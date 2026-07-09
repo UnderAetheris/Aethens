@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from ..config import Config
 from ..memory.store import MemoryStore
-from ..safety.guard import ActionRequest, SafetyLayer
+from ..safety.guard import ActionRequest, SafetyLayer, build_default_rules
 from ..tools.base import ToolRegistry
 from ..tools.builtins import default_registry
 
@@ -28,7 +28,13 @@ class Controller:
         self.config = config
         self.registry = registry or default_registry()
         self.memory = memory or MemoryStore(config.log_path)
-        self.safety = safety or SafetyLayer(self.memory, safe_mode=config.safe_mode)
+        self.safety = safety or SafetyLayer(
+            self.memory,
+            safe_mode=config.safe_mode,
+            rules=build_default_rules(
+                config.workspace_root, config.allowed_shell_commands
+            ),
+        )
 
     def handle(self, task: str, dry_run: bool = False) -> TaskResult:
         self.memory.record("task_received", {"task": task})

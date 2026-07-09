@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Callable
 
 from ..memory.store import MemoryStore
 from ..tools.base import Tool
+
+
+FILESYSTEM_TOOLS = {"read_file", "list_dir", "write_file"}
 
 
 @dataclass(frozen=True)
@@ -49,6 +54,57 @@ def _safe_mode_rule(request: ActionRequest, safe_mode: bool) -> Decision | None:
             reason=f"safe_mode is on and tool '{request.tool}' is not marked safe",
         )
     return None
+
+
+def path_within_root(workspace_root: str) -> Rule:
+    """Block filesystem tools whose target path escapes the workspace root."""
+    root = Path(workspace_root).resolve()
+
+    def rule(request: ActionRequest, safe_mode: bool) -> Decision | None:
+        if request.tool not in FILESYSTEM_TOOLS:
+            return None
+        try:
+            target = Path(json.loads(request.arg)["path"]).resolve()
+        except (ValueError, KeyError, TypeError):
+            return Decision(allowed=False, reason="invalid argument: expected JSON with 'path'")
+        if target != root and root not in target.parents:
+            return Decision(
+                allowed=False,
+                reason=f"path '{target}' escapes workspace root '{root}'",
+            )
+        return None
+
+    return rule
+
+
+def shell_allowlist(allowed: tuple[str, ...]) -> Rule:
+    """Block shell commands whose first token isn't in the allowlist."""
+
+    def rule(request: ActionRequest, safe_mode: bool) -> Decision | None:
+        if request.tool != "shell":
+            return None
+        try:
+            cmd = json.loads(request.arg)["cmd"]
+        except (ValueError, KeyError, TypeError):
+            return Decision(allowed=False, reason="invalid argument: expected JSON with 'cmd'")
+        head = (cmd.split() or [""])[0]
+        if head not in allowed:
+            return Decision(allowed=False, reason=f"command '{head}' not in shell allowlist")
+        return None
+
+    return rule
+
+
+def build_default_rules(
+    workspace_root: str = ".",
+    allowed_shell_commands: tuple[str, ...] = ("echo", "ls", "pwd", "cat"),
+) -> list[Rule]:
+    """The full rule pipeline: safe_mode gate + path scoping + shell allowlist."""
+    return [
+        _safe_mode_rule,
+        path_within_root(workspace_root),
+        shell_allowlist(allowed_shell_commands),
+    ]
 
 
 def default_rules() -> list[Rule]:

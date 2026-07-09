@@ -6,7 +6,10 @@ from .guard import (
     Decision,
     Rule,
     SafetyLayer,
+    build_default_rules,
     default_rules,
+    path_within_root,
+    shell_allowlist,
 )
 
 __all__ = [
@@ -15,5 +18,8 @@ __all__ = [
     "Decision",
     "Rule",
     "SafetyLayer",
+    "build_default_rules",
     "default_rules",
+    "path_within_root",
+    "shell_allowlist",
 ]
