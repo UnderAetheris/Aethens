@@ -1,13 +1,27 @@
 # Aetheris
 
-A modular agent system. This is v0.1: the walking skeleton.
+A modular agent system with a FastAPI bridge and a thin React shell.
 
-## Quickstart
+## Backend
+
+Start the API bridge:
+
 ```bash
 pip install -e ".[dev]"
-python -m aetheris "do the thing"
-pytest
+python -m uvicorn aetheris.api.app:app --reload
 ```
+
+## Frontend shell
+
+Install and run the shell:
+
+```bash
+cd shell
+npm install
+npm run dev
+```
+
+The shell reads the backend URL from shell/.env and polls the FastAPI bridge every second.
 
 ## Architecture
 The Controller receives a task, logs it to Memory, selects a Tool from the
@@ -16,15 +30,16 @@ under `src/aetheris/` so they plug in without tangling.
 
 | Package | Role | Status |
 | ---| ---| --- |
-| controller | Receives and routes tasks | minimal |
-| tools | Registry of safe actions | minimal |
-| memory | Task history + lessons (JSONL) | minimal |
-| planner | Chooses tools/steps for a task | stub |
+| controller | Receives and routes tasks | complete |
+| tools | Registry of safe actions | complete |
+| memory | Task history + lessons (JSONL) | complete |
+| planner | Chooses tools/steps for a task | complete |
 | skills | Reusable higher-level capabilities | stub |
-| evaluation | Benchmarks + scoring | stub |
+| evaluation | Benchmarks + scoring | complete |
 | research | Information gathering | stub |
-| learning | Self-improvement loop | stub |
-| safety | Guards, logging, reversibility | stub |
+| learning | Self-improvement loop | complete |
+| safety | Guards, logging, reversibility | complete |
+| api | FastAPI bridge for the shell | complete |
 
 ## Contributing
 1. `pre-commit install`
