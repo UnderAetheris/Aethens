@@ -8272,3 +8272,801 @@
 {"ts": 1783599928.8475204, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
 {"ts": 1783599928.848871, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
 {"ts": 1783599928.8505778, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599929.8595712, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599929.8604763, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599929.8613567, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599929.8623204, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599929.8662894, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599929.8674583, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599929.87295, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599929.8739543, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599929.8782072, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599929.8790698, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599929.8816051, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599929.882381, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599929.8854938, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599929.8864682, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599929.887423, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599929.8886724, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599929.8913684, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599929.8921862, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599929.893096, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599929.8940258, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599929.8949215, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599929.8989813, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599929.8997838, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599929.9004734, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599929.9012935, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599929.9049664, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599929.906087, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599929.9124322, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599929.9131243, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599929.9168432, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599929.9178207, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599929.9202573, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599929.9210591, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599929.9242053, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599929.9250634, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599929.9260278, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599929.9275138, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599929.930726, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599929.931973, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599929.9333115, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599929.9347405, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599929.9356754, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599930.9522493, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599930.9531298, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599930.953909, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599930.9548037, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599930.9620814, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599930.963937, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599930.9708433, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599930.971977, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599930.977827, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599930.978831, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599930.9829485, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599930.9837277, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599930.9866254, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599930.9874482, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599930.9887033, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599930.9903457, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599930.995061, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599930.996722, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599930.9980373, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599930.9990249, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599930.9999804, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599931.0040255, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599931.005195, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599931.006978, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599931.0090547, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599931.0153754, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599931.0163627, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599931.02233, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599931.0239398, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599931.0304894, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599931.0315905, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599931.0348475, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599931.0356302, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599931.0386934, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599931.0406482, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599931.042492, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599931.0438635, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599931.0480537, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599931.0489917, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599931.050215, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599931.0513756, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599931.052358, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599932.0683746, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599932.069039, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599932.0700116, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599932.0709388, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599932.076783, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599932.0774887, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599932.082201, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599932.0830336, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599932.086222, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599932.0868666, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599932.0894594, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599932.0909507, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599932.0938554, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599932.0945923, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599932.0954368, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599932.0963259, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599932.0987527, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599932.0997272, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599932.1005266, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599932.1014347, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599932.1022236, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599932.1059594, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599932.1076038, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599932.1092427, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599932.110346, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599932.1136603, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599932.1143308, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599932.1186001, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599932.1192698, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599932.1228805, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599932.1245074, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599932.1271007, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599932.1276886, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599932.1301546, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599932.1307845, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599932.1315277, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599932.132231, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599932.1345954, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599932.1352618, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599932.1358008, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599932.1365016, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599932.1375067, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599933.1581345, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599933.1596787, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599933.1612184, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599933.1625493, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599933.1671739, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599933.1682177, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599933.179884, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599933.1812532, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599933.1877923, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599933.1922722, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599933.1969688, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599933.1985407, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599933.20308, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599933.2047477, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599933.2091236, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599933.2111778, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599933.2156377, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599933.2170212, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599933.2185078, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599933.219953, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599933.2246382, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599933.2312016, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599933.2326517, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599933.2342377, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599933.2358336, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599933.2435942, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599933.245167, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599933.2559853, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599933.258248, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599933.2648394, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599933.266194, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599933.2702715, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599933.2753236, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599933.2812955, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599933.282809, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599933.2842286, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599933.2858918, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599933.2909293, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599933.292403, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599933.293821, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599933.29493, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599933.296223, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599934.3196976, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599934.321014, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599934.3227139, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599934.32513, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599934.3309312, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599934.332191, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599934.3405972, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599934.3417573, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599934.3464835, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599934.3475835, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599934.3511555, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599934.3522701, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599934.3573034, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599934.3591175, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599934.3608284, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599934.3621855, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599934.3660297, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599934.3671424, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599934.3683426, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599934.369412, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599934.3709555, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599934.3786752, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599934.3797996, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599934.3809924, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599934.3826442, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599934.3881536, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599934.389984, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599934.3981564, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599934.3993344, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599934.4054055, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599934.4070842, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599934.4126909, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599934.4137862, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599934.4179745, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599934.4191785, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599934.4211648, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599934.4231157, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599934.429889, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599934.4311407, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599934.4324274, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599934.4338276, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599934.43532, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599935.4466698, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599935.4475794, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599935.44894, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599935.4499497, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599935.4541876, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599935.456511, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599935.4621277, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599935.4630277, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599935.466267, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599935.4671974, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599935.4695911, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599935.470515, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599935.4749517, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599935.4763072, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599935.4791255, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599935.4813137, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599935.4839525, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599935.4848332, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599935.485741, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599935.4868693, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599935.4884908, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599935.4946797, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599935.495502, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599935.496305, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599935.4970896, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599935.5004337, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599935.501359, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599935.5083826, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599935.5102746, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599935.5153081, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599935.5163062, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599935.518558, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599935.5192785, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599935.527459, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599935.5283604, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599935.5292156, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599935.5300415, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599935.5327895, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599935.533633, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599935.5347188, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599935.5359275, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599935.5382516, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599936.5526893, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599936.5536742, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599936.5551124, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599936.5564618, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599936.561337, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599936.562226, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599936.5684998, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599936.5694156, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599936.5752952, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599936.5762177, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599936.5786655, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599936.5794706, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599936.5820909, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599936.582974, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599936.5838842, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599936.5847008, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599936.5882013, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599936.5897806, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599936.590768, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599936.5915928, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599936.5924563, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599936.595887, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599936.5967686, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599936.5977142, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599936.5985813, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599936.6025476, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599936.603543, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599936.6118958, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599936.6128755, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599936.6159992, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599936.616811, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599936.619114, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599936.6210508, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599936.625807, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599936.6269073, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599936.6276507, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599936.6284478, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599936.6311493, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599936.6320658, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599936.6328788, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599936.6336691, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599936.6344693, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599937.6470873, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599937.6478255, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599937.6486325, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599937.6492593, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599937.6528103, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599937.654187, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599937.6609354, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599937.6617253, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599937.6645083, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599937.6651745, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599937.667126, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599937.6676831, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599937.6702573, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599937.6712089, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599937.6727588, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599937.673683, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599937.6764886, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599937.677192, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599937.677807, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599937.6785207, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599937.6792662, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599937.6821122, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599937.6827226, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599937.6833057, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599937.6841233, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599937.6873333, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599937.688124, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599937.6928372, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599937.693561, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599937.6960716, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599937.69672, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599937.6986637, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599937.6992183, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599937.7013943, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599937.7020812, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599937.7029638, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599937.7039118, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599937.7073, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599937.7080815, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599937.7087164, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599937.710183, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599937.7110333, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599938.7327442, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599938.734022, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599938.7357533, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599938.7376935, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599938.7453508, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599938.7467065, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599938.7576768, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599938.7596278, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599938.7658153, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599938.766994, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599938.7711465, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599938.7738757, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599938.7792172, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599938.7805126, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599938.7819812, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599938.7838087, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599938.7913125, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599938.7928438, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599938.794284, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599938.7954748, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599938.7968957, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599938.8038292, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599938.8061147, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599938.808407, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599938.8106143, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599938.8166027, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599938.8180487, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599938.829656, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599938.8310168, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599938.8369453, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599938.8386343, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599938.843816, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599938.8453586, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599938.8514194, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599938.8532393, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599938.8554556, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599938.858187, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599938.863943, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599938.8653405, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599938.866859, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599938.8683817, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599938.8704267, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599939.8897629, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599939.891252, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599939.8929439, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599939.8954384, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599939.9023728, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599939.9045916, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599939.915143, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599939.9165661, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599939.9241052, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599939.9259508, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599939.9300747, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599939.9310951, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599939.9349487, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599939.936871, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599939.939258, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599939.9413147, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599939.946665, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599939.947998, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599939.9493165, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599939.9512036, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599939.9532323, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599939.9618964, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599939.9632711, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599939.965101, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599939.9666042, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599939.9753985, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599939.9772933, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599939.9878862, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599939.990009, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599939.998828, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599940.000153, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599940.0067875, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599940.0088356, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599940.0140293, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599940.015332, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599940.016845, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599940.018353, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599940.0258737, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599940.027321, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599940.0288377, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599940.0303233, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599940.031658, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599941.044947, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599941.046707, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599941.0484838, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599941.0505023, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599941.0610356, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599941.0625458, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599941.074893, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599941.0762508, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599941.082253, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599941.0836234, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599941.090176, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599941.0920408, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599941.0971837, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599941.0985723, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599941.1001813, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599941.1021461, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599941.1083627, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599941.1104398, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599941.1121733, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599941.1137311, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599941.115405, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599941.1234167, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599941.1251812, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599941.1267953, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599941.1285863, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599941.135591, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599941.1378853, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599941.1538289, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599941.1561158, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599941.1704547, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599941.172526, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599941.180287, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599941.1824927, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599941.1896498, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599941.191257, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599941.1933017, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599941.1952949, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599941.200333, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599941.201806, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599941.2046347, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599941.206753, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599941.208488, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599942.220595, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599942.2217884, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599942.222922, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599942.224959, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599942.228963, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599942.2299097, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599942.2357981, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599942.2378628, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599942.2430131, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599942.2438962, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599942.2462876, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599942.2470324, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599942.2495384, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599942.2505186, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599942.2520835, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599942.2540417, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599942.2581315, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599942.2587843, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599942.259607, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599942.2603993, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599942.26104, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599942.2641234, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599942.2647605, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599942.265899, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599942.266833, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599942.2717006, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599942.2724118, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599942.276557, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599942.2772129, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599942.279954, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599942.280666, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599942.2831542, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599942.2838306, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599942.2881145, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599942.2889547, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599942.2902071, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599942.2909546, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599942.2931824, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599942.2938473, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599942.294519, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599942.2952933, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599942.2959976, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599943.3098025, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599943.3106978, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599943.3116415, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599943.3131118, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599943.3166149, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599943.317418, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599943.3228598, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599943.3244946, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599943.3271337, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599943.3278158, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599943.3294742, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599943.3300834, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599943.3318634, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599943.3326538, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599943.3335428, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599943.3343818, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599943.33732, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599943.3384953, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599943.339309, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599943.34011, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599943.3419988, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599943.3454564, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599943.3463538, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599943.3470569, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599943.347836, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599943.351128, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599943.352027, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599943.3578782, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599943.3585863, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599943.3609831, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599943.3615386, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599943.3632762, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599943.36386, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599943.3655734, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599943.366279, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599943.3669868, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599943.3674662, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599943.3695433, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599943.3701284, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599943.3706176, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599943.3717563, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599943.3724933, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599944.3830225, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599944.3838155, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599944.3849576, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599944.3860362, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599944.3899448, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599944.3906567, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599944.3953454, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599944.3959823, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599944.3986654, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599944.3993156, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599944.4014673, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599944.4026597, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599944.40695, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599944.4079442, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599944.4089053, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599944.409753, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599944.412179, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599944.4127917, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599944.4135013, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599944.4143436, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599944.4152, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599944.4187717, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599944.4208455, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599944.4223928, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599944.4240248, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599944.4275136, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599944.4284048, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599944.4351678, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599944.4374607, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599944.4427757, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599944.443726, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599944.4463575, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599944.4471695, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599944.4496117, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599944.4506822, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599944.4531684, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599944.4544082, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599944.4583957, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599944.4591737, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599944.4600084, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599944.460718, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599944.4618297, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599945.4823058, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599945.483571, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599945.4848268, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599945.4863393, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599945.492257, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599945.4935853, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599945.5052245, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599945.5065901, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599945.5125802, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599945.513953, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599945.5181081, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599945.5192316, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599945.5238707, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599945.5252907, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599945.5271332, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599945.5287712, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599945.5336244, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599945.5349452, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599945.5368576, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599945.5384781, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599945.5401175, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599945.5464146, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599945.5480998, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599945.5500033, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599945.5513535, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599945.5588586, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599945.5607908, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599945.5704114, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599945.5718575, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599945.5788174, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599945.5802217, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599945.5842166, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599945.585504, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599945.5907757, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599945.5920994, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599945.5939174, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599945.5956461, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599945.599893, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599945.6011584, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599945.6024017, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599945.603936, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599945.605473, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599946.6211433, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599946.62186, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599946.622588, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599946.6234102, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599946.6272755, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599946.628187, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599946.6333256, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599946.6343842, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599946.6387494, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599946.639633, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599946.64208, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599946.642863, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599946.645392, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599946.6465292, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599946.6475625, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599946.648397, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599946.6520545, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599946.65329, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599946.654273, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599946.6554325, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599946.6569438, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599946.6609554, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599946.661679, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599946.6625507, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599946.6633694, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599946.67157, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599946.6727834, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599946.6822526, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599946.6833572, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599946.6874685, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599946.688439, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599946.6908476, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599946.6926537, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599946.6959243, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599946.6967742, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599946.6975636, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599946.6982849, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599946.7055933, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599946.709482, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599946.7118914, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599946.7157226, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599946.7190282, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599947.7323515, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599947.733531, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599947.7349203, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599947.7376974, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599947.7411108, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599947.7418103, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599947.7464015, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599947.7471614, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599947.7500532, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599947.7509456, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599947.754872, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599947.755502, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599947.7576787, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599947.7583268, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599947.759157, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599947.7599103, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599947.7618804, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599947.7624876, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599947.7631383, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599947.763826, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599947.7645893, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599947.7693415, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599947.770543, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599947.7714133, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599947.7721477, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599947.7750204, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599947.775691, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599947.7804945, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599947.7811978, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599947.7862935, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599947.7879877, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599947.789948, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599947.7905378, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599947.792463, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599947.7930965, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599947.7938614, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599947.7946432, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599947.796758, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599947.7975214, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599947.79843, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599947.7992272, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599947.8004549, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599948.8216646, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599948.82341, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599948.8249152, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599948.8266356, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599948.8349686, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599948.8376384, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599948.8501852, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599948.8524594, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599948.8610766, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599948.8624697, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599948.869668, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599948.871775, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599948.8803725, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599948.8821619, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599948.8843112, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599948.8876832, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599948.894991, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599948.8968215, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599948.89903, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599948.9020116, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599948.9041421, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599948.9123678, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599948.9137213, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599948.9154856, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599948.9183867, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599948.9287078, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599948.9314485, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599948.945198, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599948.9468002, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599948.9548042, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599948.9566371, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599948.961743, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599948.9630513, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599948.9687536, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599948.9709463, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599948.973172, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599948.9747632, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599948.9808242, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599948.9825525, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599948.984593, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599948.9867601, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599948.988527, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599950.0041308, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599950.0056593, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599950.007525, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599950.0094395, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599950.0177708, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599950.0197747, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599950.0298579, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599950.0311837, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599950.0383468, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599950.0403242, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599950.0452821, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599950.0464854, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599950.051549, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599950.0530782, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599950.0549753, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599950.0568776, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599950.0643413, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599950.066259, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599950.068165, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599950.069938, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599950.0727468, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
+{"ts": 1783599950.079711, "kind": "task_received", "data": {"task": "hello aetheris"}}
+{"ts": 1783599950.0810935, "kind": "plan_selected", "data": {"task": "hello aetheris", "tool": "echo", "arg": "hello aetheris", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783599950.0835147, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello aetheris", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello aetheris", "preview": null}}
+{"ts": 1783599950.0861154, "kind": "task_completed", "data": {"task": "hello aetheris", "output": "hello aetheris"}}
+{"ts": 1783599950.0952587, "kind": "task_received", "data": {"task": "read path=.aetheris_data\\workspace/note.txt"}}
+{"ts": 1783599950.0970569, "kind": "plan_selected", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "reason": "read verb with path", "confident": true}}
+{"ts": 1783599950.1101098, "kind": "action_allowed", "data": {"tool": "read_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/note.txt\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "benchmark content", "preview": null}}
+{"ts": 1783599950.1119852, "kind": "task_completed", "data": {"task": "read path=.aetheris_data\\workspace/note.txt", "output": "benchmark content"}}
+{"ts": 1783599950.1202934, "kind": "task_received", "data": {"task": "list path=.aetheris_data\\workspace"}}
+{"ts": 1783599950.121853, "kind": "plan_selected", "data": {"task": "list path=.aetheris_data\\workspace", "tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "reason": "list verb with path", "confident": true}}
+{"ts": 1783599950.1278417, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \".aetheris_data\\\\workspace\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\neval_run.jsonl\nnote.txt", "preview": null}}
+{"ts": 1783599950.1295545, "kind": "task_completed", "data": {"task": "list path=.aetheris_data\\workspace", "output": "a.txt\neval_run.jsonl\nnote.txt"}}
+{"ts": 1783599950.135918, "kind": "task_received", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data"}}
+{"ts": 1783599950.1377907, "kind": "plan_selected", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "reason": "write verb with path and content", "confident": true}}
+{"ts": 1783599950.1395457, "kind": "action_blocked", "data": {"tool": "write_file", "arg": "{\"path\": \".aetheris_data\\\\workspace/out.txt\", \"content\": \"data\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'write_file' is not marked safe", "output": null, "preview": null}}
+{"ts": 1783599950.1414135, "kind": "task_blocked", "data": {"task": "create path=.aetheris_data\\workspace/out.txt content=data", "reason": "safe_mode is on and tool 'write_file' is not marked safe"}}
+{"ts": 1783599950.1469705, "kind": "task_received", "data": {"task": "please save this somewhere"}}
+{"ts": 1783599950.148877, "kind": "plan_selected", "data": {"task": "please save this somewhere", "tool": "echo", "arg": "please save this somewhere", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783599950.1508458, "kind": "plan_uncertain", "data": {"task": "please save this somewhere", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783599950.1527386, "kind": "action_allowed", "data": {"tool": "echo", "arg": "please save this somewhere", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "please save this somewhere", "preview": null}}
+{"ts": 1783599950.155722, "kind": "task_completed", "data": {"task": "please save this somewhere", "output": "please save this somewhere"}}
