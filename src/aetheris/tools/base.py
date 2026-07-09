@@ -9,6 +9,7 @@ class Tool:
     description: str
     run: Callable[[str], str]
     safe: bool = True
+    undo: Callable[[str], None] | None = None  # reversibility hook (optional)
 
 
 class ToolRegistry:
