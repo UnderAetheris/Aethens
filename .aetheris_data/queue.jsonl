@@ -1,0 +1,4 @@
+{"id": "task-0001-5a3507", "task": "read path=README.md", "state": "queued", "detail": "", "priority": 0, "created_at": 1783604428.6531017, "updated_at": 1783604428.6531017}
+{"id": "task-0001-5a3507", "task": "read path=README.md", "state": "planning", "detail": "executive picked up", "priority": 0, "created_at": 1783604428.6531017, "updated_at": 1783604429.4792163}
+{"id": "task-0001-5a3507", "task": "read path=README.md", "state": "executing", "detail": "handed to controller", "priority": 0, "created_at": 1783604428.6531017, "updated_at": 1783604429.5001552}
+{"id": "task-0001-5a3507", "task": "read path=README.md", "state": "blocked", "detail": "blocked: path 'D:\\Desktop\\AiTools\\Aethens\\README.md' escapes workspace root 'D:\\Desktop\\AiTools\\Aethens\\.aetheris_data\\workspace'", "priority": 0, "created_at": 1783604428.6531017, "updated_at": 1783604429.5218537}
