@@ -1,0 +1,1 @@
+{"ts": 1783587885.5018916, "kind": "action_blocked", "data": {"tool": "shell", "arg": "{\"cmd\": \"rm -rf /\"}", "safe": false, "dry_run": false, "safe_mode": false, "allowed": false, "reason": "command 'rm' not in shell allowlist", "output": null, "preview": null}}

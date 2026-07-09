@@ -1,0 +1,8 @@
+{"ts": 1783587884.655012, "kind": "eval_case", "data": {"name": "list_with_unknown_verb", "passed": false, "detail": "tool echo==list_dir:False"}}
+{"ts": 1783587884.6565003, "kind": "eval_summary", "data": {"ts": 1783587884.6563964, "passed": 0, "total": 1, "pass_rate": 0.0}}
+{"ts": 1783587884.6622627, "kind": "eval_case", "data": {"name": "list_with_unknown_verb", "passed": false, "detail": "tool echo==list_dir:False"}}
+{"ts": 1783587884.663051, "kind": "eval_summary", "data": {"ts": 1783587884.6630323, "passed": 0, "total": 1, "pass_rate": 0.0}}
+{"ts": 1783587884.6661675, "kind": "learning_attempt", "data": {"intent": "list", "keyword": "scan", "from_case": "list_with_unknown_verb", "baseline_rate": 0.0}}
+{"ts": 1783587884.674357, "kind": "eval_case", "data": {"name": "list_with_unknown_verb", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783587884.675197, "kind": "eval_summary", "data": {"ts": 1783587884.6751752, "passed": 1, "total": 1, "pass_rate": 1.0}}
+{"ts": 1783587884.6778333, "kind": "learning_accepted", "data": {"intent": "list", "keyword": "scan", "new_rate": 1.0}}

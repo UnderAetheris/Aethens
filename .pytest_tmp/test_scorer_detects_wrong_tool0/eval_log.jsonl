@@ -1,0 +1,2 @@
+{"ts": 1783587884.1846793, "kind": "eval_case", "data": {"name": "bogus", "passed": false, "detail": "tool echo==write_file:False"}}
+{"ts": 1783587884.186257, "kind": "eval_summary", "data": {"ts": 1783587884.1862102, "passed": 0, "total": 1, "pass_rate": 0.0}}

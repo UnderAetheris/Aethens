@@ -1,0 +1,1 @@
+{"ts": 1783587884.9924512, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hi", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hi", "preview": null}}

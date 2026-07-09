@@ -1,0 +1,3 @@
+{"ts": 1783587884.227218, "kind": "eval_case", "data": {"name": "good", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783587884.2368608, "kind": "eval_case", "data": {"name": "bad", "passed": false, "detail": "tool echo==shell:False"}}
+{"ts": 1783587884.2377477, "kind": "eval_summary", "data": {"ts": 1783587884.2377138, "passed": 1, "total": 2, "pass_rate": 0.5}}

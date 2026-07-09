@@ -53,9 +53,15 @@ class Report:
 class Evaluator:
     """Runs benchmark cases through a real Controller, scores them, logs results."""
 
-    def __init__(self, memory: MemoryStore, workspace_root: str) -> None:
+    def __init__(
+        self,
+        memory: MemoryStore,
+        workspace_root: str,
+        extra_keywords: dict[str, list[str]] | None = None,
+    ) -> None:
         self._memory = memory
         self._root = Path(workspace_root)
+        self._extra_keywords = extra_keywords or {}
 
     def run(self, cases: list[EvalCase] | None = None) -> Report:
         cases = cases if cases is not None else default_suite()
@@ -93,7 +99,10 @@ class Evaluator:
                 workspace_root=str(self._root),
             )
         )
-        recorder = _RecordingPlanner(controller.planner)
+        from ..planner.planner import Planner
+
+        base = Planner(extra_keywords=self._extra_keywords)
+        recorder = _RecordingPlanner(base)
         controller.planner = recorder
 
         result = controller.handle(task)

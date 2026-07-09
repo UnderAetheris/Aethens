@@ -25,9 +25,21 @@ _LIST_VERBS = ("list", "ls", "dir")
 class Planner:
     """Deterministic, rule-based planner. First matching rule wins.
 
-    Turns a task string into a Plan. Never executes anything; the controller
-    routes the chosen tool through the SafetyLayer.
+    `extra_keywords` augments the built-in verb lists per intent. It is the
+    ONLY surface the learning engine may modify, and changes are fully
+    reversible (add/remove a keyword).
     """
+
+    def __init__(self, extra_keywords: dict[str, list[str]] | None = None) -> None:
+        self._extra = extra_keywords or {}
+
+    def _verbs(self, intent: str, base: tuple[str, ...]) -> tuple[str, ...]:
+        return tuple(base) + tuple(self._extra.get(intent, []))
+
+    def _contains_verb(self, intent: str, base: tuple[str, ...], text: str) -> bool:
+        tokens = re.findall(r"[a-zA-Z]+", text)
+        lower_tokens = [token.lower() for token in tokens]
+        return any(verb in lower_tokens for verb in self._verbs(intent, base))
 
     def plan(self, task: str) -> Plan:
         text = task.strip()
@@ -43,7 +55,7 @@ class Planner:
         path_match = _PATH_RE.search(text)
 
         # 2. Write intent: needs both path= and content=.
-        if any(v in low for v in _WRITE_VERBS):
+        if self._contains_verb("write", _WRITE_VERBS, low):
             content_match = _CONTENT_RE.search(text)
             if path_match and content_match:
                 arg = json.dumps(
@@ -53,7 +65,7 @@ class Planner:
             return self._fallback(task, "write intent but missing path= or content=")
 
         # 3. List intent: needs path=.
-        if any(v in low for v in _LIST_VERBS):
+        if self._contains_verb("list", _LIST_VERBS, low):
             if path_match:
                 return Plan(
                     "list_dir",
@@ -63,7 +75,7 @@ class Planner:
             return self._fallback(task, "list intent but missing path=")
 
         # 4. Read intent: needs path=.
-        if any(v in low for v in _READ_VERBS):
+        if self._contains_verb("read", _READ_VERBS, low):
             if path_match:
                 return Plan(
                     "read_file",

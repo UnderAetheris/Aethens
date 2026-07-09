@@ -1,0 +1,8 @@
+{"ts": 1783587884.2232044, "kind": "task_received", "data": {"task": "hi"}}
+{"ts": 1783587884.2244775, "kind": "plan_selected", "data": {"task": "hi", "tool": "echo", "arg": "hi", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783587884.2253387, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hi", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hi", "preview": null}}
+{"ts": 1783587884.226319, "kind": "task_completed", "data": {"task": "hi", "output": "hi"}}
+{"ts": 1783587884.2297974, "kind": "task_received", "data": {"task": "hi"}}
+{"ts": 1783587884.2325752, "kind": "plan_selected", "data": {"task": "hi", "tool": "echo", "arg": "hi", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783587884.2350996, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hi", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hi", "preview": null}}
+{"ts": 1783587884.2360091, "kind": "task_completed", "data": {"task": "hi", "output": "hi"}}

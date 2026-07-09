@@ -1,0 +1,5 @@
+{"ts": 1783587884.9377031, "kind": "task_received", "data": {"task": "save this please"}}
+{"ts": 1783587884.9398413, "kind": "plan_selected", "data": {"task": "save this please", "tool": "echo", "arg": "save this please", "reason": "fallback: write intent but missing path= or content=", "confident": false}}
+{"ts": 1783587884.94085, "kind": "plan_uncertain", "data": {"task": "save this please", "reason": "fallback: write intent but missing path= or content="}}
+{"ts": 1783587884.941963, "kind": "action_allowed", "data": {"tool": "echo", "arg": "save this please", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "save this please", "preview": null}}
+{"ts": 1783587884.9429233, "kind": "task_completed", "data": {"task": "save this please", "output": "save this please"}}
