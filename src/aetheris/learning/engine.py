@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from ..evaluation.cases import EvalCase
 from ..evaluation.evaluator import Evaluator
 from ..memory.experience import ExperienceStore
 from ..memory.knowledge import KnowledgeStore
+from ..memory.learned import LearnedKeywordStore, LearnedStep
 from ..memory.store import MemoryStore
 
 
@@ -45,12 +47,14 @@ class LearningEngine:
         workspace_root: str,
         knowledge: KnowledgeStore,
         experience: ExperienceStore,
+        learned: LearnedKeywordStore,
     ) -> None:
         self._memory = memory
         self._root = workspace_root
         self._knowledge = knowledge
         self._experience = experience
-        self.extra_keywords: dict[str, list[str]] = {}
+        self._learned = learned
+        self.extra_keywords: dict[str, list[str]] = self._learned.as_keywords()
 
     def failing_cases(self, cases: list[EvalCase]) -> list[EvalCase]:
         evaluator = Evaluator(self._memory, self._root, self.extra_keywords)
@@ -120,7 +124,8 @@ class LearningEngine:
         improved = trial_report.pass_rate > baseline.pass_rate
 
         if improved and not regressed:
-            self.extra_keywords = trial
+            self._learned.append(candidate.intent, candidate.keyword, candidate.from_case)
+            self.extra_keywords = self._learned.as_keywords()
             self._knowledge.add(
                 title=f"planner keyword '{candidate.keyword}' -> {candidate.intent}",
                 source=f"learning:{candidate.from_case}",
@@ -165,3 +170,19 @@ class LearningEngine:
             new_rate=trial_report.pass_rate,
             candidate=candidate,
         )
+
+    def revert_last(self) -> LearnedStep | None:
+        removed = self._learned.revert_last()
+        self.extra_keywords = self._learned.as_keywords()
+        if removed is None:
+            self._memory.record("learning_revert_noop", {"reason": "no accepted steps"})
+            return None
+        self._memory.record(
+            "learning_reverted",
+            {
+                "intent": removed.intent,
+                "keyword": removed.keyword,
+                "from_case": removed.from_case,
+            },
+        )
+        return removed

@@ -1,6 +1,6 @@
-{"ts": 1783587883.9848526, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
-{"ts": 1783587884.0021412, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
-{"ts": 1783587884.0198264, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
-{"ts": 1783587884.025741, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
-{"ts": 1783587884.0335777, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
-{"ts": 1783587884.0355606, "kind": "eval_summary", "data": {"ts": 1783587884.0354893, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783597114.871949, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783597114.883722, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783597114.8920164, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783597114.895987, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783597114.9045622, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783597114.905984, "kind": "eval_summary", "data": {"ts": 1783597114.9059165, "passed": 5, "total": 5, "pass_rate": 1.0}}

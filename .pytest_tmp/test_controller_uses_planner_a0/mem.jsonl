@@ -1,4 +1,4 @@
-{"ts": 1783587884.842675, "kind": "task_received", "data": {"task": "just saying hi"}}
-{"ts": 1783587884.8458667, "kind": "plan_selected", "data": {"task": "just saying hi", "tool": "echo", "arg": "just saying hi", "reason": "no tool intent detected; default echo", "confident": true}}
-{"ts": 1783587884.8470182, "kind": "action_allowed", "data": {"tool": "echo", "arg": "just saying hi", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "just saying hi", "preview": null}}
-{"ts": 1783587884.851801, "kind": "task_completed", "data": {"task": "just saying hi", "output": "just saying hi"}}
+{"ts": 1783597117.3368278, "kind": "task_received", "data": {"task": "just saying hi"}}
+{"ts": 1783597117.3382454, "kind": "plan_selected", "data": {"task": "just saying hi", "tool": "echo", "arg": "just saying hi", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783597117.3396225, "kind": "action_allowed", "data": {"tool": "echo", "arg": "just saying hi", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "just saying hi", "preview": null}}
+{"ts": 1783597117.3406465, "kind": "task_completed", "data": {"task": "just saying hi", "output": "just saying hi"}}

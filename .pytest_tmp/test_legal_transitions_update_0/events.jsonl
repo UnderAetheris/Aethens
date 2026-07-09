@@ -1,0 +1,4 @@
+{"ts": 1783597117.678271, "kind": "queue_transition", "data": {"id": "task-0001-e3b98a", "to": "queued", "detail": "enqueued"}}
+{"ts": 1783597117.7138174, "kind": "queue_transition", "data": {"id": "task-0001-e3b98a", "to": "planning", "detail": ""}}
+{"ts": 1783597117.7448668, "kind": "queue_transition", "data": {"id": "task-0001-e3b98a", "to": "executing", "detail": ""}}
+{"ts": 1783597117.7742178, "kind": "queue_transition", "data": {"id": "task-0001-e3b98a", "to": "done", "detail": "ok"}}

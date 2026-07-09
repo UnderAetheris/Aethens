@@ -1,8 +1,8 @@
-{"ts": 1783587884.7440882, "kind": "task_received", "data": {"task": "hello there"}}
-{"ts": 1783587884.745394, "kind": "plan_selected", "data": {"task": "hello there", "tool": "echo", "arg": "hello there", "reason": "no tool intent detected; default echo", "confident": true}}
-{"ts": 1783587884.7464898, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello there", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello there", "preview": null}}
-{"ts": 1783587884.7478259, "kind": "task_completed", "data": {"task": "hello there", "output": "hello there"}}
-{"ts": 1783587884.75415, "kind": "task_received", "data": {"task": "hello there"}}
-{"ts": 1783587884.755328, "kind": "plan_selected", "data": {"task": "hello there", "tool": "echo", "arg": "hello there", "reason": "no tool intent detected; default echo", "confident": true}}
-{"ts": 1783587884.7562985, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello there", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello there", "preview": null}}
-{"ts": 1783587884.7571466, "kind": "task_completed", "data": {"task": "hello there", "output": "hello there"}}
+{"ts": 1783597116.6727693, "kind": "task_received", "data": {"task": "hello there"}}
+{"ts": 1783597116.6753526, "kind": "plan_selected", "data": {"task": "hello there", "tool": "echo", "arg": "hello there", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783597116.6764207, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello there", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello there", "preview": null}}
+{"ts": 1783597116.6784756, "kind": "task_completed", "data": {"task": "hello there", "output": "hello there"}}
+{"ts": 1783597116.6874127, "kind": "task_received", "data": {"task": "hello there"}}
+{"ts": 1783597116.6889477, "kind": "plan_selected", "data": {"task": "hello there", "tool": "echo", "arg": "hello there", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783597116.6900878, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello there", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello there", "preview": null}}
+{"ts": 1783597116.6909707, "kind": "task_completed", "data": {"task": "hello there", "output": "hello there"}}

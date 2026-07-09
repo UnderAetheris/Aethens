@@ -32,6 +32,13 @@ class JsonlStore:
         with self._path.open(encoding="utf-8") as f:
             return [json.loads(line) for line in f if line.strip()]
 
+    def rewrite(self, records: list[dict[str, Any]]) -> None:
+        """Overwrite the file with exactly these records (used for reverts)."""
+        self._path.parent.mkdir(parents=True, exist_ok=True)
+        with self._path.open("w", encoding="utf-8") as f:
+            for rec in records:
+                f.write(json.dumps(rec) + "\n")
+
     def count(self) -> int:
         return len(self.all())
 

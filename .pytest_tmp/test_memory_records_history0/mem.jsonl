@@ -1,4 +1,4 @@
-{"ts": 1783587883.848644, "kind": "task_received", "data": {"task": "ping"}}
-{"ts": 1783587883.8508205, "kind": "plan_selected", "data": {"task": "ping", "tool": "echo", "arg": "ping", "reason": "no tool intent detected; default echo", "confident": true}}
-{"ts": 1783587883.85312, "kind": "action_allowed", "data": {"tool": "echo", "arg": "ping", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "ping", "preview": null}}
-{"ts": 1783587883.8544514, "kind": "task_completed", "data": {"task": "ping", "output": "ping"}}
+{"ts": 1783597114.755615, "kind": "task_received", "data": {"task": "ping"}}
+{"ts": 1783597114.756543, "kind": "plan_selected", "data": {"task": "ping", "tool": "echo", "arg": "ping", "reason": "no tool intent detected; default echo", "confident": true}}
+{"ts": 1783597114.7573195, "kind": "action_allowed", "data": {"tool": "echo", "arg": "ping", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "ping", "preview": null}}
+{"ts": 1783597114.7583196, "kind": "task_completed", "data": {"task": "ping", "output": "ping"}}

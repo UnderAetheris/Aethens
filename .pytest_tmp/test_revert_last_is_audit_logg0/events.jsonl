@@ -1,0 +1,12 @@
+{"ts": 1783597117.1918247, "kind": "eval_case", "data": {"name": "chat", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783597117.1982324, "kind": "eval_case", "data": {"name": "learnable_write", "passed": false, "detail": "tool echo==write_file:False"}}
+{"ts": 1783597117.1998248, "kind": "eval_summary", "data": {"ts": 1783597117.1997273, "passed": 1, "total": 2, "pass_rate": 0.5}}
+{"ts": 1783597117.205617, "kind": "eval_case", "data": {"name": "chat", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783597117.212541, "kind": "eval_case", "data": {"name": "learnable_write", "passed": false, "detail": "tool echo==write_file:False"}}
+{"ts": 1783597117.21333, "kind": "eval_summary", "data": {"ts": 1783597117.2133014, "passed": 1, "total": 2, "pass_rate": 0.5}}
+{"ts": 1783597117.216516, "kind": "learning_attempt", "data": {"intent": "write", "keyword": "append", "from_case": "learnable_write", "baseline_rate": 0.5}}
+{"ts": 1783597117.2222683, "kind": "eval_case", "data": {"name": "chat", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783597117.2272518, "kind": "eval_case", "data": {"name": "learnable_write", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783597117.2280946, "kind": "eval_summary", "data": {"ts": 1783597117.2280693, "passed": 2, "total": 2, "pass_rate": 1.0}}
+{"ts": 1783597117.2512467, "kind": "learning_accepted", "data": {"intent": "write", "keyword": "append", "new_rate": 1.0}}
+{"ts": 1783597117.2556021, "kind": "learning_reverted", "data": {"intent": "write", "keyword": "append", "from_case": "learnable_write"}}

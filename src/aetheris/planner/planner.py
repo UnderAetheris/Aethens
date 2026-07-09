@@ -30,8 +30,24 @@ class Planner:
     reversible (add/remove a keyword).
     """
 
-    def __init__(self, extra_keywords: dict[str, list[str]] | None = None) -> None:
-        self._extra = extra_keywords or {}
+    def __init__(
+        self,
+        extra_keywords: dict[str, list[str]] | None = None,
+        learned_store_path: str | None = None,
+    ) -> None:
+        loaded: dict[str, list[str]] = {}
+        if learned_store_path is not None:
+            from ..memory.learned import LearnedKeywordStore
+
+            loaded = LearnedKeywordStore(learned_store_path).as_keywords()
+
+        merged: dict[str, list[str]] = {k: list(v) for k, v in loaded.items()}
+        for intent, words in (extra_keywords or {}).items():
+            bucket = merged.setdefault(intent, [])
+            for word in words:
+                if word not in bucket:
+                    bucket.append(word)
+        self._extra = merged
 
     def _verbs(self, intent: str, base: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(base) + tuple(self._extra.get(intent, []))
