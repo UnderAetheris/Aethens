@@ -4,7 +4,6 @@ import json
 import re
 import time
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
 from ..memory.jsonl import JsonlStore, make_id
@@ -95,23 +94,47 @@ class SkillTemplate:
     def render(self, task_id: str, params: dict[str, str]) -> MultiStepPlan:
         """Instantiate the template into a concrete MultiStepPlan.
 
-        Fills `{param}` slots in each step's arg_template.  The result is
-        an ordinary MultiStepPlan — indistinguishable from one the planner
-        decomposed itself.  From this point the executive, SafetyLayer, and
-        Reflection handle it with zero skill-specific logic.
+        Fills `{param}` slots in each step's arg_template, then re-serialises
+        through JSON so that special characters (backslashes, quotes) are
+        correctly escaped.  Falls back to raw string replacement if the
+        template is not valid JSON.  The result is an ordinary MultiStepPlan
+        — indistinguishable from one the planner decomposed itself.
         """
         steps: list[PlanStep] = []
         for tmpl_step in self.steps:
-            arg = tmpl_step.arg_template
-            for key, val in params.items():
-                arg = arg.replace(f"{{{key}}}", val)
+            arg = self._substitute(tmpl_step.arg_template, params)
             steps.append(PlanStep(
                 tool=tmpl_step.tool,
                 arg=arg,
                 reason=f"[skill:{self.name}] {tmpl_step.reason}",
                 depends_on=list(tmpl_step.depends_on),
             ))
-        return MultiStepPlan(task_id=task_id, steps=steps)
+        return MultiStepPlan(task_id=task_id, steps=steps,
+                              source=f"skill:{self.name}:v{self.version}")
+
+    @staticmethod
+    def _substitute(template: str, params: dict[str, str]) -> str:
+        """Replace {param} slots in a JSON template and re-serialise."""
+        try:
+            parsed = json.loads(template)
+        except (json.JSONDecodeError, TypeError):
+            for key, val in params.items():
+                template = template.replace(f"{{{key}}}", val)
+            return template
+
+        def _walk(obj):
+            if isinstance(obj, dict):
+                return {k: _walk(v) for k, v in obj.items()}
+            if isinstance(obj, list):
+                return [_walk(v) for v in obj]
+            if isinstance(obj, str):
+                result = obj
+                for key, val in params.items():
+                    result = result.replace(f"{{{key}}}", val)
+                return result
+            return obj
+
+        return json.dumps(_walk(parsed))
 
     # ------------------------------------------------------------------ #
     # Serialisation                                                        #

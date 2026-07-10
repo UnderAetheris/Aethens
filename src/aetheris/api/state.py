@@ -8,13 +8,15 @@ from ..controller.controller import Controller
 from ..controller.executive import ExecutiveController
 from ..controller.queue import TaskQueue
 from ..evaluation.cases import default_suite
-from ..evaluation.evaluator import Evaluator
+from ..learning.autonomous import AutonomousLoop
 from ..learning.engine import LearningEngine
+from ..learning.plan_review import PlanReviewQueue
 from ..memory.experience import ExperienceStore
 from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
+from ..skills.registry import SkillRegistry
 
 
 @dataclass
@@ -30,6 +32,9 @@ class AppState:
     learning: LearningEngine
     executive: ExecutiveController
     model: ModelProvider | None = None
+    plan_review: PlanReviewQueue | None = None
+    autonomous: AutonomousLoop | None = None
+    registry: SkillRegistry | None = None
 
     @classmethod
     def create(cls, root: str = ".aetheris_data") -> "AppState":
@@ -46,13 +51,16 @@ class AppState:
         knowledge = KnowledgeStore(str(base / "knowledge.jsonl"))
         experience = ExperienceStore(str(base / "experience.jsonl"))
         learned = LearnedKeywordStore(str(base / "learned.jsonl"))
-        learning = LearningEngine(memory, config.workspace_root, knowledge, experience, learned)
 
-        # Build model provider from env config
+        registry = SkillRegistry(str(base / "skills.jsonl"))
+        learning = LearningEngine(memory, config.workspace_root, knowledge, experience, learned)
+        autonomous = AutonomousLoop(
+            memory, config.workspace_root, knowledge, experience, learned, registry
+        )
+
         model_cfg = ModelConfig.from_env()
         model = build_provider(model_cfg)
 
-        # Controller builds its own model-aware Planner internally
         controller = Controller(
             config,
             model=model,
@@ -60,9 +68,7 @@ class AppState:
         )
 
         def improve() -> bool:
-            """One improvement cycle: run the full benchmark then attempt one learning step."""
             result = learning.attempt(default_suite())
-            # Propagate freshly learned keywords into the live controller's planner.
             if result.accepted:
                 controller.planner = controller.planner.__class__(
                     extra_keywords=learning.extra_keywords,
@@ -78,6 +84,9 @@ class AppState:
             controller=controller,
             improve_fn=improve,
         )
+
+        plan_review = PlanReviewQueue()
+
         return cls(
             config=config,
             memory=memory,
@@ -88,4 +97,7 @@ class AppState:
             learning=learning,
             executive=executive,
             model=model,
+            plan_review=plan_review,
+            autonomous=autonomous,
+            registry=registry,
         )

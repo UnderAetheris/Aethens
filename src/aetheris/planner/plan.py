@@ -55,6 +55,7 @@ class MultiStepPlan:
     task_id: str
     steps: list[PlanStep]
     created_at: float = field(default_factory=time.time)
+    source: str = ""  # audit: skill id+version, or "" for planner-decomposed
 
     # ------------------------------------------------------------------ #
     # DAG helpers                                                          #
@@ -117,6 +118,7 @@ class MultiStepPlan:
             "task_id": self.task_id,
             "steps": [s.to_dict() for s in self.steps],
             "created_at": self.created_at,
+            "source": self.source,
         }
 
     @classmethod
@@ -125,6 +127,7 @@ class MultiStepPlan:
             task_id=d["task_id"],
             steps=[PlanStep.from_dict(s) for s in d["steps"]],
             created_at=d.get("created_at", 0.0),
+            source=d.get("source", ""),
         )
 
 

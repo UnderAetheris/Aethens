@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from ..controller.queue import TaskState
 from .models import (
+    AutonomousCycleOut,
     EvalSummaryOut,
     EventOut,
     ExperienceOut,
@@ -17,7 +18,10 @@ from .models import (
     KnowledgeOut,
     LearnedStepOut,
     LearningStateOut,
+    PlanReviewActionIn,
+    PlanReviewOut,
     ReflectionEventOut,
+    RepairOut,
     RevertOut,
     TaskIn,
     TaskOut,
@@ -61,7 +65,7 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
                 with contextlib.suppress(asyncio.CancelledError):
                     await task
 
-    app = FastAPI(title="Aetheris Bridge", version="0.1.0", lifespan=lifespan)
+    app = FastAPI(title="Aetheris Bridge", version="0.2.0", lifespan=lifespan)
     app.state.aetheris = app_state
 
     app.add_middleware(
@@ -168,7 +172,7 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
     @app.post("/learning/improve", response_model=ImprovementOut)
     def trigger_improve() -> ImprovementOut:
         """Run one improvement cycle immediately (eval + learn). Safe to call at any time."""
-        tick = s.executive.trigger_improvement()
+        s.executive.trigger_improvement()
         result = s.learning.last_result
         if result is None:
             return ImprovementOut(improved=False)
@@ -187,6 +191,161 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
         if removed is None:
             return RevertOut(reverted=False)
         return RevertOut(reverted=True, intent=removed.intent, keyword=removed.keyword)
+
+    # ------------------------------------------------------------------ #
+    # Plan review endpoints                                               #
+    # ------------------------------------------------------------------ #
+
+    @app.get("/plan/review", response_model=list[PlanReviewOut])
+    def list_pending_plans() -> list[PlanReviewOut]:
+        """List all plans awaiting user review."""
+        if s.plan_review is None:
+            return []
+        pending = s.plan_review.pending()
+        result = []
+        for p in pending:
+            result.append(PlanReviewOut(
+                review_id=p.review_id,
+                task=p.task,
+                steps=[{"tool": s.tool, "arg": s.arg, "depends_on": s.depends_on} for s in p.plan.steps],
+                source=p.plan.source,
+                status=p.status.value,
+                created_at=p.created_at,
+                user_feedback=p.user_feedback,
+            ))
+        return result
+
+    @app.get("/plan/review/{review_id}", response_model=PlanReviewOut)
+    def get_plan_review(review_id: str) -> PlanReviewOut:
+        """Get a specific plan under review."""
+        if s.plan_review is None:
+            raise HTTPException(status_code=404, detail="plan review disabled")
+        pending = s.plan_review.get(review_id)
+        if pending is None:
+            raise HTTPException(status_code=404, detail=f"unknown review '{review_id}'")
+        return PlanReviewOut(
+            review_id=pending.review_id,
+            task=pending.task,
+            steps=[{"tool": s.tool, "arg": s.arg, "depends_on": s.depends_on} for s in pending.plan.steps],
+            source=pending.plan.source,
+            status=pending.status.value,
+            created_at=pending.created_at,
+            user_feedback=pending.user_feedback,
+        )
+
+    @app.post("/plan/review/{review_id}/approve")
+    def approve_plan(review_id: str) -> dict:
+        """Approve a plan for execution."""
+        if s.plan_review is None:
+            raise HTTPException(status_code=404, detail="plan review disabled")
+        pending = s.plan_review.approve(review_id)
+        if pending is None:
+            raise HTTPException(status_code=404, detail=f"unknown review '{review_id}'")
+        s.memory.record("plan_review_approved", {"review_id": review_id})
+        return {"status": "approved", "review_id": review_id}
+
+    @app.post("/plan/review/{review_id}/reject")
+    def reject_plan(review_id: str, body: PlanReviewActionIn) -> dict:
+        """Reject a plan with optional feedback."""
+        if s.plan_review is None:
+            raise HTTPException(status_code=404, detail="plan review disabled")
+        pending = s.plan_review.reject(review_id, body.feedback)
+        if pending is None:
+            raise HTTPException(status_code=404, detail=f"unknown review '{review_id}'")
+        s.memory.record("plan_review_rejected", {"review_id": review_id, "feedback": body.feedback})
+        return {"status": "rejected", "review_id": review_id, "feedback": body.feedback}
+
+    @app.post("/plan/review/{review_id}/modify")
+    def modify_plan(review_id: str, body: PlanReviewActionIn) -> dict:
+        """Mark a plan as modified with user feedback."""
+        if s.plan_review is None:
+            raise HTTPException(status_code=404, detail="plan review disabled")
+        # In a full implementation the body would contain the modified plan steps.
+        # For now we just record the feedback.
+        pending = s.plan_review.get(review_id)
+        if pending is None:
+            raise HTTPException(status_code=404, detail=f"unknown review '{review_id}'")
+        s.memory.record("plan_review_modified", {"review_id": review_id, "feedback": body.feedback})
+        return {"status": "modified", "review_id": review_id, "feedback": body.feedback}
+
+    # ------------------------------------------------------------------ #
+    # Autonomous loop endpoints                                            #
+    # ------------------------------------------------------------------ #
+
+    @app.post("/autonomous/cycle", response_model=AutonomousCycleOut)
+    def run_autonomous_cycle() -> AutonomousCycleOut:
+        """Run one full autonomous improvement cycle."""
+        if s.autonomous is None:
+            raise HTTPException(status_code=404, detail="autonomous loop disabled")
+        result = s.autonomous.cycle()
+        return AutonomousCycleOut(
+            learned=result.learned,
+            learned_keyword=result.learned_keyword,
+            skills_proposed=result.skills_proposed,
+            skills_promoted=result.skills_promoted,
+            repairs_proposed=result.repairs_proposed,
+            repairs_applied=result.repairs_applied,
+            discoveries=result.discoveries,
+            duration_ms=result.duration_ms,
+            errors=result.errors,
+            total_cycles=s.autonomous.total_cycles,
+            uptime_seconds=s.autonomous.uptime_seconds,
+        )
+
+    @app.get("/autonomous/state")
+    def autonomous_state() -> dict:
+        """Get autonomous loop state."""
+        if s.autonomous is None:
+            return {"enabled": False}
+        return {
+            "enabled": True,
+            "total_cycles": s.autonomous.total_cycles,
+            "uptime_seconds": s.autonomous.uptime_seconds,
+            "last_result": {
+                "learned": s.autonomous.last_result.learned if s.autonomous.last_result else False,
+                "skills_proposed": s.autonomous.last_result.skills_proposed if s.autonomous.last_result else 0,
+                "skills_promoted": s.autonomous.last_result.skills_promoted if s.autonomous.last_result else 0,
+                "repairs_proposed": s.autonomous.last_result.repairs_proposed if s.autonomous.last_result else 0,
+            } if s.autonomous.last_result else None,
+        }
+
+    @app.post("/autonomous/repair", response_model=list[RepairOut])
+    def trigger_self_repair() -> list[RepairOut]:
+        """Detect and apply self-repairs for recurring failures."""
+        if s.autonomous is None:
+            raise HTTPException(status_code=404, detail="autonomous loop disabled")
+        proposals = s.autonomous._detect_recurring_failures()
+        results = []
+        for proposal in proposals:
+            result = s.autonomous._apply_repair(proposal)
+            results.append(RepairOut(
+                applied=result.applied,
+                problem=result.problem,
+                reason=result.reason,
+            ))
+        return results
+
+    @app.post("/autonomous/synthesize")
+    def trigger_synthesis() -> dict:
+        """Run auto-skill synthesis on the plan journal."""
+        if s.autonomous is None or s.autonomous._synthesizer is None:
+            raise HTTPException(status_code=404, detail="synthesis disabled")
+        result = s.autonomous._synthesizer.synthesize()
+        return {
+            "proposed": len(result.proposed),
+            "promoted": len(result.promoted),
+            "rejected": len(result.rejected),
+            "errors": result.errors,
+            "skills": [
+                {
+                    "name": skill.name,
+                    "occurrences": skill.occurrences,
+                    "confidence": skill.confidence,
+                    "params": skill.params,
+                }
+                for skill in result.proposed
+            ],
+        }
 
     return app
 

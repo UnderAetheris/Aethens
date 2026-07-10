@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
@@ -19,6 +19,61 @@ class EvalCase:
     expected_tool: str | None = None
     expected_output: str | None = None
     fixture: tuple[str, str] | None = None
+
+
+@dataclass(frozen=True)
+class WorkflowCase:
+    """One benchmark case for skill comparison.
+
+    - `name` identifies the case.
+    - `task` is the user task string.
+    - `skill` is the skill name to register for this case, or None.
+    - `fixtures` maps relative paths to content written into the workspace before the run.
+    - `recoverable` indicates the case is designed to exercise reflection repair.
+    - `safe_mode` overrides the global safe_mode for this case.
+    """
+    name: str
+    task: str
+    skill: str | None = None
+    fixtures: dict[str, str] = field(default_factory=dict)
+    recoverable: bool = False
+    safe_mode: bool = True
+
+
+def skill_workflow_suite(root: str) -> list[WorkflowCase]:
+    """Workflow suite for the seed skills.
+
+    Runs both skills and a no-skill anchor to measure adoption gate:
+    completion up or repairs down, no regressions, safety-neutral.
+    Recoverable cases are included but measured separately from the
+    completion gate (they exercise reflection, not the adoption threshold).
+    """
+    return [
+        WorkflowCase(
+            "lrf_plain",
+            f"list and read dir={root}/data file={root}/data/a.txt",
+            skill="list_and_read_first",
+            fixtures={"data/a.txt": "first!"},
+        ),
+        WorkflowCase(
+            "lrf_variant",
+            f"list and read dir={root}/docs file={root}/docs/x.txt",
+            skill="list_and_read_first",
+            fixtures={"docs/x.txt": "hello"},
+        ),
+        WorkflowCase(
+            "cv_happy",
+            f"create and verify path={root}/o.txt content=hi",
+            skill="create_and_verify",
+            safe_mode=False,
+        ),
+        WorkflowCase(
+            "anchor_simple_read",
+            f"read path={root}/a.txt",
+            skill=None,
+            fixtures={"a.txt": "x"},
+        ),
+    ]
 
 
 # ---------------------------------------------------------------------------

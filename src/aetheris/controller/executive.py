@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from ..config import Config
+from ..learning.plan_review import PlanReviewQueue, ReviewStatus
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
 from ..reflection.engine import ReflectionEngine, StepOutcome, Verdict
@@ -14,6 +15,9 @@ _IDLE_TICKS_BEFORE_IMPROVE = 3
 
 # Maximum times a step is re-planned before the whole task is failed.
 _MAX_RETRIES = 2
+
+# Minimum complexity (number of steps) to trigger plan review.
+_PLAN_REVIEW_STEP_THRESHOLD = 1
 
 
 @dataclass
@@ -29,13 +33,15 @@ class ExecutiveController:
 
     Policy:
     - While tasks are queued, drain them one step at a time.
-    - Each step is handed to the unchanged Controller → SafetyLayer → Tool path.
+    - Each step is handed to the unchanged Controller -> SafetyLayer -> Tool path.
     - Multi-step plans are executed step-by-step; progress is persisted so
       partial execution survives restarts.
     - On step fail/block, re-plan the remainder up to max_retries times;
-      exhausted → task FAILED.
+      exhausted -> task FAILED.
     - When the queue is empty for idle_ticks_before_improve consecutive ticks,
       run one improvement attempt (eval + learn), then reset the idle counter.
+    - Plans with more than _PLAN_REVIEW_STEP_THRESHOLD steps are submitted
+      for user review before execution (when plan_review is provided).
     """
 
     def __init__(
@@ -49,6 +55,7 @@ class ExecutiveController:
         max_retries: int = _MAX_RETRIES,
         plan_store: PlanStore | None = None,
         reflection: ReflectionEngine | None = None,
+        plan_review: PlanReviewQueue | None = None,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -69,6 +76,7 @@ class ExecutiveController:
             self._reflection = ReflectionEngine()
         else:
             self._reflection = None
+        self._plan_review = plan_review
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
@@ -94,6 +102,23 @@ class ExecutiveController:
                 "plan_created",
                 {"task_id": task_id, "steps": len(plan.steps), "task": rec.task},
             )
+
+        # If plan review is enabled and plan is complex, submit for review.
+        if (
+            self._plan_review is not None
+            and len(plan.steps) > _PLAN_REVIEW_STEP_THRESHOLD
+            and not plan.source.startswith("skill:")
+        ):
+            pending = self._plan_review.submit(rec.task, plan)
+            self._queue.transition(
+                task_id, TaskState.WAITING_FOR_CONTEXT,
+                f"pending review: {pending.review_id}",
+            )
+            self._memory.record(
+                "plan_review_submitted",
+                {"task_id": task_id, "review_id": pending.review_id, "steps": len(plan.steps)},
+            )
+            return Tick(did_work=True, task_id=task_id, outcome="plan_review")
 
         # Execute the next ready step.
         step = plan.next_ready()
@@ -127,7 +152,7 @@ class ExecutiveController:
 
         if not result.ok:
             if self._reflection is None:
-                # Legacy path: safety block → BLOCKED, transient failure → retry.
+                # Legacy path: safety block -> BLOCKED, transient failure -> retry.
                 if blocked:
                     step.status = StepStatus.BLOCKED
                     self._plan_store.save(plan)
@@ -269,6 +294,24 @@ class ExecutiveController:
             return Tick(did_work=False)
         self._idle_ticks = 0
         self._memory.record("executive_improve_start", {})
+        improved = bool(self._improve_fn())
+        self._memory.record("executive_improve_done", {"improved": improved})
+        return Tick(did_work=False, improved=improved)
+
+    def drain(self, max_tasks: int = 100) -> list[Tick]:
+        """Process all currently queued tasks (up to max_tasks). Does not trigger improvement."""
+        ticks: list[Tick] = []
+        while self._queue.next_queued() is not None and len(ticks) < max_tasks:
+            ticks.append(self.run_once())
+        return ticks
+
+    def trigger_improvement(self) -> Tick:
+        """Run one improvement cycle immediately, regardless of idle state."""
+        if self._improve_fn is None:
+            self._memory.record("executive_improve_skipped", {"reason": "no improver configured"})
+            return Tick(did_work=False, improved=False)
+        self._idle_ticks = 0
+        self._memory.record("executive_improve_start", {"triggered": "manual"})
         improved = bool(self._improve_fn())
         self._memory.record("executive_improve_done", {"improved": improved})
         return Tick(did_work=False, improved=improved)

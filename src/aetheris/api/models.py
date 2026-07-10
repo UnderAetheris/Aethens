@@ -93,3 +93,37 @@ class HealthOut(BaseModel):
     queued: int
     active: int
     settled: int
+
+
+class PlanReviewOut(BaseModel):
+    review_id: str
+    task: str
+    steps: list[dict]
+    source: str
+    status: str
+    created_at: float
+    user_feedback: str = ""
+
+
+class PlanReviewActionIn(BaseModel):
+    feedback: str = ""
+
+
+class AutonomousCycleOut(BaseModel):
+    learned: bool
+    learned_keyword: str | None = None
+    skills_proposed: int = 0
+    skills_promoted: int = 0
+    repairs_proposed: int = 0
+    repairs_applied: int = 0
+    discoveries: int = 0
+    duration_ms: float = 0.0
+    errors: list[str] = []
+    total_cycles: int = 0
+    uptime_seconds: float = 0.0
+
+
+class RepairOut(BaseModel):
+    applied: bool
+    problem: str
+    reason: str
