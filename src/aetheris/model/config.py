@@ -27,20 +27,25 @@ class ModelConfig:
 
 
 def build_provider(cfg: ModelConfig) -> ModelProvider:
-    """Assemble a fallback chain ending in the mock, per config."""
+    """Assemble a fallback chain ending in MockProvider, per config.
+
+    Chain order (first match wins):
+      api    -> ApiProvider -> LocalProvider (if model_name set) -> MockProvider
+      local  -> LocalProvider (if model_name set) -> MockProvider
+      mock   -> MockProvider only
+    """
     chain: list[ModelProvider] = []
 
     if cfg.provider == "api":
         key = os.getenv("AETHERIS_API_KEY", "")
         if key and cfg.api_base_url:
-            chain.append(ApiProvider(cfg.api_base_url, cfg.model_name, key))
+            chain.append(ApiProvider(cfg.api_base_url, cfg.model_name, key, cfg.temperature))
 
-    if cfg.provider in ("api", "local"):
-        if cfg.model_name:
-            chain.append(LocalProvider(cfg.local_endpoint, cfg.model_name))
+    if cfg.provider in ("api", "local") and cfg.model_name:
+        chain.append(LocalProvider(cfg.local_endpoint, cfg.model_name, cfg.temperature))
 
     chain.append(MockProvider())
 
     if len(chain) == 1:
-        return chain[0]
+        return chain[0]  # mock-only: no FallbackProvider overhead
     return FallbackProvider(chain)

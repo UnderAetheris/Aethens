@@ -134,28 +134,42 @@ class Planner:
                     tool_names=self._registry_tools,
                 )
                 resp = self._model.complete(req)
-                if resp.ok and resp.suggestion is not None:
-                    suggestion = resp.suggestion
-                    if isinstance(suggestion.get("tool"), str):
-                        tool = suggestion["tool"]
-                        if tool in self._registry_tools:
-                            try:
-                                arg_dict = suggestion.get("arg", {})
-                                arg_str = (
-                                    json.dumps(arg_dict)
-                                    if isinstance(arg_dict, dict)
-                                    else str(arg_dict)
-                                )
-                                return Plan(
-                                    tool,
-                                    arg_str,
-                                    f"model suggestion ({resp.provider})",
-                                    confident=False,
-                                )
-                            except Exception:
-                                pass
+                validated = self._validate_suggestion(resp)
+                if validated is not None:
+                    return validated
             except Exception:
                 pass
 
         # Safe fallback: echo the raw task, flagged as not confident.
         return Plan("echo", task.strip(), f"fallback: {why}", confident=False)
+
+    def _validate_suggestion(self, resp) -> Plan | None:  # type: ignore
+        """Validate a model response before trusting it as a plan.
+        
+        Returns a Plan if the suggestion is valid, None if invalid (tool unknown,
+        arg malformed, response failed, etc.).
+        """
+        if not resp.ok or resp.suggestion is None:
+            return None  # abstained or failed
+
+        tool = resp.suggestion.get("tool")
+        arg = resp.suggestion.get("arg")
+
+        # Tool must exist in registry
+        if tool not in self._registry_tools:
+            return None
+
+        # Arg must be serializable to valid JSON
+        try:
+            arg_str = json.dumps(arg) if not isinstance(arg, str) else arg
+            json.loads(arg_str)  # validate JSON shape
+        except (TypeError, ValueError, json.JSONDecodeError):
+            return None
+
+        # All checks passed -> return a plan from the suggestion
+        return Plan(
+            tool=tool,
+            arg=arg_str,
+            reason=f"model suggestion ({resp.provider})",
+            confident=False,
+        )

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from ..config import Config
 from ..memory.store import MemoryStore
@@ -7,6 +8,9 @@ from ..planner.planner import Planner
 from ..safety.guard import ActionRequest, SafetyLayer, build_default_rules
 from ..tools.base import ToolRegistry
 from ..tools.builtins import default_registry
+
+if TYPE_CHECKING:
+    from ..model import ModelProvider
 
 
 @dataclass
@@ -26,6 +30,8 @@ class Controller:
         memory: MemoryStore | None = None,
         safety: SafetyLayer | None = None,
         planner: Planner | None = None,
+        model: ModelProvider | None = None,
+        learned_store_path: str | None = None,
     ) -> None:
         self.config = config
         self.registry = registry or default_registry()
@@ -37,7 +43,15 @@ class Controller:
                 config.workspace_root, config.allowed_shell_commands
             ),
         )
-        self.planner = planner or Planner()
+        if planner is not None:
+            self.planner = planner
+        else:
+            registry_tools = tuple(self.registry.list())
+            self.planner = Planner(
+                learned_store_path=learned_store_path,
+                model=model,
+                registry_tools=registry_tools,
+            )
 
     def handle(self, task: str, dry_run: bool = False) -> TaskResult:
         self.memory.record("task_received", {"task": task})

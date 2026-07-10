@@ -15,7 +15,6 @@ from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
-from ..tools.builtins import default_registry
 
 
 @dataclass
@@ -49,19 +48,15 @@ class AppState:
         learned = LearnedKeywordStore(str(base / "learned.jsonl"))
         learning = LearningEngine(memory, config.workspace_root, knowledge, experience, learned)
 
-        # Build model provider from config
+        # Build model provider from env config
         model_cfg = ModelConfig.from_env()
         model = build_provider(model_cfg)
 
-        # Create controller with model-aware planner
-        registry = default_registry()
-        tool_names = tuple(registry.list())
-        controller = Controller(config)
-        controller.planner = controller.planner.__class__(
-            extra_keywords=controller.planner._extra,
-            learned_store_path=str(base / "learned.jsonl"),
+        # Controller builds its own model-aware Planner internally
+        controller = Controller(
+            config,
             model=model,
-            registry_tools=tool_names,
+            learned_store_path=str(base / "learned.jsonl"),
         )
 
         def improve() -> bool:

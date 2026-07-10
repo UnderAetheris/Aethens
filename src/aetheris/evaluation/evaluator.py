@@ -3,12 +3,16 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ..config import Config
 from ..controller.controller import Controller
 from ..memory.store import MemoryStore
 from ..planner.planner import Plan, Planner
 from .cases import EvalCase, default_suite
+
+if TYPE_CHECKING:
+    from ..model import ModelProvider
 
 
 class _RecordingPlanner:
@@ -58,10 +62,12 @@ class Evaluator:
         memory: MemoryStore,
         workspace_root: str,
         extra_keywords: dict[str, list[str]] | None = None,
+        model: ModelProvider | None = None,
     ) -> None:
         self._memory = memory
         self._root = Path(workspace_root)
         self._extra_keywords = extra_keywords or {}
+        self._model = model
 
     def run(self, cases: list[EvalCase] | None = None) -> Report:
         cases = cases if cases is not None else default_suite()
@@ -100,8 +106,13 @@ class Evaluator:
             )
         )
         from ..planner.planner import Planner
+        from ..tools.builtins import default_registry
 
-        base = Planner(extra_keywords=self._extra_keywords)
+        base = Planner(
+            extra_keywords=self._extra_keywords,
+            model=self._model,
+            registry_tools=tuple(default_registry().list()),
+        )
         recorder = _RecordingPlanner(base)
         controller.planner = recorder
 
