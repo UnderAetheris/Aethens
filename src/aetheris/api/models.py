@@ -80,6 +80,14 @@ class RevertOut(BaseModel):
     keyword: str | None = None
 
 
+class ReflectionEventOut(BaseModel):
+    ts: float
+    task_id: str
+    step: int
+    verdict: str
+    reason: str
+
+
 class HealthOut(BaseModel):
     status: str = "ok"
     queued: int

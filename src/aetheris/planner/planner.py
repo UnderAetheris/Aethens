@@ -9,6 +9,7 @@ from .plan import MultiStepPlan, PlanStep, StepStatus
 
 if TYPE_CHECKING:
     from ..model import ModelProvider
+    from ..skills.registry import SkillRegistry
 
 
 @dataclass(frozen=True)
@@ -45,6 +46,7 @@ class Planner:
         learned_store_path: str | None = None,
         model: ModelProvider | None = None,
         registry_tools: tuple[str, ...] | None = None,
+        skills: SkillRegistry | None = None,
     ) -> None:
         loaded: dict[str, list[str]] = {}
         if learned_store_path is not None:
@@ -61,6 +63,7 @@ class Planner:
         self._extra = merged
         self._model = model
         self._registry_tools = registry_tools or ()
+        self._skills = skills  # None → skill recognition disabled (byte-for-byte fallback)
 
     def _verbs(self, intent: str, base: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(base) + tuple(self._extra.get(intent, []))
@@ -184,16 +187,30 @@ class Planner:
     # ------------------------------------------------------------------ #
 
     def plan_multi(self, task: str, task_id: str) -> MultiStepPlan:
-        """Decompose a task into a MultiStepPlan (a small DAG of PlanSteps).
+        """Decompose a task into a MultiStepPlan.
 
-        Decomposition is deterministic-first and conservative:
-        - Split only on explicit connectors ("then", "and then").
-        - Each fragment is planned independently with the existing single-step
-          rules; each step depends on the previous one (linear chain).
-        - If any fragment can't be planned confidently, fall back to a
-          single-step plan for the whole task rather than fabricating structure.
-        - A single-step task produces a one-step plan: the degenerate case.
+        Skill-match runs first (deterministic, conservative):
+        - Confident match + successful param bind + valid render → use skill.
+        - No match or missing params → fall back to normal decomposition.
+        Normal decomposition is byte-for-byte unchanged.
         """
+        # Skill recognition: check in front of normal planning.
+        if self._skills is not None:
+            match = self._skills.match(task)
+            if match is not None:
+                skill, params = match
+                try:
+                    plan = skill.render(task_id, params)
+                    # Validate: every tool in the rendered plan must exist in the registry.
+                    if self._registry_tools:
+                        for step in plan.steps:
+                            if step.tool not in self._registry_tools:
+                                raise ValueError(f"unknown tool '{step.tool}' in skill '{skill.name}'")
+                    return plan
+                except Exception:
+                    pass  # render failed → fall through to normal planning
+
+        # Normal decomposition (unchanged).
         fragments = _STEP_SPLIT_RE.split(task.strip())
 
         if len(fragments) > 1:

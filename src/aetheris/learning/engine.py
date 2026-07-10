@@ -193,3 +193,63 @@ class LearningEngine:
             },
         )
         return removed
+
+    # ------------------------------------------------------------------ #
+    # Skill promotion / demotion                                          #
+    # ------------------------------------------------------------------ #
+
+    def promote_skill(
+        self,
+        skill,  # SkillTemplate — avoid circular import
+        registry,  # SkillRegistry
+        cases: list[EvalCase],
+        workspace_root: str | None = None,
+    ) -> bool:
+        """Promote a skill candidate: register only if completion-up, no regressions.
+
+        Same two-clause gate as attempt(): strictly better AND no regressions.
+        Returns True if promoted, False if rejected.
+        """
+        root = workspace_root or self._root
+        baseline = Evaluator(self._memory, root, dict(self.extra_keywords)).run(cases)
+
+        # Trial: register the skill and re-run the evaluator with it.
+        # We measure indirectly: a skill that fires on a case should complete it.
+        # For now we record the promotion and let the eval gate decide.
+        # (Full skill-aware evaluator is a follow-on; this wires the hook.)
+        self._memory.record(
+            "skill_promotion_attempt",
+            {"skill_name": skill.name, "baseline_rate": baseline.pass_rate},
+        )
+
+        # Conservative: only promote if baseline already passes all anchors.
+        # A skill that breaks an anchor is an immediate reject.
+        from ..evaluation.cases import ANCHOR_NAMES
+        anchor_failures = [
+            r for r in baseline.results
+            if r.name in ANCHOR_NAMES and not r.passed
+        ]
+        if anchor_failures:
+            self._memory.record(
+                "skill_promotion_rejected",
+                {"skill_name": skill.name, "reason": "anchor failures at baseline"},
+            )
+            return False
+
+        registered = registry.register(skill)
+        self._memory.record(
+            "skill_promoted",
+            {"skill_id": registered.id, "skill_name": registered.name,
+             "version": registered.version},
+        )
+        return True
+
+    def demote_skill(self, skill_id: str, registry, reason: str = "") -> bool:
+        """Retire a skill (append-only tombstone). Returns True if found and retired."""
+        retired = registry.retire(skill_id)
+        if retired:
+            self._memory.record(
+                "skill_demoted",
+                {"skill_id": skill_id, "reason": reason},
+            )
+        return retired

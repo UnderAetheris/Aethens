@@ -61,7 +61,14 @@ class ExecutiveController:
         self._retry_counts: dict[str, int] = {}
         # PlanStore lives next to the queue journal by default.
         self._plan_store = plan_store or PlanStore(config.log_path.replace(".jsonl", "_plans"))
-        self._reflection = reflection or ReflectionEngine()
+        # reflection=None is the explicit opt-out path (legacy Planner-v2 behavior).
+        # reflection_enabled=False in config also produces None unless overridden by injection.
+        if reflection is not None:
+            self._reflection: ReflectionEngine | None = reflection
+        elif config.reflection_enabled:
+            self._reflection = ReflectionEngine()
+        else:
+            self._reflection = None
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
@@ -108,6 +115,8 @@ class ExecutiveController:
         try:
             result = self._controller.handle_step(step.tool, step.arg)
         except Exception as exc:
+            if self._reflection is None:
+                return self._handle_step_failure(task_id, plan, step, f"exception: {exc!r}")
             outcome = StepOutcome(
                 task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
                 ok=False, output=f"exception: {exc!r}", blocked=False, attempt=attempt,
@@ -115,21 +124,36 @@ class ExecutiveController:
             return self._apply_verdict(task_id, plan, step, outcome)
 
         blocked = result.output.startswith("blocked:")
-        outcome = StepOutcome(
-            task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
-            ok=result.ok, output=result.output, blocked=blocked, attempt=attempt,
-        )
 
         if not result.ok:
+            if self._reflection is None:
+                # Legacy path: safety block → BLOCKED, transient failure → retry.
+                if blocked:
+                    step.status = StepStatus.BLOCKED
+                    self._plan_store.save(plan)
+                    self._retry_counts.pop(task_id, None)
+                    self._queue.transition(task_id, TaskState.BLOCKED, result.output)
+                    return Tick(did_work=True, task_id=task_id, outcome="blocked")
+                return self._handle_step_failure(task_id, plan, step, result.output)
+            outcome = StepOutcome(
+                task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
+                ok=result.ok, output=result.output, blocked=blocked, attempt=attempt,
+            )
             return self._apply_verdict(task_id, plan, step, outcome)
 
-        # Step succeeded — mark done, persist, check if whole plan is complete.
-        reflection = self._reflection.reflect(outcome, plan)
-        self._memory.record(
-            "reflection_decision",
-            {"task_id": task_id, "step": step_index, "verdict": reflection.verdict.value,
-             "reason": reflection.reason},
-        )
+        # Step succeeded.
+        if self._reflection is not None:
+            outcome = StepOutcome(
+                task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
+                ok=True, output=result.output, blocked=False, attempt=attempt,
+            )
+            reflection = self._reflection.reflect(outcome, plan)
+            self._memory.record(
+                "reflection_decision",
+                {"task_id": task_id, "step": step_index, "verdict": reflection.verdict.value,
+                 "reason": reflection.reason},
+            )
+
         step.status = StepStatus.DONE
         step.output = result.output
         self._plan_store.save(plan)
@@ -145,7 +169,6 @@ class ExecutiveController:
             self._queue.transition(task_id, TaskState.DONE, outputs)
             return Tick(did_work=True, task_id=task_id, outcome="done")
 
-        # More steps remain — re-queue so the next tick picks up the next step.
         self._queue.transition(task_id, TaskState.QUEUED, "step done, continuing")
         return Tick(did_work=True, task_id=task_id, outcome="step_done")
 

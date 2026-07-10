@@ -17,6 +17,7 @@ from .models import (
     KnowledgeOut,
     LearnedStepOut,
     LearningStateOut,
+    ReflectionEventOut,
     RevertOut,
     TaskIn,
     TaskOut,
@@ -106,6 +107,27 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
         if rec is None:
             raise HTTPException(status_code=404, detail=f"unknown task '{task_id}'")
         return _task_out(rec)
+
+    @app.get("/tasks/{task_id}/reflections", response_model=list[ReflectionEventOut])
+    def get_task_reflections(task_id: str) -> list[ReflectionEventOut]:
+        """Read-only: return all reflection_decision events for a task."""
+        if s.queue.get(task_id) is None:
+            raise HTTPException(status_code=404, detail=f"unknown task '{task_id}'")
+        events = [
+            e for e in s.memory.history()
+            if e["kind"] == "reflection_decision"
+            and e.get("data", {}).get("task_id") == task_id
+        ]
+        return [
+            ReflectionEventOut(
+                ts=e.get("ts", 0.0),
+                task_id=e["data"]["task_id"],
+                step=e["data"]["step"],
+                verdict=e["data"]["verdict"],
+                reason=e["data"]["reason"],
+            )
+            for e in events
+        ]
 
     @app.get("/events/recent", response_model=list[EventOut])
     def recent_events(limit: int = 50) -> list[EventOut]:
