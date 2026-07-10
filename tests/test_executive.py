@@ -30,7 +30,8 @@ def test_blocked_task_when_safety_denies(tmp_path):
     assert q.get(rec.id).state == TaskState.BLOCKED
 
 
-def test_idle_triggers_improvement(tmp_path):
+def test_idle_triggers_improvement_after_threshold(tmp_path):
+    """Improvement fires only after idle_ticks_before_improve consecutive idle ticks."""
     calls = {"n": 0}
 
     def improver():
@@ -38,10 +39,79 @@ def test_idle_triggers_improvement(tmp_path):
         return True
 
     ex, q, mem = _exec(tmp_path, improve_fn=improver)
-    tick = ex.run_once()
-    assert not tick.did_work and tick.improved is True
+    # Ticks 1 and 2: idle but below threshold (default=3)
+    tick1 = ex.run_once()
+    assert not tick1.did_work and tick1.improved is None
+    assert calls["n"] == 0
+    tick2 = ex.run_once()
+    assert calls["n"] == 0
+    # Tick 3: threshold reached, improvement fires
+    tick3 = ex.run_once()
+    assert not tick3.did_work and tick3.improved is True
     assert calls["n"] == 1
     assert "executive_improve_done" in [e["kind"] for e in mem.history()]
+
+
+def test_trigger_improvement_fires_immediately(tmp_path):
+    """trigger_improvement() bypasses the idle threshold."""
+    calls = {"n": 0}
+
+    def improver():
+        calls["n"] += 1
+        return True
+
+    ex, q, mem = _exec(tmp_path, improve_fn=improver)
+    tick = ex.trigger_improvement()
+    assert tick.improved is True
+    assert calls["n"] == 1
+
+
+def test_idle_counter_resets_when_work_arrives(tmp_path):
+    """Queuing a task after idle ticks resets the counter so improvement doesn't fire early."""
+    calls = {"n": 0}
+
+    def improver():
+        calls["n"] += 1
+        return True
+
+    ex, q, mem = _exec(tmp_path, improve_fn=improver)
+    ex.run_once()  # idle tick 1
+    ex.run_once()  # idle tick 2
+    q.enqueue("hello")  # work arrives
+    ex.run_once()  # drains task, resets idle counter
+    assert calls["n"] == 0  # improvement must NOT have fired yet
+
+
+def test_failed_task_is_retried_then_exhausted(tmp_path):
+    """A task that always raises is retried max_retries times then left FAILED."""
+    from aetheris.controller.controller import Controller
+    from aetheris.planner.planner import Planner
+
+    class BoomPlanner:
+        def plan(self, task):
+            raise RuntimeError("boom")
+
+    mem = MemoryStore(str(tmp_path / "events.jsonl"))
+    queue = TaskQueue(str(tmp_path / "queue.jsonl"), mem)
+    config = Config(log_path=str(tmp_path / "ctrl.jsonl"), workspace_root=str(tmp_path))
+    ctrl = Controller(config, memory=mem)
+    ctrl.planner = BoomPlanner()
+    ex = ExecutiveController(config, queue, mem, controller=ctrl, max_retries=2)
+
+    rec = queue.enqueue("boom task")
+    # Attempt 1 -> retrying
+    t1 = ex.run_once()
+    assert t1.outcome == "retrying"
+    assert queue.get(rec.id).state == TaskState.QUEUED
+    # Attempt 2 -> retrying
+    t2 = ex.run_once()
+    assert t2.outcome == "retrying"
+    # Attempt 3 -> exhausted, final FAILED
+    t3 = ex.run_once()
+    assert t3.outcome == "failed"
+    assert queue.get(rec.id).state == TaskState.FAILED
+    kinds = [e["kind"] for e in mem.history()]
+    assert kinds.count("executive_retry") == 2
 
 
 def test_improvement_does_not_run_while_work_pending(tmp_path):

@@ -55,6 +55,7 @@ class LearningEngine:
         self._experience = experience
         self._learned = learned
         self.extra_keywords: dict[str, list[str]] = self._learned.as_keywords()
+        self.last_result: LearningResult | None = None
 
     def failing_cases(self, cases: list[EvalCase]) -> list[EvalCase]:
         evaluator = Evaluator(self._memory, self._root, self.extra_keywords)
@@ -93,13 +94,15 @@ class LearningEngine:
         candidate = self.propose_one(cases)
 
         if candidate is None:
-            return LearningResult(
+            result = LearningResult(
                 accepted=False,
                 reason="no bounded candidate available",
                 baseline_rate=baseline.pass_rate,
                 new_rate=baseline.pass_rate,
                 candidate=None,
             )
+            self.last_result = result
+            return result
 
         trial = {k: list(v) for k, v in self.extra_keywords.items()}
         trial.setdefault(candidate.intent, [])
@@ -141,13 +144,15 @@ class LearningEngine:
                     "new_rate": trial_report.pass_rate,
                 },
             )
-            return LearningResult(
+            result = LearningResult(
                 accepted=True,
                 reason="strict improvement, no regressions",
                 baseline_rate=baseline.pass_rate,
                 new_rate=trial_report.pass_rate,
                 candidate=candidate,
             )
+            self.last_result = result
+            return result
 
         reason = (
             "regression detected"
@@ -163,13 +168,15 @@ class LearningEngine:
                 "reason": reason,
             },
         )
-        return LearningResult(
+        result = LearningResult(
             accepted=False,
             reason=reason,
             baseline_rate=baseline.pass_rate,
             new_rate=trial_report.pass_rate,
             candidate=candidate,
         )
+        self.last_result = result
+        return result
 
     def revert_last(self) -> LearnedStep | None:
         removed = self._learned.revert_last()

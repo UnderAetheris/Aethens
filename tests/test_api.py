@@ -73,3 +73,31 @@ def test_memory_and_learning_endpoints(client):
     assert client.get("/memory/experience").status_code == 200
     ls = client.get("/learning/state").json()
     assert "extra_keywords" in ls and "steps" in ls
+
+
+def test_trigger_improve_endpoint(client):
+    r = client.post("/learning/improve")
+    assert r.status_code == 200
+    body = r.json()
+    assert "improved" in body
+    assert isinstance(body["improved"], bool)
+
+
+def test_revert_endpoint_on_empty_is_not_reverted(client):
+    r = client.post("/learning/revert")
+    assert r.status_code == 200
+    assert r.json()["reverted"] is False
+
+
+def test_trigger_improve_endpoint(client):
+    r = client.post("/learning/improve")
+    assert r.status_code == 200
+    body = r.json()
+    assert "improved" in body
+    assert isinstance(body["improved"], bool)
+
+
+def test_revert_endpoint_on_empty_is_not_reverted(client):
+    r = client.post("/learning/revert")
+    assert r.status_code == 200
+    assert r.json()["reverted"] is False

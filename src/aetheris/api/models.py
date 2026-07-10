@@ -66,6 +66,20 @@ class LearningStateOut(BaseModel):
     steps: list[LearnedStepOut]
 
 
+class ImprovementOut(BaseModel):
+    improved: bool
+    accepted_keyword: str | None = None
+    accepted_intent: str | None = None
+    baseline_rate: float | None = None
+    new_rate: float | None = None
+
+
+class RevertOut(BaseModel):
+    reverted: bool
+    intent: str | None = None
+    keyword: str | None = None
+
+
 class HealthOut(BaseModel):
     status: str = "ok"
     queued: int

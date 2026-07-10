@@ -13,9 +13,11 @@ from .models import (
     EventOut,
     ExperienceOut,
     HealthOut,
+    ImprovementOut,
     KnowledgeOut,
     LearnedStepOut,
     LearningStateOut,
+    RevertOut,
     TaskIn,
     TaskOut,
 )
@@ -140,6 +142,29 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
             extra_keywords=s.learned.as_keywords(),
             steps=[LearnedStepOut(**st.to_dict()) for st in s.learned.steps()],
         )
+
+    @app.post("/learning/improve", response_model=ImprovementOut)
+    def trigger_improve() -> ImprovementOut:
+        """Run one improvement cycle immediately (eval + learn). Safe to call at any time."""
+        tick = s.executive.trigger_improvement()
+        result = s.learning.last_result
+        if result is None:
+            return ImprovementOut(improved=False)
+        return ImprovementOut(
+            improved=result.accepted,
+            accepted_keyword=result.candidate.keyword if result.candidate else None,
+            accepted_intent=result.candidate.intent if result.candidate else None,
+            baseline_rate=result.baseline_rate,
+            new_rate=result.new_rate,
+        )
+
+    @app.post("/learning/revert", response_model=RevertOut)
+    def revert_last() -> RevertOut:
+        """Revert the most recently accepted learning step."""
+        removed = s.learning.revert_last()
+        if removed is None:
+            return RevertOut(reverted=False)
+        return RevertOut(reverted=True, intent=removed.intent, keyword=removed.keyword)
 
     return app
 

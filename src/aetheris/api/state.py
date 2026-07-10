@@ -60,7 +60,16 @@ class AppState:
         )
 
         def improve() -> bool:
-            return learning.attempt(default_suite()).accepted
+            """One improvement cycle: run the full benchmark then attempt one learning step."""
+            result = learning.attempt(default_suite())
+            # Propagate freshly learned keywords into the live controller's planner.
+            if result.accepted:
+                controller.planner = controller.planner.__class__(
+                    extra_keywords=learning.extra_keywords,
+                    model=model,
+                    registry_tools=tuple(controller.registry.list()),
+                )
+            return result.accepted
 
         executive = ExecutiveController(
             config,
