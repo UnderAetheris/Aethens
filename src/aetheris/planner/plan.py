@@ -80,22 +80,30 @@ class MultiStepPlan:
         return [s for s in self.steps if s.status == StepStatus.PENDING]
 
     def insert_repair_after(self, after_index: int, repairs: list[tuple[str, str]]) -> bool:
-        """Append repair steps after `after_index`, shifting later dependencies.
+        """Append repair steps after `after_index`, then re-queue the original step after them.
+
+        Layout after insertion (after_index=0, 1 repair):
+          [0: original(PENDING, depends_on=[1]),  1: repair(PENDING, depends_on=[])]
+
+        Repair steps have no dependency on the original failing step (they run first).
+        The original step is left for the caller to update its depends_on to point at
+        the last repair index (after_index + n_repairs).
 
         Append-only, forward-only: never modifies steps at or before after_index.
-        Returns False (and makes no change) if after_index points to a done step
-        that would require rewriting history, or if repairs is empty.
+        Returns False (and makes no change) if repairs is empty.
         """
         if not repairs:
             return False
-        # Shift depends_on indices for all steps after the insertion point.
         insert_at = after_index + 1
         n_new = len(repairs)
+        # Shift depends_on for all steps that come after the insertion point.
         for step in self.steps[insert_at:]:
             step.depends_on = [d + n_new if d >= insert_at else d for d in step.depends_on]
+        # Build repair steps with no back-dependency on the original failing step.
         new_steps: list[PlanStep] = []
         for i, (tool, arg) in enumerate(repairs):
-            dep = [after_index + i] if (after_index + i) >= 0 else []
+            # Each repair depends only on the previous repair (linear chain), not on original.
+            dep = [insert_at + i - 1] if i > 0 else []
             new_steps.append(PlanStep(tool=tool, arg=arg, reason="repair", depends_on=dep))
         self.steps[insert_at:insert_at] = new_steps
         return True

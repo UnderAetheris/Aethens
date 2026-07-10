@@ -178,7 +178,12 @@ class ExecutiveController:
         if reflection.verdict == Verdict.INSERT_REPAIR_STEPS:
             inserted = plan.insert_repair_after(step_index, reflection.repair_steps)
             if inserted:
-                step.status = StepStatus.FAILED
+                # Reset the original step to PENDING so it retries after repairs complete.
+                # Repairs were inserted at step_index+1 .. step_index+n_repairs;
+                # original step stays at step_index and must wait for the last repair.
+                n_repairs = len(reflection.repair_steps)
+                step.status = StepStatus.PENDING
+                step.depends_on = [step_index + n_repairs]
                 self._plan_store.save(plan)
                 self._memory.record(
                     "repair_inserted",
