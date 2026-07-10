@@ -83,19 +83,28 @@ def test_idle_counter_resets_when_work_arrives(tmp_path):
 
 
 def test_failed_task_is_retried_then_exhausted(tmp_path):
-    """A task that always raises is retried max_retries times then left FAILED."""
+    """A step that always raises is retried max_retries times then the task is FAILED."""
     from aetheris.controller.controller import Controller
-    from aetheris.planner.planner import Planner
+    from aetheris.planner.plan import MultiStepPlan, PlanStep
 
     class BoomPlanner:
         def plan(self, task):
-            raise RuntimeError("boom")
+            from aetheris.planner.planner import Plan
+            return Plan("echo", task, "boom test")
+
+        def plan_multi(self, task, task_id):
+            return MultiStepPlan(
+                task_id=task_id,
+                steps=[PlanStep(tool="echo", arg=task, reason="boom test")],
+            )
 
     mem = MemoryStore(str(tmp_path / "events.jsonl"))
     queue = TaskQueue(str(tmp_path / "queue.jsonl"), mem)
     config = Config(log_path=str(tmp_path / "ctrl.jsonl"), workspace_root=str(tmp_path))
     ctrl = Controller(config, memory=mem)
     ctrl.planner = BoomPlanner()
+    # Patch handle_step to always raise
+    ctrl.handle_step = lambda *a, **kw: (_ for _ in ()).throw(RuntimeError("boom"))
     ex = ExecutiveController(config, queue, mem, controller=ctrl, max_retries=2)
 
     rec = queue.enqueue("boom task")
@@ -111,7 +120,7 @@ def test_failed_task_is_retried_then_exhausted(tmp_path):
     assert t3.outcome == "failed"
     assert queue.get(rec.id).state == TaskState.FAILED
     kinds = [e["kind"] for e in mem.history()]
-    assert kinds.count("executive_retry") == 2
+    assert kinds.count("step_replan") == 2
 
 
 def test_improvement_does_not_run_while_work_pending(tmp_path):

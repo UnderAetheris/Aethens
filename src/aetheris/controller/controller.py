@@ -83,3 +83,22 @@ class Controller:
         output = action.output if action.executed else (action.preview or "")
         self.memory.record("task_completed", {"task": task, "output": output})
         return TaskResult(ok=True, output=output)
+
+    def handle_step(self, tool_name: str, arg: str, dry_run: bool = False) -> TaskResult:
+        """Execute a single pre-planned step directly through the SafetyLayer.
+
+        Called by the ExecutiveController when draining a MultiStepPlan.
+        The planner has already run; this is purely the safety-gate + tool path.
+        Every step passes the identical SafetyLayer as a single-step task.
+        """
+        tool = self.registry.get(tool_name)
+        request = ActionRequest(tool=tool.name, arg=arg, safe=tool.safe, dry_run=dry_run)
+        action = self.safety.run(tool, request)
+
+        if not action.allowed:
+            self.memory.record("step_blocked", {"tool": tool_name, "reason": action.reason})
+            return TaskResult(ok=False, output=f"blocked: {action.reason}")
+
+        output = action.output if action.executed else (action.preview or "")
+        self.memory.record("step_executed", {"tool": tool_name, "output": output})
+        return TaskResult(ok=True, output=output)

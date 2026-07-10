@@ -16,15 +16,23 @@ class TaskState(str, Enum):
     DONE = "done"
     BLOCKED = "blocked"
     FAILED = "failed"
+    WAITING_FOR_CONTEXT = "waiting_for_context"
 
 
 _ALLOWED: dict[TaskState, set[TaskState]] = {
     TaskState.QUEUED: {TaskState.PLANNING, TaskState.FAILED},
     TaskState.PLANNING: {TaskState.EXECUTING, TaskState.BLOCKED, TaskState.FAILED},
-    TaskState.EXECUTING: {TaskState.DONE, TaskState.BLOCKED, TaskState.FAILED},
+    TaskState.EXECUTING: {
+        TaskState.DONE,
+        TaskState.BLOCKED,
+        TaskState.FAILED,
+        TaskState.QUEUED,          # step done, more steps remain
+        TaskState.WAITING_FOR_CONTEXT,
+    },
     TaskState.DONE: set(),
     TaskState.BLOCKED: {TaskState.QUEUED},
     TaskState.FAILED: {TaskState.QUEUED},
+    TaskState.WAITING_FOR_CONTEXT: {TaskState.QUEUED, TaskState.FAILED},
 }
 
 

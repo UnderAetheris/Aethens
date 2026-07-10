@@ -5,13 +5,15 @@ import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from .plan import MultiStepPlan, PlanStep, StepStatus
+
 if TYPE_CHECKING:
     from ..model import ModelProvider
 
 
 @dataclass(frozen=True)
 class Plan:
-    """A planner's decision: which tool to run, with what argument."""
+    """A planner's single-step decision (v1 contract, unchanged)."""
 
     tool: str
     arg: str
@@ -24,6 +26,9 @@ _CONTENT_RE = re.compile(r"content=(.*)$", re.DOTALL)
 _WRITE_VERBS = ("write", "create", "save")
 _READ_VERBS = ("read", "open", "show", "cat")
 _LIST_VERBS = ("list", "ls", "dir")
+
+# Connectors that signal sequential intent in a multi-step task.
+_STEP_SPLIT_RE = re.compile(r"\s+(?:and\s+then|then)\s+", re.IGNORECASE)
 
 
 class Planner:
@@ -172,4 +177,56 @@ class Planner:
             arg=arg_str,
             reason=f"model suggestion ({resp.provider})",
             confident=False,
+        )
+
+    # ------------------------------------------------------------------ #
+    # Multi-step planning (v2)                                            #
+    # ------------------------------------------------------------------ #
+
+    def plan_multi(self, task: str, task_id: str) -> MultiStepPlan:
+        """Decompose a task into a MultiStepPlan (a small DAG of PlanSteps).
+
+        Decomposition is deterministic-first and conservative:
+        - Split only on explicit connectors ("then", "and then").
+        - Each fragment is planned independently with the existing single-step
+          rules; each step depends on the previous one (linear chain).
+        - If any fragment can't be planned confidently, fall back to a
+          single-step plan for the whole task rather than fabricating structure.
+        - A single-step task produces a one-step plan: the degenerate case.
+        """
+        fragments = _STEP_SPLIT_RE.split(task.strip())
+
+        if len(fragments) > 1:
+            steps: list[PlanStep] = []
+            for i, fragment in enumerate(fragments):
+                single = self.plan(fragment.strip())
+                if not single.confident:
+                    # Can't confidently plan this fragment — fall back to
+                    # a single-step plan for the whole task.
+                    return self._single_step_plan(task, task_id)
+                steps.append(
+                    PlanStep(
+                        tool=single.tool,
+                        arg=single.arg,
+                        reason=single.reason,
+                        depends_on=[i - 1] if i > 0 else [],
+                    )
+                )
+            return MultiStepPlan(task_id=task_id, steps=steps)
+
+        return self._single_step_plan(task, task_id)
+
+    def _single_step_plan(self, task: str, task_id: str) -> MultiStepPlan:
+        """Wrap a single Plan as a one-step MultiStepPlan."""
+        single = self.plan(task)
+        return MultiStepPlan(
+            task_id=task_id,
+            steps=[
+                PlanStep(
+                    tool=single.tool,
+                    arg=single.arg,
+                    reason=single.reason,
+                    depends_on=[],
+                )
+            ],
         )
