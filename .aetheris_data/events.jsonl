@@ -18458,3 +18458,997 @@
 {"ts": 1783604459.8127794, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
 {"ts": 1783604459.8134134, "kind": "eval_summary", "data": {"ts": 1783604459.8133898, "passed": 5, "total": 5, "pass_rate": 1.0}}
 {"ts": 1783604459.814241, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675491.2151961, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675491.2276063, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675491.2768679, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675491.2894905, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675491.2975993, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675491.3112764, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675491.3129911, "kind": "eval_summary", "data": {"ts": 1783675491.3125236, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675491.321627, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675491.3388574, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675491.3563597, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675491.3645394, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675491.378613, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675491.3798132, "kind": "eval_summary", "data": {"ts": 1783675491.3797693, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675491.3856928, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675492.3885796, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675492.4044876, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675492.482183, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675492.512085, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675492.5215268, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675492.7393138, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675492.7422352, "kind": "eval_summary", "data": {"ts": 1783675492.742197, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675492.7779193, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675492.901972, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675492.9561155, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675492.9757774, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675492.9842901, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675492.9850512, "kind": "eval_summary", "data": {"ts": 1783675492.985023, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675492.9858809, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675493.9907658, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675493.9973164, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675494.0246725, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675494.03895, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675494.0572941, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675494.0658314, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675494.0697415, "kind": "eval_summary", "data": {"ts": 1783675494.069709, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675494.0791178, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675494.1060762, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675494.12442, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675494.1356723, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675494.151871, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675494.152964, "kind": "eval_summary", "data": {"ts": 1783675494.152933, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675494.1558383, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675495.1625576, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675495.1678936, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675495.1789608, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675495.1872559, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675495.193177, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675495.1991413, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675495.1998746, "kind": "eval_summary", "data": {"ts": 1783675495.1998458, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675495.2050955, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675495.2165008, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675495.2248914, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675495.2308834, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675495.2376227, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675495.2389145, "kind": "eval_summary", "data": {"ts": 1783675495.2387917, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675495.2398996, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675496.2433665, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675496.2486725, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675496.2581809, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675496.2634223, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675496.268288, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675496.2737806, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675496.2743125, "kind": "eval_summary", "data": {"ts": 1783675496.2742882, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675496.2780488, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675496.286358, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675496.2924266, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675496.2962408, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675496.3017764, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675496.302454, "kind": "eval_summary", "data": {"ts": 1783675496.3024328, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675496.302998, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675497.3186402, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675497.3242264, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675497.3353152, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675497.3431935, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675497.3485293, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675497.3538258, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675497.3544323, "kind": "eval_summary", "data": {"ts": 1783675497.3544087, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675497.3599465, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675497.3696663, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675497.376698, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675497.3820653, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675497.3881445, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675497.3888688, "kind": "eval_summary", "data": {"ts": 1783675497.388841, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675497.3896792, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675498.3943326, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675498.459719, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675498.488977, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675498.5243292, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675498.5670514, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675498.58753, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675498.5951965, "kind": "eval_summary", "data": {"ts": 1783675498.5951476, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675498.619277, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675498.6524508, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675498.6652162, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675498.6775668, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675498.694835, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675498.7014296, "kind": "eval_summary", "data": {"ts": 1783675498.7013614, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675498.7023537, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675499.7156115, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675499.7226713, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675499.7350998, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675499.7433503, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675499.7493641, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675499.7608993, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675499.762234, "kind": "eval_summary", "data": {"ts": 1783675499.7621737, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675499.775138, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675499.8106756, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675499.8246405, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675499.834162, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675499.843484, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675499.8446507, "kind": "eval_summary", "data": {"ts": 1783675499.8446121, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675499.8468018, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675500.8623068, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675500.8686087, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675500.8805106, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675500.8902433, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675500.8959463, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675500.9028482, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675500.9049227, "kind": "eval_summary", "data": {"ts": 1783675500.904895, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675500.9116635, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675500.9237845, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675500.9357843, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675500.941459, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675500.950398, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675500.9515085, "kind": "eval_summary", "data": {"ts": 1783675500.9514716, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675500.9525137, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675501.9605808, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675501.9678702, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675501.984006, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675501.9928904, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675502.0026762, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675502.0105152, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675502.0121212, "kind": "eval_summary", "data": {"ts": 1783675502.012082, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675502.0198405, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675502.037164, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675502.0454702, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675502.0517488, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675502.0585146, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675502.0602143, "kind": "eval_summary", "data": {"ts": 1783675502.0601838, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675502.0610592, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675503.073302, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675503.1397057, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675503.2424731, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675503.3936691, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675503.4771073, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675503.6215515, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675503.6313982, "kind": "eval_summary", "data": {"ts": 1783675503.6313443, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675503.6984622, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675503.7373512, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675503.7681932, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675503.774239, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675503.7815175, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675503.7822397, "kind": "eval_summary", "data": {"ts": 1783675503.78221, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675503.783301, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675504.7913654, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675504.7978835, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675504.811629, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675504.8215277, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675504.8270962, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675504.8334227, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675504.8342512, "kind": "eval_summary", "data": {"ts": 1783675504.834213, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675504.8396974, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675504.8512228, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675504.860142, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675504.8660166, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675504.8732185, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675504.8742657, "kind": "eval_summary", "data": {"ts": 1783675504.874229, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675504.8753345, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675505.8988752, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675505.9930148, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675506.1051817, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675506.1645, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675506.1697297, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675506.1754644, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675506.1762862, "kind": "eval_summary", "data": {"ts": 1783675506.176255, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675506.1823018, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675506.1948166, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675506.2034416, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675506.2089283, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675506.216138, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675506.2170293, "kind": "eval_summary", "data": {"ts": 1783675506.2169986, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675506.2180128, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675507.2214687, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675507.2247882, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675507.2325602, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675507.237764, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675507.2412362, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675507.2478786, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675507.2484715, "kind": "eval_summary", "data": {"ts": 1783675507.2484455, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675507.2524812, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675507.259326, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675507.2657905, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675507.2698941, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675507.2750921, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675507.2757874, "kind": "eval_summary", "data": {"ts": 1783675507.275761, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675507.2765236, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675508.2926416, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675508.2979407, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675508.3086321, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675508.3161812, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675508.320965, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675508.3265312, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675508.3275146, "kind": "eval_summary", "data": {"ts": 1783675508.327481, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675508.333866, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675508.345494, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675508.3555055, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675508.3605795, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675508.3669348, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675508.3678212, "kind": "eval_summary", "data": {"ts": 1783675508.3677862, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675508.3685815, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675509.3899, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675509.4842088, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675509.498124, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675509.5104918, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675509.5171957, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675509.5248716, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675509.5257108, "kind": "eval_summary", "data": {"ts": 1783675509.5256813, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675509.532625, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675509.5469427, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675509.557242, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675509.5683155, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675509.5778813, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675509.5795603, "kind": "eval_summary", "data": {"ts": 1783675509.579519, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675509.580548, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675510.583898, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675510.590659, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675510.617015, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675510.6247687, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675510.6319532, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675510.6385052, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675510.6392856, "kind": "eval_summary", "data": {"ts": 1783675510.6392539, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675510.6453774, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675510.6570837, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675510.668456, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675510.673392, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675510.6825163, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675510.6832256, "kind": "eval_summary", "data": {"ts": 1783675510.6831934, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675510.6846867, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675511.6943905, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675511.7048526, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675511.7221391, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675511.733862, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675511.7390678, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675511.7517886, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675511.7527547, "kind": "eval_summary", "data": {"ts": 1783675511.752723, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675511.7589858, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675511.7803771, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675511.7933192, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675511.8014574, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675511.8073025, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675511.8080792, "kind": "eval_summary", "data": {"ts": 1783675511.808046, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675511.8091526, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675512.8182783, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675512.8219488, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675512.828929, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675512.833561, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675512.8374538, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675512.8417456, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675512.8423667, "kind": "eval_summary", "data": {"ts": 1783675512.8423417, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675512.845546, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675512.8531294, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675512.8577986, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675512.8613565, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675512.8655696, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675512.8661091, "kind": "eval_summary", "data": {"ts": 1783675512.8660836, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675512.8666701, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675513.8826365, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675513.9257326, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675513.997462, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675514.0632966, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675514.1095386, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675514.1828742, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675514.183548, "kind": "eval_summary", "data": {"ts": 1783675514.1835222, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675514.1878679, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675514.1974592, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675514.2041283, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675514.2088137, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675514.2144504, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675514.2151227, "kind": "eval_summary", "data": {"ts": 1783675514.2150953, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675514.2159998, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675515.2252295, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675515.2310123, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675515.2483923, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675515.2566597, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675515.263527, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675515.2695959, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675515.270305, "kind": "eval_summary", "data": {"ts": 1783675515.2702773, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675515.2752523, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675515.2871656, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675515.295233, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675515.3001947, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675515.3068225, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675515.3079116, "kind": "eval_summary", "data": {"ts": 1783675515.3078692, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675515.30978, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675516.4171162, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675516.4852142, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675516.5596921, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675516.6387293, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675516.6505795, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675516.6589468, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675516.6616666, "kind": "eval_summary", "data": {"ts": 1783675516.661622, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675516.669183, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675516.6860375, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675516.6962397, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675516.7082627, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675516.7214956, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675516.723774, "kind": "eval_summary", "data": {"ts": 1783675516.7237113, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675516.7278962, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675517.739383, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675517.7443404, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675517.7509594, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675517.756745, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675517.7614331, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675517.7656038, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675517.7661924, "kind": "eval_summary", "data": {"ts": 1783675517.7661664, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675517.7699995, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675517.782153, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675517.7883267, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675517.7937593, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675517.7980428, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675517.7986684, "kind": "eval_summary", "data": {"ts": 1783675517.798642, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675517.7992253, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675518.8134704, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675518.81699, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675518.8246002, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675518.8297243, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675518.8332999, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675518.8369024, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675518.8375604, "kind": "eval_summary", "data": {"ts": 1783675518.8375354, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675518.8415263, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675518.8492398, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675518.8546214, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675518.860009, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675518.8664236, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675518.8670409, "kind": "eval_summary", "data": {"ts": 1783675518.8670142, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675518.8677404, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675519.8704896, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675519.8741312, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675519.8799136, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675519.884401, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675519.8885436, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675519.892784, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675519.89335, "kind": "eval_summary", "data": {"ts": 1783675519.893326, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675519.8971727, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675519.9053454, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675519.9116418, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675519.9160573, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675519.919992, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675519.9205587, "kind": "eval_summary", "data": {"ts": 1783675519.9205296, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675519.9211802, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675520.924103, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675520.928063, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675520.9372678, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675520.947093, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675520.9522188, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675520.957418, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675520.9583404, "kind": "eval_summary", "data": {"ts": 1783675520.9583097, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675520.962866, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675520.9734838, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675520.9810321, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675520.985743, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675520.9933724, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675520.9940658, "kind": "eval_summary", "data": {"ts": 1783675520.9940383, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675520.994768, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675521.998016, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675522.002895, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675522.013885, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675522.0197315, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675522.036952, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675522.06651, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675522.0710719, "kind": "eval_summary", "data": {"ts": 1783675522.0710402, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675522.0917835, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675522.1447277, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675522.1994958, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675522.2237682, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675522.2429645, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675522.244018, "kind": "eval_summary", "data": {"ts": 1783675522.2439818, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675522.245031, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675523.2622838, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675523.2823174, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675523.3917863, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675523.407189, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675523.41615, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675523.473593, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675523.474603, "kind": "eval_summary", "data": {"ts": 1783675523.474571, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675523.4816914, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675523.5362234, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675523.5607858, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675523.5914953, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675523.6018605, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675523.6026206, "kind": "eval_summary", "data": {"ts": 1783675523.6025875, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675523.603535, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675524.619436, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675524.7037444, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675524.7173388, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675524.7308352, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675524.7369325, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675524.7447467, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675524.7456436, "kind": "eval_summary", "data": {"ts": 1783675524.7456138, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675524.7512195, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675524.7644458, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675524.7728817, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675524.7782872, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675524.7842488, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675524.7851212, "kind": "eval_summary", "data": {"ts": 1783675524.78509, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675524.786301, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675525.7903647, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675525.7962132, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675525.8126853, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675525.8237584, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675525.830179, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675525.8400102, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675525.8406506, "kind": "eval_summary", "data": {"ts": 1783675525.8406258, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675525.8470795, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675525.8701012, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675525.8780434, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675525.8836288, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675525.8905203, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675525.8912284, "kind": "eval_summary", "data": {"ts": 1783675525.8912003, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675525.8917985, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675526.9046834, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675526.9089758, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675526.9170496, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675526.9237134, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675526.9286265, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675526.9339144, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675526.9345782, "kind": "eval_summary", "data": {"ts": 1783675526.9345272, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675526.9400122, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675526.9485373, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675526.955742, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675526.9597712, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675526.9647076, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675526.9653897, "kind": "eval_summary", "data": {"ts": 1783675526.9653604, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675526.9660585, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675527.9711945, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675527.97541, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675527.9843621, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675527.9935296, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675527.998199, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675528.0055296, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675528.0069256, "kind": "eval_summary", "data": {"ts": 1783675528.0068853, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675528.0135198, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675528.0270243, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675528.034765, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675528.041026, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675528.0474226, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675528.048417, "kind": "eval_summary", "data": {"ts": 1783675528.0483863, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675528.049285, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675529.0652328, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675529.0700815, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675529.0807562, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675529.0882866, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675529.0928566, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675529.097882, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675529.0988255, "kind": "eval_summary", "data": {"ts": 1783675529.098793, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675529.1038604, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675529.1129718, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675529.1188948, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675529.123972, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675529.1295753, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675529.130152, "kind": "eval_summary", "data": {"ts": 1783675529.130119, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675529.1308517, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675530.1460664, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675530.190069, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675530.2739308, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675530.3807282, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675530.4304357, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675530.4992924, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675530.5053642, "kind": "eval_summary", "data": {"ts": 1783675530.5053258, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675530.5595567, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675530.6164346, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675530.6255872, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675530.6310143, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675530.6390128, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675530.6398032, "kind": "eval_summary", "data": {"ts": 1783675530.6397753, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675530.640629, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675531.645094, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675531.6501544, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675531.6617537, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675531.6679692, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675531.6737716, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675531.6783857, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675531.6789742, "kind": "eval_summary", "data": {"ts": 1783675531.6789484, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675531.6837685, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675531.695727, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675531.7031662, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675531.7083197, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675531.7134354, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675531.7141461, "kind": "eval_summary", "data": {"ts": 1783675531.7141175, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675531.7148898, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675532.7200732, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675532.7266366, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675532.740052, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675532.7488499, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675532.757098, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675532.7642157, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675532.7649472, "kind": "eval_summary", "data": {"ts": 1783675532.7649128, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675532.7717865, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675532.782808, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675532.7925642, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675532.8005054, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675532.8102927, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675532.8113961, "kind": "eval_summary", "data": {"ts": 1783675532.811361, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675532.8126357, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675533.816362, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675533.823968, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675533.8367035, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675533.8477287, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675533.854556, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675533.8633006, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675533.864102, "kind": "eval_summary", "data": {"ts": 1783675533.864072, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675533.873465, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675533.892173, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675533.9049897, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675533.9137495, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675533.925743, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675533.9266186, "kind": "eval_summary", "data": {"ts": 1783675533.9265876, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675533.9273992, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675534.9352393, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675534.9399846, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675534.9501235, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675534.9583406, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675534.9626975, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675534.970176, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675534.9713607, "kind": "eval_summary", "data": {"ts": 1783675534.971327, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675534.9760902, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675534.9853776, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675534.9926033, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675534.9970555, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675535.003861, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675535.0047657, "kind": "eval_summary", "data": {"ts": 1783675535.0047367, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675535.0055006, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675536.0207903, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675536.0356822, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675536.054861, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675536.0701382, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675536.0760136, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675536.0819051, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675536.0827107, "kind": "eval_summary", "data": {"ts": 1783675536.0826774, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675536.088711, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675536.1034794, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675536.1220322, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675536.1348176, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675536.1436822, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675536.1444943, "kind": "eval_summary", "data": {"ts": 1783675536.1444645, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675536.1452358, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675537.1524777, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675537.1606345, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675537.1764228, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675537.187514, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675537.194992, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675537.211182, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675537.2142432, "kind": "eval_summary", "data": {"ts": 1783675537.2141914, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675537.2247388, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675537.2560134, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675537.2963703, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675537.3065307, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675537.315879, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675537.3175652, "kind": "eval_summary", "data": {"ts": 1783675537.3172112, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675537.319419, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675538.3267548, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675538.3601415, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675538.4077084, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675538.4570308, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675538.4865544, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675538.528385, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675538.529273, "kind": "eval_summary", "data": {"ts": 1783675538.5292447, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675538.5684676, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675538.6225693, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675538.6429353, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675538.6542535, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675538.664196, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675538.6664443, "kind": "eval_summary", "data": {"ts": 1783675538.6664083, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675538.6697426, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675539.6980612, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675539.7485476, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675539.8726358, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675539.9884973, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675540.0273154, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675540.0816734, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675540.0827336, "kind": "eval_summary", "data": {"ts": 1783675540.0826843, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675540.097755, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675540.2136588, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675540.261912, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675540.2879684, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675540.3200755, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675540.3215582, "kind": "eval_summary", "data": {"ts": 1783675540.3215263, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675540.3296857, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675541.3419638, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675541.3561153, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675541.3894033, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675541.4099555, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675541.4331684, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675541.449596, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675541.4538608, "kind": "eval_summary", "data": {"ts": 1783675541.4537978, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675541.4632208, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675541.4815748, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675541.498154, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675541.5161033, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675541.527301, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675541.5284386, "kind": "eval_summary", "data": {"ts": 1783675541.5284085, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675541.529242, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675542.5335696, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675542.5418596, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675542.5884092, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675542.6085138, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675542.6259778, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675542.6379974, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675542.6398394, "kind": "eval_summary", "data": {"ts": 1783675542.6398046, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675542.6453986, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675542.6772811, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675542.7017956, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675542.7210438, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675542.7281647, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675542.7291222, "kind": "eval_summary", "data": {"ts": 1783675542.7290578, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675542.7304208, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675543.7493649, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675543.788537, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675543.8383782, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675543.8965354, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675543.921275, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675543.9557405, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675543.9610505, "kind": "eval_summary", "data": {"ts": 1783675543.9610088, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675543.9923959, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675544.0819564, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675544.1054866, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675544.1197762, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675544.1291876, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675544.1299121, "kind": "eval_summary", "data": {"ts": 1783675544.129886, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675544.1306367, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675545.1481934, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675545.1606083, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675545.1773372, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675545.1913855, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675545.1995964, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675545.2122407, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675545.2132137, "kind": "eval_summary", "data": {"ts": 1783675545.2131696, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675545.2223625, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675545.2459137, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675545.262058, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675545.2727537, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675545.2878456, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675545.2889616, "kind": "eval_summary", "data": {"ts": 1783675545.2889326, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675545.290151, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675546.3027427, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675546.377442, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675546.4758215, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675546.588216, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675546.6430504, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675546.7161198, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675546.7338111, "kind": "eval_summary", "data": {"ts": 1783675546.7337754, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675546.814355, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675546.9177108, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675546.9657366, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675546.9730113, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675546.97939, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675546.9827318, "kind": "eval_summary", "data": {"ts": 1783675546.982666, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675546.983823, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675547.9964626, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675548.0051763, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675548.0221508, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675548.0339828, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675548.0465162, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675548.0573237, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675548.0585139, "kind": "eval_summary", "data": {"ts": 1783675548.0581646, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675548.0641909, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675548.0824735, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675548.103643, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675548.1109757, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675548.1238909, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675548.1248262, "kind": "eval_summary", "data": {"ts": 1783675548.124798, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675548.1262603, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675549.1302848, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675549.144988, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675549.1931763, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675549.239792, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675549.2586427, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675549.2671454, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675549.2679083, "kind": "eval_summary", "data": {"ts": 1783675549.267879, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675549.273804, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675549.289713, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675549.3007715, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675549.307909, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675549.3179886, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675549.3198338, "kind": "eval_summary", "data": {"ts": 1783675549.3197992, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675549.3214889, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675550.3310895, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675550.3461738, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675550.37179, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675550.3876672, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675550.3959398, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675550.405129, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675550.4063118, "kind": "eval_summary", "data": {"ts": 1783675550.4062724, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675550.4184747, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675550.435616, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675550.4446564, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675550.4538417, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675550.4608068, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675550.461682, "kind": "eval_summary", "data": {"ts": 1783675550.4616437, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675550.4637556, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675551.4795148, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675551.4844182, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675551.494817, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675551.5043194, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675551.5097032, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675551.5171406, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675551.5185256, "kind": "eval_summary", "data": {"ts": 1783675551.5182788, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675551.5239952, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675551.5374658, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675551.5446413, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675551.5518034, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675551.5583706, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675551.5591648, "kind": "eval_summary", "data": {"ts": 1783675551.5591347, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675551.5604687, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675552.588298, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675552.6696024, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675552.734692, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675552.741618, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675552.7472014, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675552.7530453, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675552.7540205, "kind": "eval_summary", "data": {"ts": 1783675552.7539918, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675552.7593436, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675552.7713792, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675552.7815795, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675552.7903168, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675552.7978015, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675552.7984886, "kind": "eval_summary", "data": {"ts": 1783675552.7984595, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675552.7993884, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675553.801109, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675553.8050444, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675553.8143947, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675553.8194907, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675553.8236673, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675553.8291938, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675553.8299174, "kind": "eval_summary", "data": {"ts": 1783675553.8298898, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675553.834266, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675553.8427632, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675553.8487864, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675553.8527398, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675553.856885, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675553.8573978, "kind": "eval_summary", "data": {"ts": 1783675553.8573713, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675553.8581324, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675554.8614936, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675554.8667724, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675554.878128, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675554.8849118, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675554.8906488, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675554.8965607, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675554.8974652, "kind": "eval_summary", "data": {"ts": 1783675554.8974328, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675554.9020364, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675554.9114742, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675554.9188204, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675554.9233782, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675554.929667, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675554.9304078, "kind": "eval_summary", "data": {"ts": 1783675554.9303792, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675554.9311607, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675555.94427, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675555.950114, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675555.9624457, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675555.9729846, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675555.9790306, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675555.9869084, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675555.9877186, "kind": "eval_summary", "data": {"ts": 1783675555.9876864, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675555.993084, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675556.0074852, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675556.0162272, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675556.0207353, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675556.0285342, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675556.0294452, "kind": "eval_summary", "data": {"ts": 1783675556.02941, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675556.0303178, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675557.0444632, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675557.0505173, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675557.0743291, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675557.0876327, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675557.09557, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675557.103503, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675557.1044903, "kind": "eval_summary", "data": {"ts": 1783675557.1044576, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675557.1142306, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675557.1318998, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675557.1410139, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675557.1494718, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675557.1566386, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675557.1590943, "kind": "eval_summary", "data": {"ts": 1783675557.1588933, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675557.1606157, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675558.1871018, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675558.2462401, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675558.3266118, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675558.4040525, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675558.4525242, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675558.5133135, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675558.5193043, "kind": "eval_summary", "data": {"ts": 1783675558.5192528, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675558.5655327, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675558.663519, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675558.6784472, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675558.687031, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675558.6961577, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675558.6977851, "kind": "eval_summary", "data": {"ts": 1783675558.697757, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675558.6985388, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675559.707968, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675559.7154326, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675559.7557387, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675559.770841, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675559.7800086, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675559.7867763, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675559.795551, "kind": "eval_summary", "data": {"ts": 1783675559.7954888, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675559.8056636, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675559.8301587, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675559.8499205, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675559.8632658, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675559.8733234, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675559.8741977, "kind": "eval_summary", "data": {"ts": 1783675559.8741672, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675559.8776646, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675560.9046144, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675560.9466987, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675561.0211978, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675561.1746743, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675561.1838267, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675561.190546, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675561.193959, "kind": "eval_summary", "data": {"ts": 1783675561.1939166, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675561.2007911, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675561.21753, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675561.233456, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675561.2491908, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675561.2635953, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675561.2650096, "kind": "eval_summary", "data": {"ts": 1783675561.2649012, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675561.2659388, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675562.2689784, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675562.2738104, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675562.2850184, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675562.2940595, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675562.3000438, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675562.306171, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675562.307011, "kind": "eval_summary", "data": {"ts": 1783675562.3069415, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675562.3140247, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675562.324447, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675562.3347561, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675562.339325, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675562.3463426, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675562.3473086, "kind": "eval_summary", "data": {"ts": 1783675562.3472786, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675562.348193, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675563.3719184, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675563.4155617, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675563.4720795, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675563.534158, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675563.603254, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675563.6295552, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675563.6302783, "kind": "eval_summary", "data": {"ts": 1783675563.63025, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675563.6352127, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675563.6461072, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675563.6530414, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675563.6584253, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675563.6642797, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675563.6650648, "kind": "eval_summary", "data": {"ts": 1783675563.665034, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675563.6661618, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675564.6745446, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675564.6819108, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675564.6946254, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675564.7028556, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675564.7101161, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675564.7158272, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675564.7166076, "kind": "eval_summary", "data": {"ts": 1783675564.7165794, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675564.7222047, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675564.73403, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675564.7426012, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675564.747915, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675564.7529976, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675564.7537801, "kind": "eval_summary", "data": {"ts": 1783675564.7537484, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675564.7546487, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675565.7716768, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675565.779199, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675565.7915063, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675565.8015542, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675565.812661, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675565.8241274, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675565.8291578, "kind": "eval_summary", "data": {"ts": 1783675565.8288832, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675565.8348513, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675565.849859, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675565.8581052, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675565.8638427, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675565.8794727, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675565.8835754, "kind": "eval_summary", "data": {"ts": 1783675565.883538, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675565.8848028, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675566.8952653, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675566.9034004, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675566.9224741, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675566.9435377, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675566.9530878, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675566.967812, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675566.9685261, "kind": "eval_summary", "data": {"ts": 1783675566.9684741, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675566.978345, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675567.0021558, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675567.0150185, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675567.023092, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675567.029772, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675567.0332577, "kind": "eval_summary", "data": {"ts": 1783675567.0332263, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675567.034012, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675568.0406728, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675568.04613, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675568.061085, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675568.07057, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675568.081241, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675568.089716, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675568.0907114, "kind": "eval_summary", "data": {"ts": 1783675568.0906813, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675568.0976157, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675568.1145163, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675568.1279802, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675568.1330333, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675568.140697, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675568.1423483, "kind": "eval_summary", "data": {"ts": 1783675568.1423123, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675568.143161, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675569.1700728, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675569.2564936, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675569.3313677, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675569.4947722, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675569.5668797, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675569.6467602, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675569.656834, "kind": "eval_summary", "data": {"ts": 1783675569.656797, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675569.768365, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675569.815745, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675569.8686266, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675569.9157817, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675569.9591258, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675569.9599702, "kind": "eval_summary", "data": {"ts": 1783675569.959939, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675569.9607906, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675570.9716039, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675570.9840093, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675571.014518, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675571.0284595, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675571.0438125, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675571.0509958, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675571.0518477, "kind": "eval_summary", "data": {"ts": 1783675571.0518181, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675571.0618804, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675571.077008, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675571.0861638, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675571.095195, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675571.1044312, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675571.1068633, "kind": "eval_summary", "data": {"ts": 1783675571.1066792, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675571.1081476, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675572.1221848, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675572.14076, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675572.1805532, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675572.2686973, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675572.319971, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675572.334254, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675572.3350139, "kind": "eval_summary", "data": {"ts": 1783675572.3349848, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675572.391624, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675572.4632926, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675572.476859, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675572.4883375, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675572.4997468, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675572.5005345, "kind": "eval_summary", "data": {"ts": 1783675572.5005033, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675572.5059018, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675573.5559485, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675573.7009978, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675573.8005261, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675573.8849137, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675574.13243, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675574.3745024, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675574.3752882, "kind": "eval_summary", "data": {"ts": 1783675574.3752575, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675574.4605362, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675574.5462122, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675574.624896, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675574.6741664, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675574.7755315, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675574.776761, "kind": "eval_summary", "data": {"ts": 1783675574.7767255, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675574.7775784, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675575.7860909, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675575.810094, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675575.843624, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675575.9530723, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675575.9792187, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675575.9943838, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675575.9955838, "kind": "eval_summary", "data": {"ts": 1783675575.9955485, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675576.007307, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675576.0264964, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675576.050715, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675576.0641553, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675576.0778193, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675576.078836, "kind": "eval_summary", "data": {"ts": 1783675576.0788043, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675576.0816507, "kind": "executive_improve_done", "data": {"improved": false}}
+{"ts": 1783675577.1095283, "kind": "executive_improve_start", "data": {}}
+{"ts": 1783675577.1605453, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675577.3108945, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675577.4396992, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675577.522761, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675577.6508944, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675577.6518016, "kind": "eval_summary", "data": {"ts": 1783675577.65176, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675577.720292, "kind": "eval_case", "data": {"name": "chat_echoes", "passed": true, "detail": "tool echo==echo:True; output=='hello aetheris':True"}}
+{"ts": 1783675577.8385675, "kind": "eval_case", "data": {"name": "read_returns_content", "passed": true, "detail": "tool read_file==read_file:True; output=='benchmark content':True"}}
+{"ts": 1783675577.9171169, "kind": "eval_case", "data": {"name": "list_shows_entries", "passed": true, "detail": "tool list_dir==list_dir:True"}}
+{"ts": 1783675577.9744492, "kind": "eval_case", "data": {"name": "write_routes_to_write_file", "passed": true, "detail": "tool write_file==write_file:True"}}
+{"ts": 1783675578.0919871, "kind": "eval_case", "data": {"name": "ambiguous_falls_back_to_echo", "passed": true, "detail": "tool echo==echo:True"}}
+{"ts": 1783675578.0940733, "kind": "eval_summary", "data": {"ts": 1783675578.0940402, "passed": 5, "total": 5, "pass_rate": 1.0}}
+{"ts": 1783675578.096746, "kind": "executive_improve_done", "data": {"improved": false}}
