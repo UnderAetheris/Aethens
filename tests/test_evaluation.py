@@ -8,12 +8,16 @@ def _evaluator(tmp_path):
     return Evaluator(mem, workspace_root=str(tmp_path)), mem
 
 
-def test_default_suite_all_pass(tmp_path):
+def test_default_suite_anchors_pass_at_baseline(tmp_path):
+    """Anchors must all pass without a model; stretch cases intentionally fail."""
+    from aetheris.evaluation.cases import ANCHOR_NAMES
+
     evaluator, _ = _evaluator(tmp_path)
     report = evaluator.run()
     assert report.total == len(default_suite())
-    assert report.passed == report.total
-    assert report.pass_rate == 1.0
+
+    anchor_results = {r.name: r.passed for r in report.results if r.name in ANCHOR_NAMES}
+    assert all(anchor_results.values()), f"anchor failures: {anchor_results}"
 
 
 def test_results_logged_to_memory(tmp_path):
@@ -28,7 +32,8 @@ def test_summary_records_pass_rate(tmp_path):
     evaluator, mem = _evaluator(tmp_path)
     evaluator.run()
     summary = [e for e in mem.history() if e["kind"] == "eval_summary"][-1]
-    assert summary["data"]["pass_rate"] == 1.0
+    # Baseline pass rate is < 1.0 by design (stretch cases need the model).
+    assert 0.0 < summary["data"]["pass_rate"] < 1.0
     assert summary["data"]["total"] == len(default_suite())
 
 
