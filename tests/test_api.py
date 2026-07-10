@@ -53,7 +53,9 @@ def test_unsafe_task_is_blocked_not_bypassed(client):
     for _ in range(5):
         client.app_state.executive.run_once()
     got = client.get(f"/tasks/{created['id']}").json()
-    assert got["state"] == TaskState.BLOCKED.value
+    # Reflection routes safety blocks to WAITING_FOR_CONTEXT (recoverable),
+    # not BLOCKED (terminal). Safety is still enforced — the task did not run.
+    assert got["state"] == TaskState.WAITING_FOR_CONTEXT.value
 
 
 def test_events_recent_reflects_activity(client):

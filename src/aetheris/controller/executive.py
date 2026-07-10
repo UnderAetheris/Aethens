@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from ..config import Config
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
+from ..reflection.engine import ReflectionEngine, StepOutcome, Verdict
 from .controller import Controller
 from .queue import TaskQueue, TaskState
 
@@ -47,6 +48,7 @@ class ExecutiveController:
         idle_ticks_before_improve: int = _IDLE_TICKS_BEFORE_IMPROVE,
         max_retries: int = _MAX_RETRIES,
         plan_store: PlanStore | None = None,
+        reflection: ReflectionEngine | None = None,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -59,6 +61,7 @@ class ExecutiveController:
         self._retry_counts: dict[str, int] = {}
         # PlanStore lives next to the queue journal by default.
         self._plan_store = plan_store or PlanStore(config.log_path.replace(".jsonl", "_plans"))
+        self._reflection = reflection or ReflectionEngine()
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
@@ -99,24 +102,34 @@ class ExecutiveController:
         return self._execute_step(task_id, plan, step)
 
     def _execute_step(self, task_id: str, plan: MultiStepPlan, step: PlanStep) -> Tick:
+        step_index = plan.steps.index(step)
+        attempt = self._retry_counts.get(task_id, 0) + 1
+
         try:
             result = self._controller.handle_step(step.tool, step.arg)
         except Exception as exc:
-            return self._handle_step_failure(
-                task_id, plan, step, f"exception: {exc!r}"
+            outcome = StepOutcome(
+                task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
+                ok=False, output=f"exception: {exc!r}", blocked=False, attempt=attempt,
             )
+            return self._apply_verdict(task_id, plan, step, outcome)
+
+        blocked = result.output.startswith("blocked:")
+        outcome = StepOutcome(
+            task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
+            ok=result.ok, output=result.output, blocked=blocked, attempt=attempt,
+        )
 
         if not result.ok:
-            # A safety block is permanent — don't retry, go straight to BLOCKED.
-            if result.output.startswith("blocked:"):
-                step.status = StepStatus.BLOCKED
-                self._plan_store.save(plan)
-                self._retry_counts.pop(task_id, None)
-                self._queue.transition(task_id, TaskState.BLOCKED, result.output)
-                return Tick(did_work=True, task_id=task_id, outcome="blocked")
-            return self._handle_step_failure(task_id, plan, step, result.output)
+            return self._apply_verdict(task_id, plan, step, outcome)
 
         # Step succeeded — mark done, persist, check if whole plan is complete.
+        reflection = self._reflection.reflect(outcome, plan)
+        self._memory.record(
+            "reflection_decision",
+            {"task_id": task_id, "step": step_index, "verdict": reflection.verdict.value,
+             "reason": reflection.reason},
+        )
         step.status = StepStatus.DONE
         step.output = result.output
         self._plan_store.save(plan)
@@ -135,6 +148,53 @@ class ExecutiveController:
         # More steps remain — re-queue so the next tick picks up the next step.
         self._queue.transition(task_id, TaskState.QUEUED, "step done, continuing")
         return Tick(did_work=True, task_id=task_id, outcome="step_done")
+
+    def _apply_verdict(
+        self, task_id: str, plan: MultiStepPlan, step: PlanStep, outcome: StepOutcome
+    ) -> Tick:
+        """Ask reflection for a verdict and enact it using existing executive mechanisms."""
+        reflection = self._reflection.reflect(outcome, plan)
+        step_index = outcome.step_index
+        self._memory.record(
+            "reflection_decision",
+            {"task_id": task_id, "step": step_index, "verdict": reflection.verdict.value,
+             "reason": reflection.reason},
+        )
+
+        if reflection.verdict == Verdict.CONTINUE:
+            # Shouldn't reach here on a failure path, but handle gracefully.
+            return Tick(did_work=True, task_id=task_id, outcome="step_done")
+
+        if reflection.verdict == Verdict.RETRY_STEP:
+            return self._handle_step_failure(task_id, plan, step, outcome.output)
+
+        if reflection.verdict == Verdict.REQUEST_CONTEXT:
+            step.status = StepStatus.BLOCKED
+            self._plan_store.save(plan)
+            self._retry_counts.pop(task_id, None)
+            self._queue.transition(task_id, TaskState.WAITING_FOR_CONTEXT, outcome.output)
+            return Tick(did_work=True, task_id=task_id, outcome="waiting_for_context")
+
+        if reflection.verdict == Verdict.INSERT_REPAIR_STEPS:
+            inserted = plan.insert_repair_after(step_index, reflection.repair_steps)
+            if inserted:
+                step.status = StepStatus.FAILED
+                self._plan_store.save(plan)
+                self._memory.record(
+                    "repair_inserted",
+                    {"task_id": task_id, "after_step": step_index,
+                     "repairs": reflection.repair_steps},
+                )
+                self._queue.transition(task_id, TaskState.QUEUED, "repair steps inserted")
+                return Tick(did_work=True, task_id=task_id, outcome="repair_inserted")
+            # insert failed validation — fall through to abort
+
+        # ABORT (or fallback from failed insert)
+        step.status = StepStatus.FAILED
+        self._plan_store.save(plan)
+        self._retry_counts.pop(task_id, None)
+        self._queue.transition(task_id, TaskState.FAILED, f"reflection abort: {reflection.reason}")
+        return Tick(did_work=True, task_id=task_id, outcome="failed")
 
     def _handle_step_failure(
         self, task_id: str, plan: MultiStepPlan, step: PlanStep, reason: str

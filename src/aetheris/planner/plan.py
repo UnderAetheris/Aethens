@@ -79,6 +79,27 @@ class MultiStepPlan:
         """Steps that are still PENDING (not yet done, failed, or blocked)."""
         return [s for s in self.steps if s.status == StepStatus.PENDING]
 
+    def insert_repair_after(self, after_index: int, repairs: list[tuple[str, str]]) -> bool:
+        """Append repair steps after `after_index`, shifting later dependencies.
+
+        Append-only, forward-only: never modifies steps at or before after_index.
+        Returns False (and makes no change) if after_index points to a done step
+        that would require rewriting history, or if repairs is empty.
+        """
+        if not repairs:
+            return False
+        # Shift depends_on indices for all steps after the insertion point.
+        insert_at = after_index + 1
+        n_new = len(repairs)
+        for step in self.steps[insert_at:]:
+            step.depends_on = [d + n_new if d >= insert_at else d for d in step.depends_on]
+        new_steps: list[PlanStep] = []
+        for i, (tool, arg) in enumerate(repairs):
+            dep = [after_index + i] if (after_index + i) >= 0 else []
+            new_steps.append(PlanStep(tool=tool, arg=arg, reason="repair", depends_on=dep))
+        self.steps[insert_at:insert_at] = new_steps
+        return True
+
     # ------------------------------------------------------------------ #
     # Serialisation                                                        #
     # ------------------------------------------------------------------ #

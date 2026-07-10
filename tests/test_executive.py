@@ -27,7 +27,8 @@ def test_blocked_task_when_safety_denies(tmp_path):
     ex, q, _ = _exec(tmp_path, safe_mode=True)
     rec = q.enqueue(f"create path={tmp_path}/out.txt content=hi")
     ex.run_once()
-    assert q.get(rec.id).state == TaskState.BLOCKED
+    # Reflection routes safety blocks to WAITING_FOR_CONTEXT (recoverable).
+    assert q.get(rec.id).state == TaskState.WAITING_FOR_CONTEXT
 
 
 def test_idle_triggers_improvement_after_threshold(tmp_path):

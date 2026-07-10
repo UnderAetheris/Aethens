@@ -219,8 +219,8 @@ def test_unsafe_step_in_multistep_plan_is_blocked(tmp_path):
     assert t1.outcome == "step_done"
 
     t2 = ex.run_once()
-    assert t2.outcome == "blocked"
-    assert queue.get(rec.id).state == TaskState.BLOCKED
+    assert t2.outcome == "waiting_for_context"
+    assert queue.get(rec.id).state == TaskState.WAITING_FOR_CONTEXT
 
 
 # ---------------------------------------------------------------------------
