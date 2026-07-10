@@ -14,6 +14,8 @@ from ..memory.experience import ExperienceStore
 from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
+from ..model import ModelProvider, ModelConfig, build_provider
+from ..tools.builtins import default_registry
 
 
 @dataclass
@@ -28,6 +30,7 @@ class AppState:
     learned: LearnedKeywordStore
     learning: LearningEngine
     executive: ExecutiveController
+    model: ModelProvider | None = None
 
     @classmethod
     def create(cls, root: str = ".aetheris_data") -> "AppState":
@@ -46,6 +49,21 @@ class AppState:
         learned = LearnedKeywordStore(str(base / "learned.jsonl"))
         learning = LearningEngine(memory, config.workspace_root, knowledge, experience, learned)
 
+        # Build model provider from config
+        model_cfg = ModelConfig.from_env()
+        model = build_provider(model_cfg)
+
+        # Create controller with model-aware planner
+        registry = default_registry()
+        tool_names = tuple(registry.list())
+        controller = Controller(config)
+        controller.planner = controller.planner.__class__(
+            extra_keywords=controller.planner._extra,
+            learned_store_path=str(base / "learned.jsonl"),
+            model=model,
+            registry_tools=tool_names,
+        )
+
         def improve() -> bool:
             return learning.attempt(default_suite()).accepted
 
@@ -53,7 +71,7 @@ class AppState:
             config,
             queue,
             memory,
-            controller=Controller(config),
+            controller=controller,
             improve_fn=improve,
         )
         return cls(
@@ -65,4 +83,5 @@ class AppState:
             learned=learned,
             learning=learning,
             executive=executive,
+            model=model,
         )

@@ -3,6 +3,10 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..model import ModelProvider
 
 
 @dataclass(frozen=True)
@@ -34,6 +38,8 @@ class Planner:
         self,
         extra_keywords: dict[str, list[str]] | None = None,
         learned_store_path: str | None = None,
+        model: ModelProvider | None = None,
+        registry_tools: tuple[str, ...] | None = None,
     ) -> None:
         loaded: dict[str, list[str]] = {}
         if learned_store_path is not None:
@@ -48,6 +54,8 @@ class Planner:
                 if word not in bucket:
                     bucket.append(word)
         self._extra = merged
+        self._model = model
+        self._registry_tools = registry_tools or ()
 
     def _verbs(self, intent: str, base: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(base) + tuple(self._extra.get(intent, []))
@@ -100,9 +108,54 @@ class Planner:
                 )
             return self._fallback(task, "read intent but missing path=")
 
-        # 5. Default: chat-style input goes to echo.
+        # 5. Default: chat-style input; try model if available, else echo with confidence.
+        if self._model is not None and self._registry_tools:
+            return self._fallback(task, "no tool intent detected; try model")
         return Plan("echo", text, "no tool intent detected; default echo")
 
     def _fallback(self, task: str, why: str) -> Plan:
-        """Safe fallback: echo the raw task, flagged as not confident."""
+        """Try the model for a suggestion; fall back to deterministic echo if it fails.
+        
+        This is called when either:
+        - A rule matched but required arguments are missing, OR
+        - No rule matched and we have a model to consult
+        
+        Returns a Plan marked as not confident, since the model output or fallback
+        was chosen due to incomplete/missing information.
+        """
+        # Try model first if available and it has tool knowledge
+        if self._model is not None and self._registry_tools:
+            try:
+                from ..model import ModelRequest, ResponseKind
+
+                req = ModelRequest(
+                    kind=ResponseKind.PLAN_SUGGESTION,
+                    task=task,
+                    tool_names=self._registry_tools,
+                )
+                resp = self._model.complete(req)
+                if resp.ok and resp.suggestion is not None:
+                    suggestion = resp.suggestion
+                    if isinstance(suggestion.get("tool"), str):
+                        tool = suggestion["tool"]
+                        if tool in self._registry_tools:
+                            try:
+                                arg_dict = suggestion.get("arg", {})
+                                arg_str = (
+                                    json.dumps(arg_dict)
+                                    if isinstance(arg_dict, dict)
+                                    else str(arg_dict)
+                                )
+                                return Plan(
+                                    tool,
+                                    arg_str,
+                                    f"model suggestion ({resp.provider})",
+                                    confident=False,
+                                )
+                            except Exception:
+                                pass
+            except Exception:
+                pass
+
+        # Safe fallback: echo the raw task, flagged as not confident.
         return Plan("echo", task.strip(), f"fallback: {why}", confident=False)
