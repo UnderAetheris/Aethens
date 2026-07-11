@@ -77,6 +77,66 @@ def skill_workflow_suite(root: str) -> list[WorkflowCase]:
 
 
 # ---------------------------------------------------------------------------
+# Code-repair benchmark cases
+# ---------------------------------------------------------------------------
+
+def code_repair_suite(root: str) -> list[WorkflowCase]:
+    """Hermetic repo-task benchmark: each case has a scripted fixable defect.
+
+    The task string instructs the agent to make the tests pass.  A successful
+    run means the agent inspected the repo, edited the broken file, ran the
+    tests, and the tests passed.
+    """
+    return [
+        WorkflowCase(
+            name="fix_missing_import",
+            task=f"fix the failing test in {root}/code_repo/",
+            skill=None,
+            fixtures={
+                "code_repo/__init__.py": "",
+                "code_repo/main.py": "def add(a, b):\n    return a + b\n",
+                "code_repo/test_main.py": (
+                    "import main\n"
+                    "def test_add():\n"
+                    "    assert main.add(1, 2) == 3\n"
+                ),
+            },
+            recoverable=True,
+        ),
+        WorkflowCase(
+            name="fix_assertion_failure",
+            task=f"fix the failing test in {root}/code_repo/",
+            skill=None,
+            fixtures={
+                "code_repo/__init__.py": "",
+                "code_repo/main.py": "def add(a, b):\n    return a - b\n",
+                "code_repo/test_main.py": (
+                    "import main\n"
+                    "def test_add():\n"
+                    "    assert main.add(1, 2) == 3\n"
+                ),
+            },
+            recoverable=True,
+        ),
+        WorkflowCase(
+            name="fix_syntax_error",
+            task=f"fix the failing test in {root}/code_repo/",
+            skill=None,
+            fixtures={
+                "code_repo/__init__.py": "",
+                "code_repo/main.py": "def add(a, b)\n    return a + b\n",
+                "code_repo/test_main.py": (
+                    "import main\n"
+                    "def test_add():\n"
+                    "    assert main.add(1, 2) == 3\n"
+                ),
+            },
+            recoverable=True,
+        ),
+    ]
+
+
+# ---------------------------------------------------------------------------
 # Anchor names — used by tests to assert these never regress.
 # ---------------------------------------------------------------------------
 ANCHOR_NAMES: frozenset[str] = frozenset({

@@ -7,6 +7,7 @@ from ..learning.plan_review import PlanReviewQueue, ReviewStatus
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
 from ..reflection.engine import ReflectionEngine, StepOutcome, Verdict
+from ..reflection.failure_parser import FailureParser
 from .controller import Controller
 from .queue import TaskQueue, TaskState
 
@@ -80,6 +81,7 @@ class ExecutiveController:
         self._skill_promotion = skill_promotion
         self._promotion_budget = promotion_budget
         self._promotion_config = promotion_config
+        self._failure_parser = FailureParser()
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
@@ -147,9 +149,11 @@ class ExecutiveController:
         except Exception as exc:
             if self._reflection is None:
                 return self._handle_step_failure(task_id, plan, step, f"exception: {exc!r}")
+            failure_kind = self._failure_parser.classify(f"exception: {exc!r}", False)
             outcome = StepOutcome(
                 task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
                 ok=False, output=f"exception: {exc!r}", blocked=False, attempt=attempt,
+                failure_kind=failure_kind.value,
             )
             return self._apply_verdict(task_id, plan, step, outcome)
 
@@ -165,9 +169,11 @@ class ExecutiveController:
                     self._queue.transition(task_id, TaskState.BLOCKED, result.output)
                     return Tick(did_work=True, task_id=task_id, outcome="blocked")
                 return self._handle_step_failure(task_id, plan, step, result.output)
+            failure_kind = self._failure_parser.classify(result.output, blocked)
             outcome = StepOutcome(
                 task_id=task_id, step_index=step_index, tool=step.tool, arg=step.arg,
                 ok=result.ok, output=result.output, blocked=blocked, attempt=attempt,
+                failure_kind=failure_kind.value,
             )
             return self._apply_verdict(task_id, plan, step, outcome)
 

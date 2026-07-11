@@ -26,7 +26,7 @@ class StepOutcome:
 
     Reflection sees only this; it has no handle to any tool, registry, or
     SafetyLayer.  Everything it causes happens because the executive enacts
-    its verdict through the unchanged Controller → SafetyLayer → Tool path.
+    its verdict through the unchanged Controller -> SafetyLayer -> Tool path.
     """
 
     task_id: str
@@ -39,6 +39,7 @@ class StepOutcome:
     attempt: int = 1         # which retry attempt this was (1-based)
     repair_suggestions: list[tuple[str, str]] = field(default_factory=list)
     # ^ list of (tool_name, arg) pairs the engine may propose as repair steps
+    failure_kind: str = ""   # FailureKind string value from deterministic parser, or "" if unclassified
 
 
 @dataclass
@@ -73,16 +74,48 @@ class ReflectionEngine:
 
         Rules (in priority order):
         1. Safety block → never retry → REQUEST_CONTEXT (or ABORT if no repair).
-        2. Success → CONTINUE.
-        3. Repair suggestions present and valid → INSERT_REPAIR_STEPS.
-        4. Transient failure within retry budget → RETRY_STEP.
-        5. Transient failure, retries exhausted → ABORT.
+        2. FailureKind (deterministic classification) → rule-based verdict.
+        3. Success → CONTINUE.
+        4. Repair suggestions present and valid → INSERT_REPAIR_STEPS.
+        5. Transient failure within retry budget → RETRY_STEP.
+        6. Transient failure, retries exhausted → ABORT.
         """
         if outcome.blocked:
             # Safety block is a deliberate "no" — never loop at the wall.
             return ReflectionResult(
                 verdict=Verdict.REQUEST_CONTEXT,
                 reason=f"safety blocked step {outcome.step_index}: {outcome.output}",
+            )
+
+        # Deterministic failure classification keys off existing verdicts.
+        fk = outcome.failure_kind
+        if fk == "unsafe_blocked":
+            return ReflectionResult(
+                verdict=Verdict.REQUEST_CONTEXT,
+                reason=f"unsafe_blocked on step {outcome.step_index}: never blind-retry the wall",
+            )
+        if fk == "command_not_found":
+            return ReflectionResult(
+                verdict=Verdict.REQUEST_CONTEXT,
+                reason=f"command_not_found on step {outcome.step_index}: environment issue, pause",
+            )
+        if fk == "missing_import":
+            return ReflectionResult(
+                verdict=Verdict.INSERT_REPAIR_STEPS,
+                reason=f"missing_import on step {outcome.step_index}: insert import repair",
+                repair_steps=[],  # caller (executive / planner) fills in the concrete step
+            )
+        if fk == "syntax_error":
+            return ReflectionResult(
+                verdict=Verdict.INSERT_REPAIR_STEPS,
+                reason=f"syntax_error on step {outcome.step_index}: insert syntax repair",
+                repair_steps=[],
+            )
+        if fk == "assertion_failure":
+            return ReflectionResult(
+                verdict=Verdict.INSERT_REPAIR_STEPS,
+                reason=f"assertion_failure on step {outcome.step_index}: needs code change, then retry",
+                repair_steps=[],
             )
 
         if outcome.ok:

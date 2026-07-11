@@ -78,10 +78,10 @@ def path_within_root(workspace_root: str) -> Rule:
 
 
 def shell_allowlist(allowed: tuple[str, ...]) -> Rule:
-    """Block shell commands whose first token isn't in the allowlist."""
+    """Block shell/test/lint commands whose first token isn't in the allowlist."""
 
     def rule(request: ActionRequest, safe_mode: bool) -> Decision | None:
-        if request.tool != "shell":
+        if request.tool not in ("shell", "run_tests", "run_check"):
             return None
         try:
             cmd = json.loads(request.arg)["cmd"]
