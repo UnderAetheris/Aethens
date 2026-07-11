@@ -39,7 +39,7 @@ class ExecutiveController:
     - On step fail/block, re-plan the remainder up to max_retries times;
       exhausted -> task FAILED.
     - When the queue is empty for idle_ticks_before_improve consecutive ticks,
-      run one improvement attempt (eval + learn), then reset the idle counter.
+      run idle actions: (a) eval + keyword-learning, (c) optional skill promotion.
     - Plans with more than _PLAN_REVIEW_STEP_THRESHOLD steps are submitted
       for user review before execution (when plan_review is provided).
     """
@@ -56,6 +56,8 @@ class ExecutiveController:
         plan_store: PlanStore | None = None,
         reflection: ReflectionEngine | None = None,
         plan_review: PlanReviewQueue | None = None,
+        skill_promotion=None,  # IdleSkillPromotion | None — default off
+        promotion_budget: int = 1,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -66,10 +68,7 @@ class ExecutiveController:
         self._max_retries = max_retries
         self._idle_ticks: int = 0
         self._retry_counts: dict[str, int] = {}
-        # PlanStore lives next to the queue journal by default.
         self._plan_store = plan_store or PlanStore(config.log_path.replace(".jsonl", "_plans"))
-        # reflection=None is the explicit opt-out path (legacy Planner-v2 behavior).
-        # reflection_enabled=False in config also produces None unless overridden by injection.
         if reflection is not None:
             self._reflection: ReflectionEngine | None = reflection
         elif config.reflection_enabled:
@@ -77,6 +76,8 @@ class ExecutiveController:
         else:
             self._reflection = None
         self._plan_review = plan_review
+        self._skill_promotion = skill_promotion
+        self._promotion_budget = promotion_budget
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
@@ -296,7 +297,24 @@ class ExecutiveController:
         self._memory.record("executive_improve_start", {})
         improved = bool(self._improve_fn())
         self._memory.record("executive_improve_done", {"improved": improved})
+
+        # (c) Idle skill promotion: bounded, cooperative, only when provably idle.
+        if self._skill_promotion is not None:
+            self._run_idle_promotion()
+
         return Tick(did_work=False, improved=improved)
+
+    def _run_idle_promotion(self) -> None:
+        self._memory.record("idle_promotion_started", {"budget": self._promotion_budget})
+        tried = 0
+        for candidate in self._skill_promotion.mine():
+            if tried >= self._promotion_budget:
+                break
+            if self._queue.next_queued() is not None:
+                self._memory.record("idle_promotion_yielded", {"reason": "work arrived"})
+                return
+            self._skill_promotion.try_one(candidate)
+            tried += 1
 
     def drain(self, max_tasks: int = 100) -> list[Tick]:
         """Process all currently queued tasks (up to max_tasks). Does not trigger improvement."""

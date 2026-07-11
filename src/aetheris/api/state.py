@@ -16,6 +16,7 @@ from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
+from ..skills.idle_promotion import IdleSkillPromotion
 from ..skills.registry import SkillRegistry
 
 
@@ -37,7 +38,7 @@ class AppState:
     registry: SkillRegistry | None = None
 
     @classmethod
-    def create(cls, root: str = ".aetheris_data") -> "AppState":
+    def create(cls, root: str = ".aetheris_data", idle_promotion: IdleSkillPromotion | None = None) -> "AppState":
         base = Path(root)
         base.mkdir(parents=True, exist_ok=True)
         config = Config(
@@ -83,6 +84,7 @@ class AppState:
             memory,
             controller=controller,
             improve_fn=improve,
+            skill_promotion=idle_promotion,
         )
 
         plan_review = PlanReviewQueue()
