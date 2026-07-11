@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ..config import Config
+from ..config import Config, PromotionConfig
 from ..learning.plan_review import PlanReviewQueue, ReviewStatus
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
@@ -58,6 +58,7 @@ class ExecutiveController:
         plan_review: PlanReviewQueue | None = None,
         skill_promotion=None,  # IdleSkillPromotion | None — default off
         promotion_budget: int = 1,
+        promotion_config: PromotionConfig | None = None,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -78,6 +79,7 @@ class ExecutiveController:
         self._plan_review = plan_review
         self._skill_promotion = skill_promotion
         self._promotion_budget = promotion_budget
+        self._promotion_config = promotion_config
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
@@ -92,16 +94,18 @@ class ExecutiveController:
 
     def _run_task(self, task_id: str) -> Tick:
         rec = self._queue.transition(task_id, TaskState.PLANNING, "executive picked up")
-        self._queue.transition(task_id, TaskState.EXECUTING, "handed to controller")
+        rec = self._queue.transition(task_id, TaskState.EXECUTING, "handed to controller")
 
         # Load or create the multi-step plan for this task.
         plan = self._plan_store.load(task_id)
         if plan is None:
             plan = self._controller.planner.plan_multi(rec.task, task_id)
             self._plan_store.save(plan)
+            rec.plan_source = plan.plan_source
+            self._queue._store.append(rec.to_dict())
             self._memory.record(
                 "plan_created",
-                {"task_id": task_id, "steps": len(plan.steps), "task": rec.task},
+                {"task_id": task_id, "steps": len(plan.steps), "task": rec.task, "plan_source": plan.plan_source},
             )
 
         # If plan review is enabled and plan is complex, submit for review.

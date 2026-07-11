@@ -194,13 +194,16 @@ class Planner:
         - No match or missing params → fall back to normal decomposition.
         Normal decomposition is byte-for-byte unchanged.
         """
+        plan_source = "decomposed"
+
         # Skill recognition: check in front of normal planning.
         if self._skills is not None:
-            match = self._skills.match(task)
-            if match is not None:
-                skill, params = match
+            matched = self._skills.match(task)
+            if matched is not None:
+                skill, params = matched
                 try:
                     plan = skill.render(task_id, params)
+                    plan.plan_source = f"skill:{skill.name}@v{skill.version}"
                     # Validate: every tool in the rendered plan must exist in the registry.
                     if self._registry_tools:
                         for step in plan.steps:
@@ -208,7 +211,9 @@ class Planner:
                                 raise ValueError(f"unknown tool '{step.tool}' in skill '{skill.name}'")
                     return plan
                 except Exception:
-                    pass  # render failed → fall through to normal planning
+                    plan_source = "fallback:invalid_render"
+            else:
+                plan_source = self._skill_fallback_reason(task)
 
         # Normal decomposition (unchanged).
         fragments = _STEP_SPLIT_RE.split(task.strip())
@@ -220,7 +225,7 @@ class Planner:
                 if not single.confident:
                     # Can't confidently plan this fragment — fall back to
                     # a single-step plan for the whole task.
-                    return self._single_step_plan(task, task_id)
+                    return self._single_step_plan(task, task_id, plan_source)
                 steps.append(
                     PlanStep(
                         tool=single.tool,
@@ -229,14 +234,25 @@ class Planner:
                         depends_on=[i - 1] if i > 0 else [],
                     )
                 )
-            return MultiStepPlan(task_id=task_id, steps=steps)
+            plan = MultiStepPlan(task_id=task_id, steps=steps)
+            plan.plan_source = plan_source
+            return plan
 
-        return self._single_step_plan(task, task_id)
+        return self._single_step_plan(task, task_id, plan_source)
 
-    def _single_step_plan(self, task: str, task_id: str) -> MultiStepPlan:
+    def _skill_fallback_reason(self, task: str) -> str:
+        """Determine why no skill matched: no trigger fired or params failed to bind."""
+        if self._skills is None:
+            return "fallback:no_trigger_match"
+        for skill in self._skills.active_skills():
+            if skill.matches(task):
+                return "fallback:bind_failed"
+        return "fallback:no_trigger_match"
+
+    def _single_step_plan(self, task: str, task_id: str, plan_source: str = "decomposed") -> MultiStepPlan:
         """Wrap a single Plan as a one-step MultiStepPlan."""
         single = self.plan(task)
-        return MultiStepPlan(
+        plan = MultiStepPlan(
             task_id=task_id,
             steps=[
                 PlanStep(
@@ -247,3 +263,5 @@ class Planner:
                 )
             ],
         )
+        plan.plan_source = plan_source
+        return plan

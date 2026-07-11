@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from ..config import Config
+from ..config import Config, PromotionConfig
 from ..controller.controller import Controller
 from ..controller.executive import ExecutiveController
 from ..controller.queue import TaskQueue
@@ -17,6 +17,7 @@ from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
 from ..skills.idle_promotion import IdleSkillPromotion
+from ..skills.promoter import SkillPromoter
 from ..skills.registry import SkillRegistry
 
 
@@ -36,6 +37,7 @@ class AppState:
     plan_review: PlanReviewQueue | None = None
     autonomous: AutonomousLoop | None = None
     registry: SkillRegistry | None = None
+    promotion_config: PromotionConfig | None = None
 
     @classmethod
     def create(cls, root: str = ".aetheris_data", idle_promotion: IdleSkillPromotion | None = None) -> "AppState":
@@ -62,10 +64,18 @@ class AppState:
         model_cfg = ModelConfig.from_env()
         model = build_provider(model_cfg)
 
+        from ..planner.planner import Planner
+
         controller = Controller(
             config,
             model=model,
             learned_store_path=str(base / "learned.jsonl"),
+        )
+        controller.planner = Planner(
+            learned_store_path=str(base / "learned.jsonl"),
+            model=model,
+            registry_tools=tuple(controller.registry.list()),
+            skills=registry,
         )
 
         def improve() -> bool:
@@ -78,6 +88,8 @@ class AppState:
                 )
             return result.accepted
 
+        promotion_config = PromotionConfig.from_env()
+
         executive = ExecutiveController(
             config,
             queue,
@@ -85,6 +97,8 @@ class AppState:
             controller=controller,
             improve_fn=improve,
             skill_promotion=idle_promotion,
+            promotion_budget=promotion_config.promotion_budget,
+            promotion_config=promotion_config,
         )
 
         plan_review = PlanReviewQueue()
@@ -102,4 +116,5 @@ class AppState:
             plan_review=plan_review,
             autonomous=autonomous,
             registry=registry,
+            promotion_config=promotion_config,
         )

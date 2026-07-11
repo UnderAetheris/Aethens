@@ -45,6 +45,7 @@ class TaskRecord:
     priority: int = 0
     created_at: float = 0.0
     updated_at: float = 0.0
+    plan_source: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)

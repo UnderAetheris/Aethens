@@ -20,9 +20,14 @@ from .models import (
     LearningStateOut,
     PlanReviewActionIn,
     PlanReviewOut,
+    PromotionConfigOut,
     ReflectionEventOut,
     RepairOut,
     RevertOut,
+    SkillActivityOut,
+    SkillDetailOut,
+    SkillOut,
+    SkillProvenanceOut,
     TaskIn,
     TaskOut,
 )
@@ -32,7 +37,7 @@ _ACTIVE = {TaskState.PLANNING, TaskState.EXECUTING}
 _SETTLED = {TaskState.DONE, TaskState.BLOCKED, TaskState.FAILED}
 
 
-def _task_out(rec) -> TaskOut:
+def _task_out(rec, plan_source: str = "") -> TaskOut:
     return TaskOut(
         id=rec.id,
         task=rec.task,
@@ -41,6 +46,31 @@ def _task_out(rec) -> TaskOut:
         priority=rec.priority,
         created_at=rec.created_at,
         updated_at=rec.updated_at,
+        plan_source=plan_source,
+    )
+
+
+def _provenance_for(name: str, memory) -> SkillProvenanceOut | None:
+    mined_events = [
+        e for e in memory.history()
+        if e["kind"] == "skill_candidate_mined"
+        and e.get("data", {}).get("name") == name
+    ]
+    if not mined_events:
+        return None
+    last = mined_events[-1]
+    prov = last["data"].get("provenance", {})
+    promoted_events = [
+        e for e in memory.history()
+        if e["kind"] == "skill_promoted"
+        and e.get("data", {}).get("skill_name") == name
+    ]
+    adopted_verdict = promoted_events[-1]["data"] if promoted_events else None
+    return SkillProvenanceOut(
+        source_task_ids=prov.get("source_task_ids", []),
+        recurrence=prov.get("recurrence", 0),
+        shape_tools=prov.get("shape", {}).get("tools", []),
+        adopted_verdict=adopted_verdict,
     )
 
 
@@ -110,7 +140,9 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
         rec = s.queue.get(task_id)
         if rec is None:
             raise HTTPException(status_code=404, detail=f"unknown task '{task_id}'")
-        return _task_out(rec)
+        plan = s.executive._plan_store.load(task_id)
+        plan_source = plan.plan_source if plan else rec.plan_source
+        return _task_out(rec, plan_source=plan_source)
 
     @app.get("/tasks/{task_id}/reflections", response_model=list[ReflectionEventOut])
     def get_task_reflections(task_id: str) -> list[ReflectionEventOut]:
@@ -132,6 +164,94 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
             )
             for e in events
         ]
+
+    # ------------------------------------------------------------------ #
+    # Skill Library Observability endpoints (v0 — read-only)             #
+    # ------------------------------------------------------------------ #
+
+    @app.get("/skills", response_model=list[SkillOut])
+    def list_skills(include_retired: bool = False) -> list[SkillOut]:
+        """List active skills (or all if include_retired=true)."""
+        if s.registry is None:
+            return []
+        skills = s.registry._current().values() if include_retired else s.registry.active_skills()
+        result = []
+        for skill in skills:
+            trigger = skill.trigger_patterns[0] if skill.trigger_patterns else ""
+            result.append(SkillOut(
+                name=skill.name,
+                version=skill.version,
+                trigger=trigger,
+                params=skill.required_params,
+                active=skill.active,
+                source="auto_promoted" if skill.id.startswith("auto_") else "hand_authored",
+            ))
+        result.sort(key=lambda x: (x.name, -x.version))
+        return result
+
+    @app.get("/skills/activity", response_model=list[SkillActivityOut])
+    def skill_activity(limit: int = 50) -> list[SkillActivityOut]:
+        """Recent promotion / rejection / retirement events."""
+        kinds = {"skill_promoted", "skill_promotion_rejected", "skill_retired", "skill_demoted"}
+        events = [
+            e for e in s.memory.history()
+            if e["kind"] in kinds
+        ][-limit:]
+        out = []
+        for e in reversed(events):
+            data = e.get("data", {})
+            kind = e["kind"]
+            if kind == "skill_demoted":
+                kind = "skill_retired"
+            out.append(SkillActivityOut(
+                ts=e.get("ts", 0.0),
+                kind=kind,
+                name=data.get("skill_name", ""),
+                version=data.get("version"),
+                reason=data.get("reason", ""),
+            ))
+        return out
+
+    @app.get("/skills/{name}", response_model=SkillDetailOut)
+    def get_skill_detail(name: str) -> SkillDetailOut:
+        """Get one skill with provenance and version history."""
+        if s.registry is None:
+            raise HTTPException(status_code=404, detail="skill registry disabled")
+        current = s.registry._current()
+        match = None
+        for skill in current.values():
+            if skill.name == name:
+                match = skill
+                break
+        if match is None:
+            raise HTTPException(status_code=404, detail=f"unknown skill '{name}'")
+        trigger = match.trigger_patterns[0] if match.trigger_patterns else ""
+        provenance = _provenance_for(name, s.memory)
+        version_history = sorted({
+            s.version for s in current.values()
+            if s.name == name
+        })
+        return SkillDetailOut(
+            name=match.name,
+            version=match.version,
+            trigger=trigger,
+            params=match.required_params,
+            active=match.active,
+            source="auto_promoted" if match.id.startswith("auto_") else "hand_authored",
+            steps=[{"tool": st.tool, "arg_template": st.arg_template, "depends_on": st.depends_on} for st in match.steps],
+            provenance=provenance,
+            version_history=version_history,
+        )
+
+    @app.get("/config/promotion", response_model=PromotionConfigOut)
+    def promotion_config() -> PromotionConfigOut:
+        """Current promotion tuning values and their clamped ranges."""
+        cfg = s.promotion_config or PromotionConfig.from_env()
+        return PromotionConfigOut(
+            min_recurrence=cfg.min_recurrence,
+            stability_max_repairs=cfg.stability_max_repairs,
+            promotion_budget=cfg.promotion_budget,
+        )
 
     @app.get("/events/recent", response_model=list[EventOut])
     def recent_events(limit: int = 50) -> list[EventOut]:

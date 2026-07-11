@@ -31,6 +31,8 @@ class IdleSkillPromotion:
         workspace_root: str,
         history_provider: Callable[[], list],
         promotion_budget: int = 1,
+        min_recurrence: int = 3,
+        stability_max_repairs: int = 0,
     ) -> None:
         self._promoter = promoter
         self._registry = registry
@@ -46,6 +48,10 @@ class IdleSkillPromotion:
         self.tried: int = 0
         self.promoted_names: list[str] = []
         self.rejected_names: list[str] = []
+
+        # Tuning knobs (clamped upstream, just store here).
+        self._min_recurrence = min_recurrence
+        self._stability_max_repairs = stability_max_repairs
 
     def mine(self) -> list:
         """Read-only: return untried candidates from the plan journal.

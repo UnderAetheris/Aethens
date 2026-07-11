@@ -16,6 +16,7 @@ class TaskOut(BaseModel):
     priority: int = 0
     created_at: float = 0.0
     updated_at: float = 0.0
+    plan_source: str = ""
 
 
 class EventOut(BaseModel):
@@ -127,3 +128,46 @@ class RepairOut(BaseModel):
     applied: bool
     problem: str
     reason: str
+
+
+# ---------------------------------------------------------------------------
+# Skill Library Observability models (v0 — additive, read-only)
+# ---------------------------------------------------------------------------
+
+class SkillProvenanceOut(BaseModel):
+    source_task_ids: list[str] = []
+    recurrence: int = 0
+    shape_tools: list[str] = []
+    adopted_verdict: dict | None = None
+
+
+class SkillOut(BaseModel):
+    name: str
+    version: int
+    trigger: str
+    params: list[str]
+    usefulness: float = 0.0
+    active: bool = True
+    source: str = "hand_authored"
+
+
+class SkillDetailOut(SkillOut):
+    steps: list[dict] = []
+    provenance: SkillProvenanceOut | None = None
+    version_history: list[int] = []
+
+
+class SkillActivityOut(BaseModel):
+    ts: float
+    kind: str            # skill_promoted | skill_promotion_rejected | skill_retired
+    name: str
+    version: int | None = None
+    reason: str = ""
+
+
+class PromotionConfigOut(BaseModel):
+    min_recurrence: int
+    min_recurrence_range: tuple[int, int] = (2, 20)
+    stability_max_repairs: int
+    promotion_budget: int
+    promotion_budget_range: tuple[int, int] = (1, 5)

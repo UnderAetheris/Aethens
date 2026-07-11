@@ -85,17 +85,17 @@ class SkillPromoter:
 
     Conservatism knobs (all default toward NOT promoting):
       - min_recurrence: minimum instances of the same shape (default 3).
-      - max_avg_repairs: stability threshold — plans with more repairs are
-        considered fragile and excluded (default 0.5; v0 uses zero repairs).
+      - stability_max_repairs: plans with more repairs than this are
+        considered fragile and excluded (default 0).
     """
 
     def __init__(
         self,
         min_recurrence: int = 3,
-        max_avg_repairs: float = 0.5,
+        stability_max_repairs: int = 0,
     ) -> None:
         self._min_recurrence = min_recurrence
-        self._max_avg_repairs = max_avg_repairs
+        self._stability_max_repairs = stability_max_repairs
 
     def candidates(
         self,
@@ -114,7 +114,7 @@ class SkillPromoter:
         """
         stable = [
             p for p in completed_plans
-            if self._repairs_of(p, memory) == 0
+            if self._repairs_of(p, memory) <= self._stability_max_repairs
         ]
 
         groups: dict[PlanShape, list[MultiStepPlan]] = {}
