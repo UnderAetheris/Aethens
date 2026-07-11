@@ -67,11 +67,13 @@ class ReflectionEngine:
         self,
         registry_tools: tuple[str, ...] = (),
         max_repair_steps: int = 3,
-        understanding: RepoUnderstanding | None = None,
+        understanding: Any = None,
+        reasoning: Any = None,
     ) -> None:
         self._tools = frozenset(registry_tools)
         self._max_repair = max_repair_steps
         self._understanding = understanding
+        self._reasoning = reasoning
 
     # ------------------------------------------------------------------ #
     # Public API                                                           #
@@ -109,18 +111,36 @@ class ReflectionEngine:
             )
         if fk == "missing_import":
             repair_steps = self._build_import_repair(outcome)
+            if self._reasoning is not None:
+                try:
+                    deliberation = self._reasoning.deliberate_for_repair(outcome)
+                    self._reasoning._journal_append(deliberation)
+                except Exception:
+                    pass
             return ReflectionResult(
                 verdict=Verdict.INSERT_REPAIR_STEPS,
                 reason=f"missing_import on step {outcome.step_index}: insert import repair",
                 repair_steps=repair_steps,
             )
         if fk == "syntax_error":
+            if self._reasoning is not None:
+                try:
+                    deliberation = self._reasoning.deliberate_for_repair(outcome)
+                    self._reasoning._journal_append(deliberation)
+                except Exception:
+                    pass
             return ReflectionResult(
                 verdict=Verdict.INSERT_REPAIR_STEPS,
                 reason=f"syntax_error on step {outcome.step_index}: insert syntax repair",
                 repair_steps=[],
             )
         if fk == "assertion_failure":
+            if self._reasoning is not None:
+                try:
+                    deliberation = self._reasoning.deliberate_for_repair(outcome)
+                    self._reasoning._journal_append(deliberation)
+                except Exception:
+                    pass
             return ReflectionResult(
                 verdict=Verdict.INSERT_REPAIR_STEPS,
                 reason=f"assertion_failure on step {outcome.step_index}: needs code change, then retry",
@@ -191,7 +211,7 @@ class ReflectionEngine:
         if module is None:
             return []
         arg = json.dumps({
-            "path": "",  # caller fills in the target file
+            "path": "",
             "find": "\n",
             "replace": f"\nfrom {module} import {symbol_name}\n",
         })

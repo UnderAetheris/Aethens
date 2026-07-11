@@ -224,3 +224,13 @@ class ProjectFactsOut(BaseModel):
     readme_summary: str = ""
     architecture_summary: str = ""
     version: int = 0
+
+
+# ---------------------------------------------------------------------------
+# Reasoning models (v0 — read-only, advisory)
+# ---------------------------------------------------------------------------
+
+class ReasoningStatusOut(BaseModel):
+    enabled: bool = False
+    budget: dict | None = None
+    history_count: int = 0

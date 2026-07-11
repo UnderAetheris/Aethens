@@ -377,6 +377,61 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
             raise HTTPException(status_code=404, detail="understanding engine disabled")
         return s.understanding.scan_history()
 
+    # ------------------------------------------------------------------ #
+    # Reasoning endpoints (v0 — read-only, advisory)                     #
+    # ------------------------------------------------------------------ #
+
+    @app.get("/reasoning/status")
+    def reasoning_status() -> dict[str, Any]:
+        """Reasoning engine status."""
+        if s.reasoning is None:
+            return {"enabled": False}
+        return {
+            "enabled": True,
+            "budget": {
+                "max_depth": s.reasoning._budget.max_depth,
+                "max_hypotheses": s.reasoning._budget.max_hypotheses,
+                "timeout_ms": s.reasoning._budget.timeout_ms,
+                "max_fan_in": s.reasoning._budget.max_fan_in,
+                "confidence_floor": s.reasoning._budget.confidence_floor,
+            },
+            "history_count": len(s.reasoning.reasoning_history()),
+        }
+
+    @app.get("/reasoning/history")
+    def reasoning_history() -> list[dict[str, Any]]:
+        """Deliberation journal (structured records, not chain-of-thought)."""
+        if s.reasoning is None:
+            raise HTTPException(status_code=404, detail="reasoning engine disabled")
+        return s.reasoning.reasoning_history()
+
+    @app.get("/reasoning/deliberate/planning")
+    def reasoning_deliberate_planning(task: str) -> dict[str, Any]:
+        """Deliberate on a planning decision (advisory)."""
+        if s.reasoning is None:
+            raise HTTPException(status_code=404, detail="reasoning engine disabled")
+        ctx = _PlannerContext(task=task)
+        deliberation = s.reasoning.deliberate_for_planning(ctx)
+        return _deliberation_to_dict(deliberation)
+
+    @app.get("/reasoning/deliberate/repair")
+    def reasoning_deliberate_repair(failure: str) -> dict[str, Any]:
+        """Deliberate on a repair decision (advisory)."""
+        if s.reasoning is None:
+            raise HTTPException(status_code=404, detail="reasoning engine disabled")
+        outcome = _ReflectionOutcome(failure=failure)
+        deliberation = s.reasoning.deliberate_for_repair(outcome)
+        return _deliberation_to_dict(deliberation)
+
+    @app.get("/reasoning/deliberate/promotion")
+    def reasoning_deliberate_promotion(candidate: str) -> dict[str, Any]:
+        """Deliberate on a promotion decision (advisory)."""
+        if s.reasoning is None:
+            raise HTTPException(status_code=404, detail="reasoning engine disabled")
+        cand = _PromotionCandidate(name=candidate)
+        deliberation = s.reasoning.deliberate_for_promotion(cand)
+        return _deliberation_to_dict(deliberation)
+
     @app.get("/events/recent", response_model=list[EventOut])
     def recent_events(limit: int = 50) -> list[EventOut]:
         history = s.memory.history()[-limit:]
@@ -592,6 +647,56 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
         }
 
     return app
+
+
+# ------------------------------------------------------------------ #
+# Reasoning API helper classes (lightweight context carriers)         #
+# ------------------------------------------------------------------ #
+
+class _PlannerContext:
+    def __init__(self, task: str) -> None:
+        self.task = task
+
+
+class _ReflectionOutcome:
+    def __init__(self, failure: str) -> None:
+        self.failure = failure
+        self.task_id = "api"
+        self.step_index = 0
+        self.tool = "run_tests"
+        self.arg = ""
+        self.ok = False
+        self.output = failure
+        self.blocked = False
+        self.attempt = 1
+
+
+class _PromotionCandidate:
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.task_id = "api"
+        self.benchmark_deltas = {}
+        self.history = []
+
+
+def _deliberation_to_dict(d: Any) -> dict[str, Any]:
+    return {
+        "seam": d.seam.value,
+        "subject": d.subject,
+        "assumptions": [{"statement": a.statement, "load_bearing": a.load_bearing} for a in d.assumptions],
+        "observations": [{"statement": o.statement, "provenance": {"source": o.provenance.source, "ref": o.provenance.ref}} for o in d.observations],
+        "uncertainties": [{"question": u.question, "resolvable_by": u.resolvable_by} for u in d.uncertainties],
+        "candidates": [{"approach_id": c.approach_id, "summary": c.summary, "score": c.score} for c in d.candidates],
+        "risks": [{"approach_id": r.approach_id, "statement": r.statement, "severity": r.severity} for r in d.risks],
+        "consequences": [{"approach_id": c.approach_id, "predicted": c.predicted, "expected_effect": c.expected_effect} for c in d.consequences],
+        "confidence": d.confidence,
+        "recommendation": d.recommendation.value,
+        "recommended_approach": d.recommended_approach,
+        "depth_used": d.depth_used,
+        "hypotheses_used": d.hypotheses_used,
+        "abstained": d.abstained,
+        "reason": d.reason,
+    }
 
 
 app = create_app()

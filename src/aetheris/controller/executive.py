@@ -6,6 +6,7 @@ from ..config import Config, PromotionConfig
 from ..learning.plan_review import PlanReviewQueue, ReviewStatus
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
+from ..reasoning.engine import ReasoningEngine
 from ..reflection.engine import ReflectionEngine, StepOutcome, Verdict
 from ..reflection.failure_parser import FailureParser
 from ..understanding.engine import RepoUnderstanding
@@ -62,6 +63,7 @@ class ExecutiveController:
         promotion_budget: int = 1,
         promotion_config: PromotionConfig | None = None,
         understanding: RepoUnderstanding | None = None,
+        reasoning: ReasoningEngine | None = None,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -76,7 +78,7 @@ class ExecutiveController:
         if reflection is not None:
             self._reflection: ReflectionEngine | None = reflection
         elif config.reflection_enabled:
-            self._reflection = ReflectionEngine(understanding=understanding)
+            self._reflection = ReflectionEngine(understanding=understanding, reasoning=reasoning)
         else:
             self._reflection = None
         self._plan_review = plan_review
@@ -85,6 +87,7 @@ class ExecutiveController:
         self._promotion_config = promotion_config
         self._failure_parser = FailureParser()
         self._understanding = understanding
+        self._reasoning = reasoning
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()

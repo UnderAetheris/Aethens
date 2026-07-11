@@ -16,6 +16,7 @@ from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
+from ..reasoning.engine import ReasoningEngine
 from ..skills.idle_promotion import IdleSkillPromotion
 from ..skills.promoter import SkillPromoter
 from ..skills.registry import SkillRegistry
@@ -40,6 +41,7 @@ class AppState:
     registry: SkillRegistry | None = None
     promotion_config: PromotionConfig | None = None
     understanding: RepoUnderstanding | None = None
+    reasoning: ReasoningEngine | None = None
 
     @classmethod
     def create(cls, root: str = ".aetheris_data", idle_promotion: IdleSkillPromotion | None = None) -> "AppState":
@@ -92,6 +94,17 @@ class AppState:
 
         promotion_config = PromotionConfig.from_env()
 
+        understanding = RepoUnderstanding(
+            root=config.workspace_root,
+            model_path=str(base / "repo_model.json"),
+        )
+
+        reasoning = ReasoningEngine(
+            understanding=understanding,
+            memory=memory,
+            skills=registry,
+        ) if config.reasoning_enabled else None
+
         executive = ExecutiveController(
             config,
             queue,
@@ -101,14 +114,11 @@ class AppState:
             skill_promotion=idle_promotion,
             promotion_budget=promotion_config.promotion_budget,
             promotion_config=promotion_config,
+            understanding=understanding,
+            reasoning=reasoning,
         )
 
         plan_review = PlanReviewQueue()
-
-        understanding = RepoUnderstanding(
-            root=config.workspace_root,
-            model_path=str(base / "repo_model.json"),
-        )
 
         return cls(
             config=config,
@@ -125,4 +135,5 @@ class AppState:
             registry=registry,
             promotion_config=promotion_config,
             understanding=understanding,
+            reasoning=reasoning,
         )
