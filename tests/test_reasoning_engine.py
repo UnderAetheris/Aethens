@@ -155,7 +155,7 @@ def test_deliberation_is_immutable():
 
 def test_abstains_below_confidence_floor(tmp_path):
     r = _make_engine(tmp_path, confidence_floor=0.99)
-    outcome = type("Outcome", (), {"failure": "some error", "task_id": "t1", "step_index": 0})()
+    outcome = type("Outcome", (), {"output": "some error", "task_id": "t1", "step_index": 0})()
     d = r.deliberate_for_repair(outcome)
     assert d.recommendation == Recommendation.ABSTAIN
     assert d.abstained is True

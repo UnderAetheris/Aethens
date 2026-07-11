@@ -64,7 +64,7 @@ class Risk:
     provenance: Provenance
 
 
-@dataclass
+@dataclass(frozen=True)
 class CandidateApproach:
     approach_id: str
     summary: str

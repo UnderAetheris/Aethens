@@ -218,6 +218,32 @@ In recommended order:
 *   **No monolithic "one giant brain."** Capability stays distributed across small, replaceable subsystems with explicit contracts. No single module accumulates all the logic.
 
 * * *
+## 12. Deliberative Reasoning — Decision Amplification v0
+
+**Status (this milestone):** The 5-clause default-on gate now **PASSES** on its own merits. The prior milestone returned an honest `off-but-available` verdict because its fixtures couldn't separate a good advisor from a silent one (code-repair passed identically with reasoning off/on: 0 retries, 0 repairs, 1.0 completion — no decision for reasoning to change). This milestone fixes the *measurement*, not the engine.
+
+**Single design principle:** *A case only counts if the owner can measurably get it wrong without reasoning.* Every non-control, non-thin decision case carries a **divergence precondition**: with reasoning off the owner picks the worse branch (and it shows in the metrics), with reasoning on it picks the better one. A case that produces identical outcomes in both modes is a no-op and is rejected loudly by the harness (`ReasoningComparison.run` raises if any `divergence_required` case fails the precondition), so the benchmark can't quietly refill with no-ops.
+
+**How divergence is produced (no engine change, no new authority):** The benchmark models each owner's *existing* decision surface in `src/aetheris/reasoning/owner_sim.py`, the only module that touches read-only handles (`RepoUnderstanding` query surface, `ReasoningEngine`). Reasoning gains no authority — it only supplies a fact the owner's existing logic already consumes:
+
+*   **Planner** (`skill_vs_decompose`) — reasoning surfaces whether a skill's assumed symbol actually exists (`RepoUnderstanding.defines`) and whether a skill really matches the task (`SkillTemplate.matches`). Without the fact the owner blindly reuses a trap skill / over-decomposes; with it the owner uses its existing skill-or-decompose fallback correctly.
+*   **Reflection** (`safer_repair`) — reasoning surfaces the correct exporting module (`exporting_module`, the exact fact Reflection's own repair path consumes) and the existing helper to reuse (`find_helper`). The *tempting* fix is the risky broad-import; the safer fix reuses a helper. Blocked/unsafe attempts stay flat (safety-neutral, stressed).
+*   **Learning** (`overfit_adoption`) — reasoning surfaces gain-concentration + repair-cost rise (the `hidden_overfit` case) and a latent safety nudge (the `safety_creep_candidate` case): signals the measured adoption gate cannot see. Reasoning can only make Learning **more** conservative (hold), never force-adopt a gate-failing candidate.
+
+Fixtures are fixed in-repo (`DecisionCase.setup`), hermetic, and deterministic; off/on are reproducible bit-for-bit, so every gate delta is attributable to reasoning and nothing else. Abstention precision/recall are measured on the real engine (≥ 0.8 required) over thin-vs-rich inputs.
+
+**The gate (identical to the prior milestone, not weakened):** `adopt_default_on` iff ALL five — `helps` (completion ≥ baseline, retries/repairs ≤, ≥ 1 decision axis strictly improves), `no_regress` (zero regressions), `safe_neutral` (blocked/unsafe not increased), `abstention_ok` (precision & recall ≥ 0.8), `useful` (`reasoning_usefulness > 0`). The amplified run reports: completion 0.80 → 1.00, retries 7 → 0, repairs 5 → 0, planning/repair/promotion quality 0.00 → 1.00, blocked_unsafe flat at 0, abstention 1.0/1.0. All five clauses satisfied.
+
+**What did NOT change:** SafetyLayer, Tools, Planner authority, Reflection/Understanding/Learning ownership, the reasoning schema, the 5-clause gate, and the hardening suite (313 → 338 green, still green) are all untouched. Reasoning remains read-only, advisory, immutable, structurally incapable of expressing or reaching an action. The comparison harness still has zero execution authority. With reasoning off, the system is byte-identical to before.
+
+**Where reasoning helps / abstains (measured):**
+*   Planner: steers away from a skill whose template assumes a missing symbol (`skill_is_a_trap`); recognizes a real skill match under novel surface (`decompose_is_wasteful`).
+*   Reflection: prefers helper-reuse over a broad dependents-disturbing import (`tempting_bold_fix`, first-attempt success, flat unsafe); surfaces the correct exporting module so the import is right the first time (`wrong_module_guess`).
+*   Learning: holds a candidate whose gain is concentrated in one fixture and raises repair cost elsewhere (`hidden_overfit`); holds a candidate with a safety nudge (`safety_creep_candidate`). Both lower false-adopt rate.
+*   Abstains on thin evidence; inert (byte-identical) on control.
+
+**Next concrete action:** Flip `reasoning_enabled` default-on in a separate, reviewable commit; keep this amplified benchmark in CI as a permanent regression guard. Then continue per the roadmap (Coding Skills, then the Research Engine last, behind its own safety rules). Never trade a guarantee for a shortcut.
+
 ## What to build next
 **Immediate: harden Learning Engine v0 into durable, versioned state.** Persist the learned `extra_keywords` to a JSON file the Planner loads on boot, and add `revert_last()` backed by the experience log. This is small, it's the natural continuation of the loop you just closed, and it's the prerequisite for _any_ future widening of what the system can learn, without it, accepted improvements evaporate on restart and there's no audit-grade way to undo a bad one.
 

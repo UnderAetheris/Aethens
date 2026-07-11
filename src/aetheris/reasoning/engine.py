@@ -194,6 +194,18 @@ class ReasoningEngine:
             except Exception:
                 pass
 
+        if inputs.failure_context is not None:
+            try:
+                output = getattr(inputs.failure_context, "output", "") or ""
+                if output:
+                    observations.append(Observation(
+                        statement=f"failure: {output[:100]}",
+                        provenance=Provenance(source="reflection", ref="failure_output"),
+                    ))
+                    count += 1
+            except Exception:
+                pass
+
         if inputs.memory is not None:
             try:
                 history = inputs.memory.history()
@@ -253,37 +265,41 @@ class ReasoningEngine:
         seam = self._detect_seam(inputs)
         if seam == Seam.PLANNER:
             candidates.extend([
-                CandidateApproach(approach_id="use_matching_skill", summary="Reuse an existing skill if one matches"),
-                CandidateApproach(approach_id="decompose_plan", summary="Decompose into verified single-step plans"),
-                CandidateApproach(approach_id="inspect_then_plan", summary="Inspect workspace before planning"),
+                CandidateApproach(approach_id="use_matching_skill", summary="Reuse an existing skill if one matches", score=0.5),
+                CandidateApproach(approach_id="decompose_plan", summary="Decompose into verified single-step plans", score=0.5),
+                CandidateApproach(approach_id="inspect_then_plan", summary="Inspect workspace before planning", score=0.5),
             ])
         elif seam == Seam.REFLECTION:
             candidates.extend([
-                CandidateApproach(approach_id="retry_step", summary="Retry the failed step"),
-                CandidateApproach(approach_id="repair_and_retry", summary="Insert repair steps then retry"),
-                CandidateApproach(approach_id="request_context", summary="Pause and request more context"),
+                CandidateApproach(approach_id="retry_step", summary="Retry the failed step", score=0.5),
+                CandidateApproach(approach_id="repair_and_retry", summary="Insert repair steps then retry", score=0.5),
+                CandidateApproach(approach_id="request_context", summary="Pause and request more context", score=0.5),
             ])
         elif seam == Seam.LEARNING:
             candidates.extend([
-                CandidateApproach(approach_id="adopt", summary="Adopt the candidate"),
-                CandidateApproach(approach_id="reject", summary="Reject the candidate"),
-                CandidateApproach(approach_id="defer", summary="Defer decision pending more data"),
+                CandidateApproach(approach_id="adopt", summary="Adopt the candidate", score=0.5),
+                CandidateApproach(approach_id="reject", summary="Reject the candidate", score=0.5),
+                CandidateApproach(approach_id="defer", summary="Defer decision pending more data", score=0.5),
             ])
-
-        for c in candidates:
-            c.score = 0.5
 
         return candidates
 
     def _score_candidates(self, candidates: list[CandidateApproach], observations: list[Observation], assumptions: list[Assumption]) -> list[CandidateApproach]:
+        scored: list[CandidateApproach] = []
         for c in candidates:
             support_count = sum(1 for o in observations if c.approach_id.replace("_", " ") in o.statement.lower())
-            c.score = min(1.0, 0.5 + support_count * 0.1)
+            score = min(1.0, 0.5 + support_count * 0.1)
             for a in assumptions:
                 if a.load_bearing:
-                    c.score *= 0.8
-        candidates.sort(key=lambda c: c.score, reverse=True)
-        return candidates
+                    score *= 0.8
+            scored.append(CandidateApproach(
+                approach_id=c.approach_id,
+                summary=c.summary,
+                supports=c.supports,
+                score=score,
+            ))
+        scored.sort(key=lambda c: c.score, reverse=True)
+        return scored
 
     # ------------------------------------------------------------------ #
     # Model enrichment (optional, validated)                             #
@@ -356,18 +372,26 @@ class ReasoningEngine:
         candidates.sort(key=lambda c: c.score, reverse=True)
         return candidates, risks
 
-    def _compute_confidence(self, candidates: list[Observation | Any], observations: list[Observation], uncertainties: list[Uncertainty], risks: list[Risk]) -> float:
+    def _compute_confidence(self, candidates: list[Any], observations: list[Observation], uncertainties: list[Uncertainty], risks: list[Risk]) -> float:
         if not candidates:
             return 0.0
         if not observations:
-            return 0.2
-        base = 0.5
-        obs_bonus = min(0.3, len(observations) * 0.05)
-        base += obs_bonus
+            base = 0.4
+        else:
+            base = 0.5
+            obs_bonus = min(0.3, len(observations) * 0.05)
+            base += obs_bonus
         if len(candidates) >= 2:
             scores = [getattr(c, "score", 0.0) for c in candidates]
             if scores[0] > scores[-1] + 0.2:
                 base += 0.1
+        # Boost for clear failure classification with no high-severity risks.
+        has_clear_failure = any(
+            "ModuleNotFoundError" in o.statement or "AssertionError" in o.statement
+            for o in observations
+        )
+        if has_clear_failure and not any(r.severity == "high" for r in risks):
+            base += 0.15
         for u in uncertainties:
             if u.resolvable_by:
                 base -= 0.05
