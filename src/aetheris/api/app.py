@@ -13,6 +13,7 @@ from .models import (
     EvalSummaryOut,
     EventOut,
     ExperienceOut,
+    FileFactsOut,
     HealthOut,
     ImprovementOut,
     KnowledgeOut,
@@ -20,14 +21,18 @@ from .models import (
     LearningStateOut,
     PlanReviewActionIn,
     PlanReviewOut,
+    ProjectFactsOut,
     PromotionConfigOut,
     ReflectionEventOut,
     RepairOut,
+    RepoModelOut,
     RevertOut,
+    ScanReportOut,
     SkillActivityOut,
     SkillDetailOut,
     SkillOut,
     SkillProvenanceOut,
+    SymbolOut,
     TaskIn,
     TaskOut,
 )
@@ -71,6 +76,28 @@ def _provenance_for(name: str, memory) -> SkillProvenanceOut | None:
         recurrence=prov.get("recurrence", 0),
         shape_tools=prov.get("shape", {}).get("tools", []),
         adopted_verdict=adopted_verdict,
+    )
+
+
+def _symbol_out(sym) -> SymbolOut:
+    return SymbolOut(
+        name=sym.name,
+        kind=sym.kind,
+        module=sym.module,
+        definition=SymbolRefOut(path=sym.definition.path, line=sym.definition.line),
+        exported=sym.exported,
+        uses=[SymbolRefOut(path=u.path, line=u.line) for u in sym.uses],
+    )
+
+
+def _file_facts_out(facts) -> FileFactsOut:
+    return FileFactsOut(
+        path=facts.path,
+        module=facts.module,
+        is_test=facts.is_test,
+        tests_target=facts.tests_target,
+        symbols=[_symbol_out(s) for s in facts.symbols],
+        imports=list(facts.imports),
     )
 
 
@@ -252,6 +279,103 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
             stability_max_repairs=cfg.stability_max_repairs,
             promotion_budget=cfg.promotion_budget,
         )
+
+    # ------------------------------------------------------------------ #
+    # Repository Understanding endpoints (v0 — read-only)                #
+    # ------------------------------------------------------------------ #
+
+    @app.get("/understanding/model", response_model=RepoModelOut)
+    def understanding_model() -> RepoModelOut:
+        """Current repository model summary."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        model = s.understanding._model
+        return RepoModelOut(
+            version=model.version,
+            root=model.root,
+            language=model.language,
+            build_system=model.build_system,
+            entrypoints=list(model.entrypoints),
+            readme_summary=model.readme_summary,
+            architecture_summary=model.architecture_summary,
+        )
+
+    @app.get("/understanding/scan", response_model=ScanReportOut)
+    def understanding_scan() -> ScanReportOut:
+        """Run an incremental scan and return the report."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        report = s.understanding.scan()
+        return ScanReportOut(
+            changed=report.changed,
+            removed=report.removed,
+            version=report.version,
+            timestamp=report.timestamp,
+        )
+
+    @app.get("/understanding/defines/{name}", response_model=list[SymbolOut])
+    def understanding_defines(name: str) -> list[SymbolOut]:
+        """Symbols defined with this name."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return [_symbol_out(sym) for sym in s.understanding.defines(name)]
+
+    @app.get("/understanding/module_of/{name}")
+    def understanding_module_of(name: str) -> dict[str, str | None]:
+        """Module where a symbol is defined."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return {"name": name, "module": s.understanding.module_of(name)}
+
+    @app.get("/understanding/exporting_module/{name}")
+    def understanding_exporting_module(name: str) -> dict[str, str | None]:
+        """Which module exports a symbol (public / __all__)."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return {"name": name, "module": s.understanding.exporting_module(name)}
+
+    @app.get("/understanding/dependents_of/{name}")
+    def understanding_dependents(name: str) -> dict[str, list[str]]:
+        """Modules that depend on a symbol."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return {"name": name, "dependents": s.understanding.dependents_of(name)}
+
+    @app.get("/understanding/tests_for/{path:path}")
+    def understanding_tests_for(path: str) -> dict[str, list[str]]:
+        """Test files exercising an implementation path."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return {"path": path, "tests": s.understanding.tests_for(path)}
+
+    @app.get("/understanding/helpers")
+    def understanding_helpers(intent: str) -> dict[str, list[SymbolOut]]:
+        """Find helper symbols matching an intent (deterministic match)."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return {"intent": intent, "helpers": [_symbol_out(s) for s in s.understanding.find_helper(intent)]}
+
+    @app.get("/understanding/project", response_model=ProjectFactsOut)
+    def understanding_project() -> ProjectFactsOut:
+        """Project-level facts."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        facts = s.understanding.project_facts()
+        return ProjectFactsOut(**facts)
+
+    @app.get("/understanding/files", response_model=list[FileFactsOut])
+    def understanding_files() -> list[FileFactsOut]:
+        """All indexed files with their facts."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return [_file_facts_out(f) for f in s.understanding._model.files.values()]
+
+    @app.get("/understanding/history")
+    def understanding_history() -> list[dict[str, Any]]:
+        """Scan journal history."""
+        if s.understanding is None:
+            raise HTTPException(status_code=404, detail="understanding engine disabled")
+        return s.understanding.scan_history()
 
     @app.get("/events/recent", response_model=list[EventOut])
     def recent_events(limit: int = 50) -> list[EventOut]:

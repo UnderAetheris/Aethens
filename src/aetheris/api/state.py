@@ -19,6 +19,7 @@ from ..model import ModelProvider, ModelConfig, build_provider
 from ..skills.idle_promotion import IdleSkillPromotion
 from ..skills.promoter import SkillPromoter
 from ..skills.registry import SkillRegistry
+from ..understanding.engine import RepoUnderstanding
 
 
 @dataclass
@@ -38,6 +39,7 @@ class AppState:
     autonomous: AutonomousLoop | None = None
     registry: SkillRegistry | None = None
     promotion_config: PromotionConfig | None = None
+    understanding: RepoUnderstanding | None = None
 
     @classmethod
     def create(cls, root: str = ".aetheris_data", idle_promotion: IdleSkillPromotion | None = None) -> "AppState":
@@ -103,6 +105,11 @@ class AppState:
 
         plan_review = PlanReviewQueue()
 
+        understanding = RepoUnderstanding(
+            root=config.workspace_root,
+            model_path=str(base / "repo_model.json"),
+        )
+
         return cls(
             config=config,
             memory=memory,
@@ -117,4 +124,5 @@ class AppState:
             autonomous=autonomous,
             registry=registry,
             promotion_config=promotion_config,
+            understanding=understanding,
         )

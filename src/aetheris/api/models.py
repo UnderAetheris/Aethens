@@ -171,3 +171,56 @@ class PromotionConfigOut(BaseModel):
     stability_max_repairs: int
     promotion_budget: int
     promotion_budget_range: tuple[int, int] = (1, 5)
+
+
+# ---------------------------------------------------------------------------
+# Repository Understanding models (v0 — additive, read-only)
+# ---------------------------------------------------------------------------
+
+class SymbolRefOut(BaseModel):
+    path: str
+    line: int
+
+
+class SymbolOut(BaseModel):
+    name: str
+    kind: str
+    module: str
+    definition: SymbolRefOut
+    exported: bool = False
+    uses: list[SymbolRefOut] = []
+
+
+class FileFactsOut(BaseModel):
+    path: str
+    module: str
+    is_test: bool = False
+    tests_target: str | None = None
+    symbols: list[SymbolOut] = []
+    imports: list[str] = []
+
+
+class RepoModelOut(BaseModel):
+    version: int
+    root: str
+    language: str = "python"
+    build_system: str = ""
+    entrypoints: list[str] = []
+    readme_summary: str = ""
+    architecture_summary: str = ""
+
+
+class ScanReportOut(BaseModel):
+    changed: list[str] = []
+    removed: list[str] = []
+    version: int = 0
+    timestamp: float = 0.0
+
+
+class ProjectFactsOut(BaseModel):
+    language: str = "python"
+    build_system: str = ""
+    entrypoints: list[str] = []
+    readme_summary: str = ""
+    architecture_summary: str = ""
+    version: int = 0

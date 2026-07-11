@@ -8,6 +8,7 @@ from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
 from ..reflection.engine import ReflectionEngine, StepOutcome, Verdict
 from ..reflection.failure_parser import FailureParser
+from ..understanding.engine import RepoUnderstanding
 from .controller import Controller
 from .queue import TaskQueue, TaskState
 
@@ -60,6 +61,7 @@ class ExecutiveController:
         skill_promotion=None,  # IdleSkillPromotion | None — default off
         promotion_budget: int = 1,
         promotion_config: PromotionConfig | None = None,
+        understanding: RepoUnderstanding | None = None,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -74,7 +76,7 @@ class ExecutiveController:
         if reflection is not None:
             self._reflection: ReflectionEngine | None = reflection
         elif config.reflection_enabled:
-            self._reflection = ReflectionEngine()
+            self._reflection = ReflectionEngine(understanding=understanding)
         else:
             self._reflection = None
         self._plan_review = plan_review
@@ -82,6 +84,7 @@ class ExecutiveController:
         self._promotion_budget = promotion_budget
         self._promotion_config = promotion_config
         self._failure_parser = FailureParser()
+        self._understanding = understanding
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()

@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from ..understanding.engine import RepoUnderstanding
+    from ..planner.plan import MultiStepPlan, PlanStep
 
 # Reflection's own retry ceiling — the executive's _MAX_RETRIES is the hard cap;
 # this constant lets reflection signal RETRY_STEP vs ABORT independently.
 _MAX_REFLECT_RETRIES = 3
-
-if TYPE_CHECKING:
-    from ..planner.plan import MultiStepPlan, PlanStep
 
 
 class Verdict(str, Enum):
@@ -58,12 +60,18 @@ class ReflectionEngine:
     verdict using mechanisms it already has.
 
     Integration seam (executive):
-        pick → run → record → reflect(outcome) → act → advance
+        pick -> run -> record -> reflect(outcome) -> act -> advance
     """
 
-    def __init__(self, registry_tools: tuple[str, ...] = (), max_repair_steps: int = 3) -> None:
+    def __init__(
+        self,
+        registry_tools: tuple[str, ...] = (),
+        max_repair_steps: int = 3,
+        understanding: RepoUnderstanding | None = None,
+    ) -> None:
         self._tools = frozenset(registry_tools)
         self._max_repair = max_repair_steps
+        self._understanding = understanding
 
     # ------------------------------------------------------------------ #
     # Public API                                                           #
@@ -100,10 +108,11 @@ class ReflectionEngine:
                 reason=f"command_not_found on step {outcome.step_index}: environment issue, pause",
             )
         if fk == "missing_import":
+            repair_steps = self._build_import_repair(outcome)
             return ReflectionResult(
                 verdict=Verdict.INSERT_REPAIR_STEPS,
                 reason=f"missing_import on step {outcome.step_index}: insert import repair",
-                repair_steps=[],  # caller (executive / planner) fills in the concrete step
+                repair_steps=repair_steps,
             )
         if fk == "syntax_error":
             return ReflectionResult(
@@ -153,6 +162,40 @@ class ReflectionEngine:
             verdict=Verdict.ABORT,
             reason=f"step {outcome.step_index} exhausted retries: {outcome.output}",
         )
+
+    # ------------------------------------------------------------------ #
+    # Repair construction (with optional Understanding enrichment)       #
+    # ------------------------------------------------------------------ #
+
+    def _build_import_repair(self, outcome: StepOutcome) -> list[tuple[str, str]]:
+        """Build a concrete edit_file repair for a missing import.
+
+        Queries the Understanding model (if available) to find the correct
+        module that exports the missing symbol.  Falls back to an empty
+        list if the model has no answer, letting the executive use v0
+        deterministic behavior.
+        """
+        output_lower = outcome.output.lower()
+        symbol_name = None
+        for marker in ("no module named ", "importerror: "):
+            idx = output_lower.find(marker)
+            if idx != -1:
+                rest = outcome.output[idx + len(marker):].strip()
+                symbol_name = rest.split()[0].strip("'\"") if rest else None
+                break
+        if symbol_name is None:
+            return []
+        if self._understanding is None:
+            return []
+        module = self._understanding.exporting_module(symbol_name)
+        if module is None:
+            return []
+        arg = json.dumps({
+            "path": "",  # caller fills in the target file
+            "find": "\n",
+            "replace": f"\nfrom {module} import {symbol_name}\n",
+        })
+        return [("edit_file", arg)]
 
     # ------------------------------------------------------------------ #
     # Repair validation                                                    #
