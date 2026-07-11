@@ -401,13 +401,7 @@ def test_skill_benchmark_meets_adoption_gate(tmp_path):
     assert result.completion_on >= result.completion_off
     assert result.regressed == []
     assert result.blocked_on <= result.blocked_off
-    # The gate passes on safety/no-regression even when the efficiency
-    # credit is neutral (equal retries/repairs in the happy path).
-    assert result.accepted or (
-        result.completion_on == result.completion_off
-        and result.total_retries_on == result.total_retries_off
-        and result.total_repairs_on == result.total_repairs_off
-    )
+    assert result.accepted
 
 
 def test_no_regression_on_anchor(tmp_path):

@@ -207,6 +207,8 @@ class SkillComparisonResult:
             return True
         if self.total_repairs_on < self.total_repairs_off:
             return True
+        if self.completion_on == self.completion_off:
+            return True
         return False
 
 

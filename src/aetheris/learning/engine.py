@@ -201,39 +201,65 @@ class LearningEngine:
         self,
         skill,  # SkillTemplate — avoid circular import
         registry,  # SkillRegistry
-        cases: list[EvalCase],
+        cases: list | None = None,
         workspace_root: str | None = None,
     ) -> bool:
-        """Promote a skill candidate: register only if completion-up, no regressions.
+        """Promote a skill candidate: register only if it clears the measured gate.
 
-        Same two-clause gate as attempt(): strictly better AND no regressions.
-        Returns True if promoted, False if rejected.
+        Uses SkillComparison for WorkflowCase lists (same two-clause gate as
+        hand-authored skills: completion >= baseline, no regressions,
+        safety-neutral).  Falls back to an anchor-check for EvalCase lists
+        (backward compatibility).
         """
+        from ..evaluation.cases import ANCHOR_NAMES, WorkflowCase
+
         root = workspace_root or self._root
-        baseline = Evaluator(self._memory, root, dict(self.extra_keywords)).run(cases)
 
-        # Trial: register the skill and re-run the evaluator with it.
-        # We measure indirectly: a skill that fires on a case should complete it.
-        # For now we record the promotion and let the eval gate decide.
-        # (Full skill-aware evaluator is a follow-on; this wires the hook.)
-        self._memory.record(
-            "skill_promotion_attempt",
-            {"skill_name": skill.name, "baseline_rate": baseline.pass_rate},
-        )
-
-        # Conservative: only promote if baseline already passes all anchors.
-        # A skill that breaks an anchor is an immediate reject.
-        from ..evaluation.cases import ANCHOR_NAMES
-        anchor_failures = [
-            r for r in baseline.results
-            if r.name in ANCHOR_NAMES and not r.passed
-        ]
-        if anchor_failures:
+        if cases and all(isinstance(c, WorkflowCase) for c in cases):
+            from ..evaluation.compare import SkillComparison
+            comp = SkillComparison(self._memory, root)
+            result = comp.run(cases, skill=skill)
+            if not result.accepted:
+                self._memory.record(
+                    "skill_promotion_rejected",
+                    {
+                        "skill_name": skill.name,
+                        "reason": (
+                            f"gate not cleared: "
+                            f"completion_on={result.completion_on:.2f} "
+                            f"completion_off={result.completion_off:.2f} "
+                            f"regressed={result.regressed}"
+                        ),
+                    },
+                )
+                return False
+            registered = registry.register(skill)
             self._memory.record(
-                "skill_promotion_rejected",
-                {"skill_name": skill.name, "reason": "anchor failures at baseline"},
+                "skill_promoted",
+                {
+                    "skill_id": registered.id,
+                    "skill_name": registered.name,
+                    "version": registered.version,
+                    "completion_on": round(result.completion_on, 4),
+                    "completion_off": round(result.completion_off, 4),
+                    "regressed": result.regressed,
+                },
             )
-            return False
+            return True
+
+        if cases:
+            from ..evaluation.evaluator import Evaluator
+            baseline = Evaluator(self._memory, root, dict(self.extra_keywords)).run(cases)
+            anchor_failures = [
+                r for r in baseline.results
+                if r.name in ANCHOR_NAMES and not r.passed
+            ]
+            if anchor_failures:
+                self._memory.record(
+                    "skill_promotion_rejected",
+                    {"skill_name": skill.name, "reason": "anchor failures at baseline"},
+                )
+                return False
 
         registered = registry.register(skill)
         self._memory.record(

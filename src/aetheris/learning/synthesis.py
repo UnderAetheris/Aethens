@@ -2,31 +2,28 @@
 shapes, generalize them into skill templates, and propose them through the
 existing promotion gate.
 
-Design:
-- Scan MemoryStore for successful MultiStepPlan executions (plan_created +
-  step_done events that form a complete plan).
-- Cluster plans by tool sequence (ignoring concrete args).
-- For each cluster with count >= threshold, extract the common arg pattern,
-  derive a trigger phrase from the task text, and build a SkillTemplate.
-- The proposed skill is measured through the existing SkillComparison gate
-  before registration.
-
-No changes to the safe spine: a synthesized skill is still only a rendered
-MultiStepPlan, still gated by SafetyLayer, still inherits Reflection.
+Delegates to SkillPromoter (skills/promoter.py) for the deterministic mining
+and generalization.  The SynthesizedSkill and SynthesisResult types are
+preserved for the autonomous loop.
 """
 from __future__ import annotations
 
 import json
 import re
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
 from ..memory.store import MemoryStore
-from ..planner.plan import MultiStepPlan, PlanStep
-from ..skills.registry import SkillRegistry, SkillStep, SkillTemplate
+from ..planner.plan import MultiStepPlan, PlanStore
+from ..skills.promoter import SkillCandidate, SkillPromoter, candidate_to_template
+from ..skills.registry import SkillStep
+
+if TYPE_CHECKING:
+    pass
 
 
 # ---------------------------------------------------------------------------
-# Types
+# Types (preserved for autonomous-loop compatibility)
 # ---------------------------------------------------------------------------
 
 @dataclass
@@ -56,15 +53,14 @@ class SynthesisResult:
 # ---------------------------------------------------------------------------
 
 class PlanJournalMiner:
-    """Extract completed plan shapes from the memory event log."""
+    """Extract completed plan shapes from the plan sidecar directory."""
 
-    def __init__(self, memory: MemoryStore, plan_store_dir: str = ".aetheris_data/plans"):
+    def __init__(self, memory: MemoryStore | None = None, plan_store_dir: str = ".aetheris_data/plans") -> None:
         self._memory = memory
         self._plan_dir = plan_store_dir
 
     def completed_plans(self) -> list[MultiStepPlan]:
         """Return all plans that completed successfully, loaded from sidecars."""
-        from ..planner.plan import PlanStore
         store = PlanStore(self._plan_dir)
         plans: list[MultiStepPlan] = []
         for path in store._dir.glob("*.plan.json"):
@@ -77,48 +73,38 @@ class PlanJournalMiner:
                 pass
         return plans
 
-    def plan_shapes(self, plans: list[MultiStepPlan]) -> dict[str, list[MultiStepPlan]]:
-        """Group plans by their tool-sequence shape (ignoring concrete args).
-
-        Returns a dict mapping shape-key -> list of plans with that shape.
-        Shape key is a tuple of (tool, depends_on) pairs.
-        """
-        groups: dict[str, list[MultiStepPlan]] = {}
+    def plan_shapes(self, plans: list[MultiStepPlan]) -> dict:
+        """Group plans by tool-sequence shape (ignoring concrete args)."""
+        groups: dict = {}
         for plan in plans:
-            key = tuple(
-                (s.tool, tuple(s.depends_on)) for s in plan.steps
-            )
+            key = tuple((s.tool, tuple(s.depends_on)) for s in plan.steps)
             groups.setdefault(key, []).append(plan)
         return groups
 
 
 # ---------------------------------------------------------------------------
-# Skill synthesizer
+# Skill synthesizer (delegates to SkillPromoter)
 # ---------------------------------------------------------------------------
 
 class AutoSkillSynthesizer:
     """Detect repeated successful plan patterns and synthesize skill templates.
 
-    The synthesizer is conservative:
-    - Minimum occurrence threshold before proposing.
-    - Trigger phrases are derived from the task text (first verb phrase).
-    - Params are generalized from concrete values.
-    - Proposed skills must clear the existing SkillComparison gate before
-      they are registered.
+    Delegates mining + generalization to SkillPromoter.  The promotion gate
+    (SkillComparison) is run per candidate.
     """
 
     def __init__(
         self,
         memory: MemoryStore,
         workspace_root: str,
-        registry: SkillRegistry,
+        registry,  # SkillRegistry — avoid circular import
         min_occurrences: int = 3,
     ) -> None:
         self._memory = memory
         self._root = workspace_root
         self._registry = registry
         self._min_occurrences = min_occurrences
-        self._miner = PlanJournalMiner(memory)
+        self._miner = PlanJournalMiner()
 
     def synthesize(self) -> SynthesisResult:
         """Run one synthesis cycle: mine -> cluster -> propose -> gate."""
@@ -129,162 +115,137 @@ class AutoSkillSynthesizer:
 
         try:
             plans = self._miner.completed_plans()
-            shapes = self._miner.plan_shapes(plans)
+            promoter = SkillPromoter(min_recurrence=self._min_occurrences)
+            candidates = promoter.candidates(plans, memory=self._memory)
         except Exception as exc:
             errors.append(f"plan mining failed: {exc}")
             return SynthesisResult(proposed=[], promoted=[], rejected=[], errors=errors)
 
-        for shape_key, shape_plans in shapes.items():
-            if len(shape_plans) < self._min_occurrences:
-                continue
-
+        for cand in candidates:
             try:
-                skill = self._synthesize_from_shape(shape_key, shape_plans)
-                if skill is None:
-                    continue
-                proposed.append(skill)
-                accepted = self._gate_skill(skill)
+                syn = self._to_synthesized(cand)
+                proposed.append(syn)
+                accepted = self._gate_skill(cand)
                 if accepted:
-                    promoted.append(skill.name)
+                    promoted.append(cand.name)
                 else:
-                    rejected.append(skill.name)
+                    rejected.append(cand.name)
             except Exception as exc:
-                errors.append(f"synthesis failed for {shape_key}: {exc}")
+                errors.append(f"synthesis failed for {cand.name}: {exc}")
 
         return SynthesisResult(
             proposed=proposed, promoted=promoted, rejected=rejected, errors=errors
         )
 
-    def _synthesize_from_shape(
-        self, shape_key: tuple[tuple[str, tuple[int, ...]], ...], plans: list[MultiStepPlan]
-    ) -> SynthesizedSkill | None:
-        """Build a SynthesizedSkill from a cluster of same-shape plans."""
-        tools = [tool for tool, _ in shape_key]
-        if len(set(tools)) < 2:
-            return None  # single-tool plans are not worth templating
-
-        # Derive params from first plan's concrete args.
-        first = plans[0]
-        params = self._extract_params(first.steps)
-        if not params:
-            return None
-
-        # Build steps with {param} slots.
-        steps: list[SkillStep] = []
-        for plan_step, (tool, deps) in zip(first.steps, shape_key):
-            arg_template = self._generalize_arg(plan_step.arg, params)
-            steps.append(SkillStep(
-                tool=tool,
-                arg_template=arg_template,
-                reason=f"auto: {tool}",
-                depends_on=list(deps),
-            ))
-
-        # Derive a trigger hint from task texts.
-        trigger_hint = self._derive_trigger([p.task_id for p in plans])
-
-        name = self._make_name(tools, params)
-        description = (
-            f"Auto-synthesized skill for {', '.join(tools)} sequence. "
-            f"Discovered from {len(plans)} successful executions."
-        )
-
+    def _to_synthesized(self, cand: SkillCandidate) -> SynthesizedSkill:
         return SynthesizedSkill(
-            name=name,
-            description=description,
-            trigger_hint=trigger_hint,
-            params=sorted(params.keys()),
-            steps=steps,
-            occurrences=len(plans),
-            confidence=min(1.0, len(plans) / 10.0),
-            source_plan_ids=[p.task_id for p in plans],
+            name=cand.name,
+            description=(
+                f"Auto-synthesized skill for "
+                f"{', '.join(s.tool for s in cand.steps)} sequence. "
+                f"Discovered from {cand.provenance.get('recurrence', 0)} executions."
+            ),
+            trigger_hint=cand.trigger,
+            params=list(cand.params),
+            steps=list(cand.steps),
+            occurrences=cand.provenance.get("recurrence", 0),
+            confidence=min(1.0, cand.provenance.get("recurrence", 0) / 10.0),
+            source_plan_ids=cand.provenance.get("source_task_ids", []),
         )
 
-    def _extract_params(self, steps: list[PlanStep]) -> dict[str, str] | None:
-        """Extract {param} slots from plan step args.
-
-        Looks for repeated structural patterns in JSON args and produces
-        a mapping of param_name -> example_value.
-        """
-        params: dict[str, str] = {}
-        for step in steps:
-            try:
-                arg_obj = json.loads(step.arg)
-                if isinstance(arg_obj, dict):
-                    for key, val in arg_obj.items():
-                        if isinstance(val, str) and val:
-                            param_name = self._sanitize_param(key)
-                            params[param_name] = val
-            except (json.JSONDecodeError, TypeError):
-                continue
-        return params if params else None
-
-    @staticmethod
-    def _sanitize_param(name: str) -> str:
-        return re.sub(r"[^a-z0-9_]", "_", name.lower())
-
-    def _generalize_arg(self, arg: str, params: dict[str, str]) -> str:
-        """Replace concrete param values in a JSON arg with {param} slots."""
+    def _gate_skill(self, cand: SkillCandidate) -> bool:
+        """Run the candidate through the SkillComparison gate."""
         try:
-            obj = json.loads(arg)
-            result = obj
-            if isinstance(result, dict):
-                for key, val in result.items():
-                    param_name = self._sanitize_param(key)
-                    if param_name in params and isinstance(val, str):
-                        result[key] = f"{{{param_name}}}"
-            return json.dumps(result)
-        except (json.JSONDecodeError, TypeError):
-            # Fallback: simple string replacement.
-            generalized = arg
-            for param_name, example in params.items():
-                generalized = generalized.replace(example, f"{{{param_name}}}")
-            return generalized
-
-    def _derive_trigger(self, task_ids: list[str]) -> str:
-        """Derive a conservative trigger phrase from task IDs or context.
-
-        In a real system this would look at the original task texts stored
-        in the memory journal.  For now we produce a generic trigger based
-        on the tool sequence.
-        """
-        # Placeholder: real implementation would mine task texts from memory.
-        return "auto-synthesized skill"
-
-    def _make_name(self, tools: list[str], params: dict[str, str]) -> str:
-        """Generate a readable skill name from its tool sequence and params."""
-        if set(tools) == {"list_dir", "read_file"}:
-            return "auto_list_and_read"
-        if set(tools) == {"write_file", "read_file"}:
-            return "auto_write_and_verify"
-        if set(tools) == {"read_file", "write_file"}:
-            return "auto_read_and_write"
-        return f"auto_{'_and_'.join(tools)}"
-
-    # ------------------------------------------------------------------ #
-    # Promotion gate                                                      #
-    # ------------------------------------------------------------------ #
-
-    def _gate_skill(self, skill: SynthesizedSkill) -> bool:
-        """Run the synthesized skill through the SkillComparison gate.
-
-        Returns True if the skill clears the gate (completion >= baseline,
-        no regressions, safety-neutral).
-        """
-        try:
-            from ..evaluation.compare import SkillComparison, skill_workflow_suite
-            template = SkillTemplate(
-                id="",
-                name=skill.name,
-                description=skill.description,
-                trigger_patterns=[re.escape(skill.trigger_hint)],
-                required_params=skill.params,
-                steps=skill.steps,
-                version=1,
-            )
+            from ..evaluation.compare import SkillComparison
+            template = candidate_to_template(cand)
+            from ..evaluation.cases import skill_workflow_suite
             suite = skill_workflow_suite(self._root)
             comp = SkillComparison(self._memory, self._root)
             result = comp.run(suite, skill=template)
             return result.accepted
         except Exception:
             return False
+
+    # ------------------------------------------------------------------ #
+    # Backward-compat wrappers used by tests (delegate to SkillPromoter) #
+    # ------------------------------------------------------------------ #
+
+    def _extract_params(self, steps: list) -> dict | None:
+        """Extract param names -> example values from plan step args."""
+        args = [s.arg for s in steps]
+        promoter = SkillPromoter()
+        params, _ = promoter._diff_args(args)
+        if params is None:
+            return None
+        result: dict[str, str] = {}
+        parsed_list = []
+        for a in args:
+            try:
+                parsed_list.append(json.loads(a))
+            except (json.JSONDecodeError, TypeError):
+                return None
+        all_keys: set[str] = set()
+        for obj in parsed_list:
+            all_keys.update(obj.keys())
+        for key in sorted(all_keys):
+            str_vals = [obj[key] for obj in parsed_list if isinstance(obj.get(key), str)]
+            if str_vals:
+                param_name = re.sub(r"[^a-z0-9_]", "_", key.lower())
+                result[param_name] = str_vals[0]
+        return result if result else None
+
+    def _generalize_arg(self, arg: str, params: dict[str, str]) -> str:
+        """Replace concrete param values with {param} slots."""
+        try:
+            obj = json.loads(arg)
+            result = obj
+            if isinstance(result, dict):
+                for key, val in result.items():
+                    param_name = re.sub(r"[^a-z0-9_]", "_", key.lower())
+                    if param_name in params and isinstance(val, str) and val == params[param_name]:
+                        result[key] = f"{{{param_name}}}"
+            return json.dumps(result)
+        except (json.JSONDecodeError, TypeError):
+            generalized = arg
+            for param_name, example in params.items():
+                generalized = generalized.replace(example, f"{{{param_name}}}")
+            return generalized
+
+    def _make_name(self, tools: list[str], params: dict[str, str]) -> str:
+        """Generate a readable skill name (backward-compat wrapper)."""
+        tool_set = set(tools)
+        if tool_set == {"list_dir", "read_file"}:
+            return "auto_list_and_read"
+        if tool_set == {"write_file", "read_file"}:
+            return "auto_write_and_verify"
+        if tool_set == {"read_file", "write_file"}:
+            return "auto_read_and_write"
+        return f"auto_{'_and_'.join(sorted(tool_set))}"
+
+    def _synthesize_from_shape(self, shape_key, plans: list) -> "SynthesizedSkill | None":
+        """Build a SynthesizedSkill from a cluster of same-shape plans (backward-compat)."""
+        tools = [tool for tool, _ in shape_key]
+        if len(set(tools)) < 2:
+            return None
+        first = plans[0]
+        params = self._extract_params(first.steps)
+        if not params:
+            return None
+        steps: list[SkillStep] = []
+        for plan_step, (tool, deps) in zip(first.steps, shape_key):
+            arg_template = self._generalize_arg(plan_step.arg, params)
+            steps.append(SkillStep(
+                tool=tool, arg_template=arg_template,
+                reason=f"auto: {tool}", depends_on=list(deps),
+            ))
+        name = self._make_name(tools, params)
+        return SynthesizedSkill(
+            name=name,
+            description=f"Auto-synthesized skill for {', '.join(tools)} sequence.",
+            trigger_hint="auto-synthesized skill",
+            params=sorted(params.keys()),
+            steps=steps,
+            occurrences=len(plans),
+            confidence=min(1.0, len(plans) / 10.0),
+            source_plan_ids=[p.task_id for p in plans],
+        )
