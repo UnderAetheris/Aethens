@@ -6,8 +6,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from ..understanding.engine import RepoUnderstanding
-    from ..planner.plan import MultiStepPlan, PlanStep
+    from ..planner.plan import MultiStepPlan
 
 # Reflection's own retry ceiling — the executive's _MAX_RETRIES is the hard cap;
 # this constant lets reflection signal RETRY_STEP vs ABORT independently.
@@ -69,11 +68,13 @@ class ReflectionEngine:
         max_repair_steps: int = 3,
         understanding: Any = None,
         reasoning: Any = None,
+        model_patcher: Any = None,
     ) -> None:
         self._tools = frozenset(registry_tools)
         self._max_repair = max_repair_steps
         self._understanding = understanding
         self._reasoning = reasoning
+        self._model_patcher = model_patcher
 
     # ------------------------------------------------------------------ #
     # Public API                                                           #
@@ -109,43 +110,8 @@ class ReflectionEngine:
                 verdict=Verdict.REQUEST_CONTEXT,
                 reason=f"command_not_found on step {outcome.step_index}: environment issue, pause",
             )
-        if fk == "missing_import":
-            repair_steps = self._build_import_repair(outcome)
-            if self._reasoning is not None:
-                try:
-                    deliberation = self._reasoning.deliberate_for_repair(outcome)
-                    self._reasoning._journal_append(deliberation)
-                except Exception:
-                    pass
-            return ReflectionResult(
-                verdict=Verdict.INSERT_REPAIR_STEPS,
-                reason=f"missing_import on step {outcome.step_index}: insert import repair",
-                repair_steps=repair_steps,
-            )
-        if fk == "syntax_error":
-            if self._reasoning is not None:
-                try:
-                    deliberation = self._reasoning.deliberate_for_repair(outcome)
-                    self._reasoning._journal_append(deliberation)
-                except Exception:
-                    pass
-            return ReflectionResult(
-                verdict=Verdict.INSERT_REPAIR_STEPS,
-                reason=f"syntax_error on step {outcome.step_index}: insert syntax repair",
-                repair_steps=[],
-            )
-        if fk == "assertion_failure":
-            if self._reasoning is not None:
-                try:
-                    deliberation = self._reasoning.deliberate_for_repair(outcome)
-                    self._reasoning._journal_append(deliberation)
-                except Exception:
-                    pass
-            return ReflectionResult(
-                verdict=Verdict.INSERT_REPAIR_STEPS,
-                reason=f"assertion_failure on step {outcome.step_index}: needs code change, then retry",
-                repair_steps=[],
-            )
+        if fk in ("missing_import", "syntax_error", "assertion_failure"):
+            return self._code_failure_repair(outcome, plan, fk)
 
         if outcome.ok:
             return ReflectionResult(
@@ -216,6 +182,42 @@ class ReflectionEngine:
             "replace": f"\nfrom {module} import {symbol_name}\n",
         })
         return [("edit_file", arg)]
+
+    def _code_failure_repair(
+        self, outcome: StepOutcome, plan: MultiStepPlan, failure_kind: str
+    ) -> ReflectionResult:
+        """Insert a repair for a code failure.
+
+        Tries a model-assisted patch first (validated in a sandbox, handed back
+        as candidate content).  If the model is off or its patch fails any gate,
+        falls back to the deterministic repair.  Reflection owns the verdict in
+        both cases; the edit always executes through the unchanged writer.
+        """
+        steps: list[tuple[str, str]] | None = None
+        reason = ""
+        if self._model_patcher is not None:
+            proposal = self._model_patcher.propose_repair(outcome, plan)
+            if proposal is not None:
+                steps = list(proposal.repair_steps)
+                reason = (
+                    f"model-assisted patch validated in sandbox "
+                    f"(resembles_retired={proposal.resembles_retired})"
+                )
+        if steps is None:
+            steps = self._build_import_repair(outcome) if failure_kind == "missing_import" else []
+            reason = f"{failure_kind} on step {outcome.step_index}: insert deterministic repair"
+
+        if self._reasoning is not None:
+            try:
+                deliberation = self._reasoning.deliberate_for_repair(outcome)
+                self._reasoning._journal_append(deliberation)
+            except Exception:
+                pass
+        return ReflectionResult(
+            verdict=Verdict.INSERT_REPAIR_STEPS,
+            reason=reason,
+            repair_steps=steps,
+        )
 
     # ------------------------------------------------------------------ #
     # Repair validation                                                    #

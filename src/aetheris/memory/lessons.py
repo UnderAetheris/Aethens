@@ -375,6 +375,15 @@ class ExperienceMemory:
     def unretire(self, lesson_id: str) -> Lesson | None:
         return self._store.unretire(lesson_id)
 
+    def retired_lessons(self) -> list[Lesson]:
+        """All lessons currently retired (incl. those decayed/expired).
+
+        Used by Model-Assisted Patching: a model patch resembling a retired
+        pattern earns extra scrutiny, so the patcher consults what the world
+        has already rejected.
+        """
+        return [les for les in self._store.query(only_active=False) if les.retired]
+
     def decay(self, now: float | None = None, ttl_seconds: int | None = None) -> list[Lesson]:
         ttl = self._ttl_seconds if ttl_seconds is None else ttl_seconds
         return self._store.decay(now=now, ttl_seconds=ttl)

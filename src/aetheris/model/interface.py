@@ -11,6 +11,7 @@ class ResponseKind(str, Enum):
     SUMMARY = "summary"
     KNOWLEDGE = "knowledge"
     SKILL_SUGGESTION = "skill_suggestion"
+    PATCH = "patch"
 
 
 @dataclass(frozen=True)
