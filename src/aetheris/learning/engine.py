@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from ..evaluation.cases import EvalCase
 from ..evaluation.evaluator import Evaluator
 from ..memory.experience import ExperienceStore
+from ..memory.experience_rerank import experience_bias
 from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore, LearnedStep
 from ..memory.store import MemoryStore
@@ -47,12 +48,14 @@ class LearningEngine:
         knowledge: KnowledgeStore,
         experience: ExperienceStore,
         learned: LearnedKeywordStore,
+        experience_lessons=None,
     ) -> None:
         self._memory = memory
         self._root = workspace_root
         self._knowledge = knowledge
         self._experience = experience
         self._learned = learned
+        self._experience_lessons = experience_lessons  # ExperienceMemory | None
         self.extra_keywords: dict[str, list[str]] = self._learned.as_keywords()
         self.last_result: LearningResult | None = None
 
@@ -91,6 +94,36 @@ class LearningEngine:
     def attempt(self, cases: list[EvalCase]) -> LearningResult:
         baseline = Evaluator(self._memory, self._root, dict(self.extra_keywords)).run(cases)
         candidate = self.propose_one(cases)
+
+        # Experience can only make the gate MORE conservative.  A confident
+        # real-run FAILED_REPEATEDLY lesson that bears on this candidate's
+        # intent/keyword is a reason to HOLD — never a reason to adopt.  The
+        # measured gate remains the sole adopter; experience never promotes
+        # something the gate would reject.
+        if candidate is not None and self._experience_lessons is not None:
+            bias = experience_bias(
+                f"{candidate.intent} {candidate.keyword}",
+                self._experience_lessons.query(),
+            )
+            if bias < 0:
+                self._memory.record(
+                    "learning_held_experience",
+                    {
+                        "intent": candidate.intent,
+                        "keyword": candidate.keyword,
+                        "from_case": candidate.from_case,
+                        "reason": "confident real-run failure on this intent/keyword",
+                    },
+                )
+                result = LearningResult(
+                    accepted=False,
+                    reason="experience hold: confident real-run failure on this intent/keyword",
+                    baseline_rate=baseline.pass_rate,
+                    new_rate=baseline.pass_rate,
+                    candidate=candidate,
+                )
+                self.last_result = result
+                return result
 
         if candidate is None:
             result = LearningResult(

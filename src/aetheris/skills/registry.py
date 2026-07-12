@@ -6,6 +6,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
+from ..memory.experience_rerank import experience_rerank
 from ..memory.jsonl import JsonlStore, make_id
 from ..planner.plan import MultiStepPlan, PlanStep
 
@@ -231,15 +232,36 @@ class SkillRegistry:
     # Matching                                                             #
     # ------------------------------------------------------------------ #
 
-    def match(self, task: str) -> tuple[SkillTemplate, dict[str, str]] | None:
-        """Return the first active skill that matches the task and can bind params.
+    def match(
+        self, task: str, experience=None
+    ) -> tuple[SkillTemplate, dict[str, str]] | None:
+        """Return the best active skill that matches the task and can bind params.
 
         Conservative: returns None if no skill matches confidently.
         The planner calls this in front of normal planning; None → fall back.
+
+        When an ``ExperienceMemory`` handle is supplied, candidate skills are
+        re-ranked by real-run history (``experience_rerank``) *without* adding
+        or removing any option.  With consumption off, or no confident lesson,
+        the result is the original first-match order (byte-identical floor).
         """
-        for skill in self.active_skills():
-            if skill.matches(task):
-                params = skill.extract_params(task)
-                if params is not None:
-                    return skill, params
-        return None
+        candidates = [
+            (s, s.extract_params(task))
+            for s in self.active_skills()
+            if s.matches(task) and s.extract_params(task) is not None
+        ]
+        if not candidates:
+            return None
+        if experience is None:
+            return candidates[0]
+
+        lessons = experience.query()
+        if not lessons:
+            return candidates[0]
+
+        ranked = experience_rerank(
+            candidates,
+            lessons,
+            keyfn=lambda sc: f"{sc[0].name} {' '.join(sc[0].trigger_patterns)}",
+        )
+        return ranked[0]

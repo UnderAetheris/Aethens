@@ -5,7 +5,8 @@ import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from .plan import MultiStepPlan, PlanStep, StepStatus
+from ..memory import ExperienceMemory
+from .plan import MultiStepPlan, PlanStep
 
 if TYPE_CHECKING:
     from ..model import ModelProvider
@@ -47,6 +48,7 @@ class Planner:
         model: ModelProvider | None = None,
         registry_tools: tuple[str, ...] | None = None,
         skills: SkillRegistry | None = None,
+        experience: ExperienceMemory | None = None,
     ) -> None:
         loaded: dict[str, list[str]] = {}
         if learned_store_path is not None:
@@ -64,6 +66,7 @@ class Planner:
         self._model = model
         self._registry_tools = registry_tools or ()
         self._skills = skills  # None → skill recognition disabled (byte-for-byte fallback)
+        self._experience = experience  # None → no experience-guided re-ranking
 
     def _verbs(self, intent: str, base: tuple[str, ...]) -> tuple[str, ...]:
         return tuple(base) + tuple(self._extra.get(intent, []))
@@ -198,7 +201,7 @@ class Planner:
 
         # Skill recognition: check in front of normal planning.
         if self._skills is not None:
-            matched = self._skills.match(task)
+            matched = self._skills.match(task, experience=self._experience)
             if matched is not None:
                 skill, params = matched
                 try:

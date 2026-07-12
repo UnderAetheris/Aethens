@@ -6,7 +6,6 @@ NO write handle.  It cannot cause an effect.
 """
 from __future__ import annotations
 
-import json
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -73,12 +72,14 @@ class ReasoningEngine:
         skills: Any = None,
         budget: ReasoningBudget | None = None,
         model: Any = None,
+        experience: Any = None,
     ) -> None:
         self._u = understanding
         self._mem = memory
         self._skills = skills
         self._budget = budget or ReasoningBudget()
         self._model = model
+        self._experience = experience  # ExperienceMemory | None -> None = no experience observations
         self._journal: list[dict[str, Any]] = []
 
     # ------------------------------------------------------------------ #
@@ -233,6 +234,30 @@ class ReasoningEngine:
                     statement=f"{len(active)} active skills available",
                     provenance=Provenance(source="skills", ref="registry"),
                 ))
+            except Exception:
+                pass
+
+        # Experience enters only as another observation source, with a distinct
+        # provenance.  No schema change; abstention still governs thin history
+        # exactly as thin evidence.  ExperienceMemory.query() returns [] when
+        # consumption is off, so this contributes nothing on the byte-identical floor.
+        if self._experience is not None:
+            try:
+                for les in self._experience.query():
+                    ot = les.outcome_type
+                    if ot.is_avoid:
+                        verb = "avoid (repeated real-run failure)"
+                    elif ot.is_success:
+                        verb = "worked_well in prior runs"
+                    else:
+                        verb = "failed_safely (no blast radius)"
+                    observations.append(Observation(
+                        statement=f"experience: {verb} — {les.problem}",
+                        provenance=Provenance(source="experience", ref=les.id),
+                    ))
+                    count += 1
+                    if count >= self._budget.max_fan_in:
+                        break
             except Exception:
                 pass
 
