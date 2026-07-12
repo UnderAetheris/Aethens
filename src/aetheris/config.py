@@ -15,6 +15,11 @@ class Config:
     # Default-on: flipped because the amplified benchmark passes its 5-clause
     # gate on its own merits.  Opt-out is always available (config or env).
     reasoning_enabled: bool = True  # AETHERIS_REASONING=off forces the v0 off-path
+    # Experience Memory Engine v0: recording is a safe side-effect of the
+    # executive's normal run (write path).  Consuming lessons is gated off by
+    # default and benchmarked before it may steer anything.
+    experience_record: bool = True    # AETHERIS_EXPERIENCE_RECORD=0 to disable writes
+    experience_consume: bool = False   # AETHERIS_EXPERIENCE_CONSUME=1 to enable reads
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -28,6 +33,8 @@ class Config:
             reflection_enabled=os.getenv("AETHERIS_REFLECTION", "1") != "0",
             code_loop_enabled=os.getenv("AETHERIS_CODE_LOOP", "0") == "1",
             reasoning_enabled=os.getenv("AETHERIS_REASONING", "1") == "1",
+            experience_record=os.getenv("AETHERIS_EXPERIENCE_RECORD", "1") != "0",
+            experience_consume=os.getenv("AETHERIS_EXPERIENCE_CONSUME", "0") == "1",
         )
 
 

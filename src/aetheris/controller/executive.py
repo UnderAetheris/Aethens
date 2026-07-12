@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 
 from ..config import Config, PromotionConfig
 from ..learning.plan_review import PlanReviewQueue, ReviewStatus
+from ..memory.lessons import ExperienceMemory, OutcomeType
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
 from ..reasoning.engine import ReasoningEngine
@@ -64,6 +65,7 @@ class ExecutiveController:
         promotion_config: PromotionConfig | None = None,
         understanding: RepoUnderstanding | None = None,
         reasoning: ReasoningEngine | None = None,
+        experience: ExperienceMemory | None = None,
     ) -> None:
         self._config = config
         self._queue = queue
@@ -88,13 +90,45 @@ class ExecutiveController:
         self._failure_parser = FailureParser()
         self._understanding = understanding
         self._reasoning = reasoning
+        self._experience = experience
 
     def run_once(self) -> Tick:
         nxt = self._queue.next_queued()
         if nxt is None:
             return self._on_idle()
         self._idle_ticks = 0
-        return self._run_task(nxt.id)
+        tick = self._run_task(nxt.id)
+        # Experience write path: a pure side-effect.  It observes what happened
+        # and records a Lesson; it adds no step, gate, or decision, so it is
+        # safe to keep on.  It never reads back here (consumption is gated).
+        self._observe_experience(tick)
+        return tick
+
+    @staticmethod
+    def _outcome_for_tick(tick: Tick) -> OutcomeType | None:
+        """Map a terminal Tick to a provenance OutcomeType (or None if non-terminal)."""
+        o = tick.outcome
+        if o in ("done", "step_done"):
+            return OutcomeType.WORKED_WELL
+        if o in ("blocked", "waiting_for_context"):
+            return OutcomeType.FAILED_SAFELY
+        if o == "failed":
+            return OutcomeType.FAILED_REPEATEDLY
+        return None
+
+    def _observe_experience(self, tick: Tick) -> None:
+        if self._experience is None or tick.task_id is None:
+            return
+        outcome = self._outcome_for_tick(tick)
+        if outcome is None:
+            return
+        self._experience.record(
+            outcome=outcome,
+            problem=f"task {tick.task_id} ended '{tick.outcome}'",
+            cause=tick.outcome or "unknown",
+            fix="(recorded for later mining; advisory, no action taken)",
+            related_task=tick.task_id,
+        )
 
     # ------------------------------------------------------------------ #
     # Task execution                                                       #
