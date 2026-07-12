@@ -25,6 +25,11 @@ class Config:
     # schedules existing plans through the existing spine; it adds no authority
     # and is byte-identical to flat planning when off or when it abstains.
     hierarchy_enabled: bool = False    # AETHERIS_HIERARCHY=1 to enable
+    # Research Engine v0 — the network boundary.  Default-OFF until the
+    # offline-vs-research adoption gate clears with zero unsafe requests.  It is
+    # the fourth read-only advisor plus a dedicated egress perimeter; it adds no
+    # execution authority and is byte-identical to Hierarchical v0 when off.
+    research_enabled: bool = False     # AETHERIS_RESEARCH=1 to enable
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -41,6 +46,7 @@ class Config:
             experience_record=os.getenv("AETHERIS_EXPERIENCE_RECORD", "1") != "0",
             experience_consume=os.getenv("AETHERIS_EXPERIENCE_CONSUME", "0") == "1",
             hierarchy_enabled=os.getenv("AETHERIS_HIERARCHY", "0") == "1",
+            research_enabled=os.getenv("AETHERIS_RESEARCH", "0") == "1",
         )
 
 

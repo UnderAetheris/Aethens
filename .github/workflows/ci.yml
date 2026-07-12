@@ -22,3 +22,15 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_reasoning_gate.py
+  research-gate:
+    # The network boundary is continuously re-proven: the offline-vs-research
+    # adoption gate (absolute clause: a single unsafe request fails it) must
+    # pass on every change or the build fails.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python scripts/run_research_gate.py

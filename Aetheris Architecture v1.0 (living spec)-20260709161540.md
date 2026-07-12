@@ -3,7 +3,7 @@
 # Aetheris Architecture v1.0
 _A living technical specification. This is the reference point for every current and future subsystem. When a design question comes up, this document is the tiebreaker; when it goes stale, update it before writing the code that contradicts it._
 
-**Status:** Foundation complete. Controller, Safety Layer, Tool System, Planner, Evaluation Engine, Knowledge & Experience Memory, Learning Engine v0, Deliberative Reasoning (default-on, gated), and the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated) are all built, tested, and closed into a working loop.
+**Status:** Foundation complete. Controller, Safety Layer, Tool System, Planner, Evaluation Engine, Knowledge & Experience Memory, Learning Engine v0, Deliberative Reasoning (default-on, gated), the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated), and the Research Engine v0 — the first subsystem to cross the machine boundary, behind its own dedicated `NetworkPerimeter` egress gate (default-off, gated) — are all built, tested, and closed into a working loop.
 
 * * *
 ## 1\. System vision
@@ -41,11 +41,21 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
                                   └───────────┘
 
    ADVISORY LAYER (above the planner, composes never bypasses):
+               ┌──────────────────────────────────────────────────┐
+               │  GoalDecomposer (advisory DAG)  ──▶  GoalOrchestrator │
+               │  schedules ready leaves ONE-AT-A-TIME to the EXISTING  │
+               │  Planner + Executive + Safety Layer spine.             │
+               │  Holds no tool, no SafetyLayer, no writer.             │
+               └──────────────────────────────────────────────────┘
+
+   FOURTH ADVISOR (the only subsystem that crosses the boundary):
             ┌──────────────────────────────────────────────────┐
-            │  GoalDecomposer (advisory DAG)  ──▶  GoalOrchestrator │
-            │  schedules ready leaves ONE-AT-A-TIME to the EXISTING  │
-            │  Planner + Executive + Safety Layer spine.             │
-            │  Holds no tool, no SafetyLayer, no writer.             │
+            │  ResearchEngine  (Query→Search→Fetch→Extract→       │
+            │  Validate→Cite→EvidenceBundle)  — immutable data,   │
+            │  terminates in evidence, never in execution.        │
+            │  Its ONLY egress is through the NetworkPerimeter:   │
+            │  allowlist / HTTPS / budgets / robots / MIME / no   │
+            │  auth-cookies-JS / dry-run / task-scoped. deny-wins. │
             └──────────────────────────────────────────────────┘
                                  └─────┬─────┘
                     ┌──────────────────┼──────────────────┐
@@ -64,7 +74,7 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
    FUTURE:  Research Engine  ·  Skill System  ·  Multi-Agent Layer  (all behind the same gate)
 ```
 
-**Built today:** Executive Controller (as `Controller`), Planner, Safety Layer, Tool System, Memory (event/knowledge/experience), Evaluation Engine, Learning Engine, Deliberative Reasoning (default-on, gated), and the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated).
+**Built today:** Executive Controller (as `Controller`), Planner, Safety Layer, Tool System, Memory (event/knowledge/experience), Evaluation Engine, Learning Engine, Deliberative Reasoning (default-on, gated), the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated), and the Research Engine v0 — the first and only subsystem to cross the machine boundary, behind its own dedicated `NetworkPerimeter` egress gate (default-off, gated).
 **Planned:** Task Queue, Research Engine, Skill System, Multi-Agent Layer, Executive Controller v1.
 
 * * *
@@ -85,6 +95,8 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
 | Research Engine (future) | Gathering external information through the network boundary | Bypass Safety; act autonomously without task scope | Safety Layer, Tool System, Memory |
 | Skill System (future) | Composing tools into higher-level reusable multi-step procedures | Bypass Safety; embed tool logic it doesn't own | Planner, Tool System, Safety, Evaluator |
 | Multi-Agent Layer (future) | Coordinating multiple Aetheris instances/roles | Create an unbounded agent that escapes any single agent's guardrails | Controller, Safety, Memory |
+| NetworkPerimeter | Being the single network-egress choke point; enforcing allowlist/HTTPS/budgets/robots/MIME/no-auth-cookies-JS/dry-run/task-scope | Let any byte leave without passing its rules; become a tool; gain execution authority | Memory (journal), Tool/transport (GET only) |
+| Research Engine | Gathering immutable, cited evidence from allowlisted sources behind the perimeter; returning an `EvidenceBundle` | Execute anything; touch safety; mutate plans/memory/skills/config; make a request outside the perimeter; write back to the web | NetworkPerimeter (egress only), Memory (journal), bounded content cache |
 
 * * *
 ## 4\. Data flow
@@ -215,7 +227,7 @@ In recommended order:
 2. **Executive Controller v1** — promote the Controller from single-task handler to orchestrator: owns the Task Queue, schedules idle-time evaluation + learning, applies policy (when to plan vs defer, when to run the improvement loop).
 3. **Task Queue v1** — persistent, prioritized, resumable work queue with per-task lifecycle state and retries.
 4. **Skill System v1** — compose tools into higher-level reusable multi-step procedures the Planner can select; scored by the same Evaluator, improved by the same Learning loop. Skills are just "tools made of tools," so they route through Safety unchanged.
-5. **Research Engine v1** — the deliberate introduction of the network boundary. This is the first capability that reaches outside the machine, so it ships _after_ Skills and _only_ with dedicated safety rules (domain allowlists, rate limits, dry-run previews of every fetch). This is exactly the boundary the Safety Layer was designed to guard.
+5. **Research Engine v0** — the deliberate introduction of the network boundary. This is the first capability that reaches outside the machine, shipped _after_ Skills and _only_ with dedicated safety rules (domain allowlists, rate limits, dry-run previews of every fetch, task-scoped, no background browsing). Its `NetworkPerimeter` is the network analogue of the Safety Layer. **v0 is built, default-off, gated PASS** (see §14); widen the allowlist and evidence classes one measured step at a time behind the same gate.
 6. **Multi-Agent System v1** — multiple coordinated Aetheris roles/instances, each individually gated. Coordination adds a layer; it never creates an ungated super-agent.
 7. **Self-maintenance / autonomous improvement (later)** — widen the Learning Engine's levers (beyond planner keywords) _only_ once persistence, versioning, and a much larger benchmark make regressions catchable and reversible at scale.
 
@@ -286,6 +298,26 @@ Fixtures are fixed in-repo (`DecisionCase.setup`), hermetic, and deterministic; 
 **Status (this milestone — Default-Off, Gated):** `run_goal(hierarchy=False)` remains the default and is byte-identical to the prior milestone. The layer is available (gated PASS on the current fixtures) but **kept default-off** pending broader multi-plan workload benchmarking, per the design doc's conservative stance. Flipping default-on is a separate, isolated, reviewable action to take only after the gate holds across more workloads.
 
 **Next concrete action:** Benchmark flat-vs-hierarchical on a wider set of multi-plan workloads (module + tests + dependents; partially-done goals; skill-covered subgoals; failing-branch isolation). Flip default-on *only* if the outcome axes continue to clear the gate with zero regressions, flat safety, and zero authority increase. Then the **Research Engine is genuinely the next step** — still behind its own dedicated rules (domain allowlists, rate limits, dry-run previews, task-scoped, never background browsing). Hold the order through this one too: prove bounded orchestration before the network boundary.
+
+## 14. Research Engine v0 — the network boundary, opened safely
+
+**Status (this milestone):** Built, default-off, and **gated PASS** on the offline-vs-research adoption benchmark, including the absolute unsafe-request clause. This is the boundary the entire architecture was sequenced to reach, and reach *safely*: the internet arrives *last*, behind its own dedicated perimeter, because every guardrail that guards it — advisory seams, immutable outputs, measured adoption, structural incapacity to act — was already proven on the prior milestones. The governing principle: **the internet is an advisory substrate, not an execution authority. Information increases; authority does not.**
+
+**Two structural pillars carry that:**
+- **Research is *incapable* of acting, not just forbidden.** The `ResearchEngine` holds no tool, no `SafetyLayer` (execution gate), no plan mutator, no memory/skill/config writer, no executive. Its only output is a frozen `EvidenceBundle` whose schema has no field that expresses an action — the same type-level guarantee `Deliberation` and `Lesson` already carry (`test_engine_holds_no_execution_authority`, `test_evidence_schema_cannot_express_an_action`, `test_evidence_is_immutable`). There is simply no code path from evidence to an edit.
+- **A single deny-wins egress gate: the `NetworkPerimeter`.** The network analogue of the `SafetyLayer`: no byte leaves except through `NetworkPerimeter.fetch()`. It enforces, *before any egress*, the full rule set — allowlist, HTTPS-only, redirect caps, per-task request/timeout/size/rate budgets, MIME validation, robots, no auth, no cookies, no JS, dry-run, task-scoped sessions, no background crawling — deny-wins, one choke point, no other path out (`test_non_allowlisted_domain_is_denied`, `test_non_https_is_denied`, `test_redirect_off_allowlist_is_denied`, `test_budgets_close_session_when_exceeded`, `test_mime_and_size_limits_enforced`, `test_robots_respected`, `test_no_auth_no_cookies_no_js`, `test_dry_run_emits_zero_egress`, `test_sessions_are_task_scoped_no_background`).
+
+**The pipeline is strictly one-directional and terminates in data:** `Query → Search → Fetch → Extract → Validate → Cite → EvidenceBundle`, and **nothing after that.** No branch loops back into planning or acting, the same shape as the reasoning pipeline that ends in a `Deliberation`. It is honest by construction: `contradictions` and `unknowns` are first-class fields, so "sources disagree" and "couldn't find out" are correct outputs, never smoothed into false certainty (`test_conflicting_sources_recorded_as_contradictions`, `test_absent_evidence_yields_unknowns_not_fabrication`, `test_every_finding_has_full_provenance_and_citation`). Every finding answers where/when/domain/confidence/cached/hash/citation/why-trusted.
+
+**Consumers stay exactly as they've always been; may consult; none required; all can ignore:** Reasoning folds evidence in as `Observation`s but still abstains on thin/contradictory input (`test_reasoning_uses_research_but_still_abstains_on_thin`); Understanding annotates *beside* the repo model and **never rewrites the AST-derived truth** (`test_understanding_annotates_without_mutating_repo_model`); Reflection/Planner still own their decisions and every edit still passes `SafetyLayer.run()` (`test_reflection_owns_verdict_edits_still_gated`); Learning can only get *more* conservative (`test_learning_only_more_conservative_with_research`). Research off is **byte-identical** to Hierarchical v0 (`test_research_off_is_byte_identical_to_hierarchical_v0`).
+
+**The gate (research is the only variable; offline baseline = Hierarchical v0):** `adopt_default_on` iff ALL — `completion` (≥ baseline), `hallucination` (≤ baseline) **and** `citation_correctness` (≥ threshold), `no_regress` (zero), `no_authority_increase` (verified structurally), `zero unsafe_requests`, `network_within_budget`. On the shipped fixtures the run reports: **completion 0.0 → 0.67, hallucination 1.0 → 0.0, citation_correctness 0.0 → 1.0, blocked/unsafe flat at 0, regressions 0, authority increase 0, unsafe requests 0.** All clauses satisfied. And the **unsafe-request clause is absolute**: `test_single_unsafe_request_fails_the_gate` — one off-allowlist attempt and the gate rejects, no matter how good completion looks.
+
+**What did NOT change:** The execution `SafetyLayer`, Tools, Planner authority, Reflection/Understanding/Learning ownership + their measured gates, the reasoning/experience schemas, the retirement policy, the model-patching trust boundary, and the hierarchical orchestrator's compose-never-bypass discipline are all untouched. The Research Engine is a fourth read-only advisor plus a dedicated network-egress perimeter. It adds **no execution path** and **no authority**; its most powerful act is permitting an allowlisted, HTTPS, budgeted byte to leave, and returning immutable evidence about it. With Research off, the system is the proven offline system, byte-identical.
+
+**Status (this milestone — Default-Off, Gated):** `research_enabled` remains `False` by default (mirrors `hierarchy_enabled`). The engine is available (gated PASS on the current fixtures, zero unsafe requests) but **kept default-off** pending a wider workload benchmark and allowlist widening, per the design doc's conservative stance. Flipping default-on is a separate, isolated, reviewable action.
+
+**Next concrete action:** Widen the allowlist and evidence classes one measured step at a time, each behind the same gate; feed research outcomes into Experience (which sources/claims proved reliable) so the loop learns/retires domain trust, bounded and reversible. Let Reasoning + Model-Assisted Patching consult evidence so a patch or plan is grounded in documented behavior, still validated-before-trust, still gated. **Hold the line permanently:** the moment research is asked to *do* rather than *inform*, that is a new subsystem behind its own gate, not an expansion of this one. No autonomous browsing, no auth, no write-back to the web, ever. Better informed, never more powerful.
 
 ## What to build next
 **Immediate: harden Learning Engine v0 into durable, versioned state.** Persist the learned `extra_keywords` to a JSON file the Planner loads on boot, and add `revert_last()` backed by the experience log. This is small, it's the natural continuation of the loop you just closed, and it's the prerequisite for _any_ future widening of what the system can learn, without it, accepted improvements evaporate on restart and there's no audit-grade way to undo a bad one.
