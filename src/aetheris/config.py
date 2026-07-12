@@ -20,6 +20,11 @@ class Config:
     # default and benchmarked before it may steer anything.
     experience_record: bool = True    # AETHERIS_EXPERIENCE_RECORD=0 to disable writes
     experience_consume: bool = False   # AETHERIS_EXPERIENCE_CONSUME=1 to enable reads
+    # Hierarchical decomposition + long-horizon orchestration (v0).
+    # Default-OFF until the flat-vs-hierarchical adoption gate clears.  It only
+    # schedules existing plans through the existing spine; it adds no authority
+    # and is byte-identical to flat planning when off or when it abstains.
+    hierarchy_enabled: bool = False    # AETHERIS_HIERARCHY=1 to enable
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -35,6 +40,7 @@ class Config:
             reasoning_enabled=os.getenv("AETHERIS_REASONING", "1") == "1",
             experience_record=os.getenv("AETHERIS_EXPERIENCE_RECORD", "1") != "0",
             experience_consume=os.getenv("AETHERIS_EXPERIENCE_CONSUME", "0") == "1",
+            hierarchy_enabled=os.getenv("AETHERIS_HIERARCHY", "0") == "1",
         )
 
 

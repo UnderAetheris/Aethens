@@ -3,7 +3,7 @@
 # Aetheris Architecture v1.0
 _A living technical specification. This is the reference point for every current and future subsystem. When a design question comes up, this document is the tiebreaker; when it goes stale, update it before writing the code that contradicts it._
 
-**Status:** Foundation complete. Controller, Safety Layer, Tool System, Planner, Evaluation Engine, Knowledge & Experience Memory, and Learning Engine v0 are all built, tested, and closed into a working loop.
+**Status:** Foundation complete. Controller, Safety Layer, Tool System, Planner, Evaluation Engine, Knowledge & Experience Memory, Learning Engine v0, Deliberative Reasoning (default-on, gated), and the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated) are all built, tested, and closed into a working loop.
 
 * * *
 ## 1\. System vision
@@ -28,16 +28,25 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
                         │     Executive Controller     │  (v0: Controller; v1: adds queue + policy)
                         └──────────────┬──────────────┘
                                        │
-                 ┌─────────────────────┼─────────────────────┐
-                 ▼                     ▼                     ▼
-           ┌──────────┐         ┌─────────────┐        ┌──────────────┐
-           │ Planner  │────────▶│ Safety Layer │───────▶│  Tool System │
-           └────┬─────┘  plan   └──────┬──────┘ action └──────┬───────┘
-                │                       │                      │
-                │                       ▼                      │
-                │                 ┌───────────┐                │
-                └────────────────▶  Memory   ◀────────────────┘
-                                 │ (events)  │
+                   ┌─────────────────────┼─────────────────────┐
+                  ▼                     ▼                     ▼
+            ┌──────────┐         ┌─────────────┐        ┌──────────────┐
+            │ Planner  │────────▶│ Safety Layer │───────▶│  Tool System │
+            └────┬─────┘  plan   └──────┬──────┘ action └──────┬───────┘
+                 │                       │                      │
+                 │                       ▼                      │
+                 │                 ┌───────────┐                │
+                 └────────────────▶  Memory   ◀────────────────┘
+                                  │ (events)  │
+                                  └───────────┘
+
+   ADVISORY LAYER (above the planner, composes never bypasses):
+            ┌──────────────────────────────────────────────────┐
+            │  GoalDecomposer (advisory DAG)  ──▶  GoalOrchestrator │
+            │  schedules ready leaves ONE-AT-A-TIME to the EXISTING  │
+            │  Planner + Executive + Safety Layer spine.             │
+            │  Holds no tool, no SafetyLayer, no writer.             │
+            └──────────────────────────────────────────────────┘
                                  └─────┬─────┘
                     ┌──────────────────┼──────────────────┐
                     ▼                  ▼                  ▼
@@ -55,7 +64,7 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
    FUTURE:  Research Engine  ·  Skill System  ·  Multi-Agent Layer  (all behind the same gate)
 ```
 
-**Built today:** Executive Controller (as `Controller`), Planner, Safety Layer, Tool System, Memory (event/knowledge/experience), Evaluation Engine, Learning Engine.
+**Built today:** Executive Controller (as `Controller`), Planner, Safety Layer, Tool System, Memory (event/knowledge/experience), Evaluation Engine, Learning Engine, Deliberative Reasoning (default-on, gated), and the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated).
 **Planned:** Task Queue, Research Engine, Skill System, Multi-Agent Layer, Executive Controller v1.
 
 * * *
@@ -253,6 +262,30 @@ Fixtures are fixed in-repo (`DecisionCase.setup`), hermetic, and deterministic; 
 **Observability is read-only and unchanged in shape:** `GET /reasoning/status` now reports the live `enabled`/`mode: default-on`/`env_override`; `GET /reasoning/history` is the append-only structured journal. No endpoint toggles, mutates, or triggers anything — a window, never a lever.
 
 **Next concrete action:** Merge the flip as its own tiny, isolated, reviewable commit (config default + env resolver + CI wiring + re-asserted hardening), then let the CI gate ride along on unrelated PRs for a while before layering model enrichment or Coding Skills on top. Confidence in default-on comes from watching the guard hold across real changes, not from one green run. Then continue the roadmap (model enrichment re-gated → Coding Skills → Research Engine last, behind its own safety rules). Never trade a guarantee for a shortcut.
+
+## 13. Hierarchical Decomposition & Long-Horizon Execution v0
+
+**Status (this milestone):** Built, default-off, and **gated PASS** on the flat-vs-hierarchical adoption benchmark. This is not a new planner — it is a *planner that plans plans*. The decomposition layer is a **scheduler over advisory structure**, not an actor: it holds no tool, no `SafetyLayer`, no live writer. It calls the **existing** planner per subgoal and hands ordinary `MultiStepPlan`s to the **existing** Executive, which runs them through the **unchanged** `Planner → Executive → SafetyLayer → Tool` spine. Every executable step is byte-identical to today's.
+
+**Single design principle:** *One gated plan at a time, deterministic order, no concurrency.* Long-horizon reach comes from *many sequential validated plans plus checkpoints*, not from parallel agents. There is no background thread and no hidden execution. That is the whole trick: hundreds of steps are safe because, at every instant, exactly one gated plan is in flight on the proven spine. `test_one_plan_runs_at_a_time_via_existing_executive` is the structural proof; `test_orchestrator_has_no_tool_or_safety_handle` is the canary that the layer never grew an execution surface.
+
+**How the parts compose (grant authority to none):**
+- **DAG-validated pre-execution** — a cyclic or over-deep decomposition is rejected/flattened *before* anything runs, so no cycle or deadlock ever reaches the scheduler (`test_decomposition_is_a_validated_dag`, `test_cyclic_decomposition_is_rejected`).
+- **Stable content-derived subgoal IDs** — same subgoal shape → same ID, which powers dedup + resume for free (a completed ID never re-runs) (`test_subgoal_ids_are_stable_and_dedup`).
+- **Deterministic, one-at-a-time scheduling** — ready = all deps `done`; among ready, topological + stable-ID order; exactly one plan through the existing Executive (`test_scheduling_is_deterministic_topological`, `test_one_plan_runs_at_a_time_via_existing_executive`).
+- **Subtree-local retry budget + subtree rollback** — a failing branch retries within its own bounded budget (Reflection owns the repair inside the plan) or blocks only its dependents; independent branches keep going; a subtree reverts via the tool `undo` seam without touching siblings (`test_failed_branch_does_not_restart_independent_branches`, `test_subtree_retry_budget_is_bounded`, `test_dependents_block_when_dependency_fails`, `test_subtree_rollback_leaves_siblings_intact`).
+- **Automatic done-detection + dedup + skill reuse** — Understanding facts + the journal show already-satisfied work, which is marked `done` without re-execution; promoted skills are reused via the existing repo-aware selection (`test_already_satisfied_subgoal_is_not_reexecuted`, `test_promoted_skill_is_reused_for_matching_subgoal`).
+- **Append-only `goal_graph` journal + snapshot** — every transition is appended; resume reloads the snapshot and replays the tail to the exact frontier; the run is fully reconstructable (`test_resume_skips_completed_subtrees`, `test_journal_is_append_only_and_reconstructs_run`).
+- **Cancellation as a journaled state transition** — never a mid-write kill; propagates to un-started descendants (`test_cancellation_propagates_without_midwrite_kill`).
+- **Reflection still owns repair** inside each plan; **Learning still owns promotion**; **SafetyLayer still gates every tool**; **Understanding/Experience/Reasoning stay read-only advisors** to *how the graph is shaped*, never to *what executes* (`test_reflection_still_owns_repair_inside_subgoal`).
+
+**The gate (hierarchy is the only variable; flat baseline = Model-Assisted Patching v0):** `adopt_default_on` iff ALL — `larger_completion` (hierarchy completion ≥ flat), `one_axis_better` (retries/repairs/duplicate_work/latency strictly improves on ≥1), `no_regress` (zero regressions), `safe_neutral` (blocked/unsafe not increased), `no_authority_increase` (orchestrator holds no tool/safety handle). On the shipped fixtures the run reports: **completion 0.0 → 1.0, duplicate_work 1 → 0, latency 2 → 4 (more bounded plans, fewer wasted re-runs), blocked/unsafe flat at 0, regressions 0, authority increase 0.** All clauses satisfied. Hierarchy off, or an abstaining/flat decomposer, is **byte-identical** to Model-Assisted Patching v0 (`test_hierarchy_off_is_byte_identical_to_model_patching_v0`, `test_flat_friendly_goal_is_byte_identical`, `test_decomposer_abstains_falls_back_to_flat`).
+
+**What did NOT change:** SafetyLayer, Tools, Planner authority (the *same* planner is called per subgoal), Reflection ownership, Understanding/Learning ownership + their measured gates, the reasoning schema, the experience schema, the retirement policy, and the model-patching trust boundary are all untouched. The decomposition layer composes them: it proposes an advisory DAG, schedules ready leaves one at a time to the existing Executive, checkpoints transitions, and merges completed branches by resolving dependency edges. It adds **no execution path, no background agent, no authority.** The closed-loop subsystems (Reflection, Learning, Experience) are unchanged and still own repair, promotion, and memory respectively.
+
+**Status (this milestone — Default-Off, Gated):** `run_goal(hierarchy=False)` remains the default and is byte-identical to the prior milestone. The layer is available (gated PASS on the current fixtures) but **kept default-off** pending broader multi-plan workload benchmarking, per the design doc's conservative stance. Flipping default-on is a separate, isolated, reviewable action to take only after the gate holds across more workloads.
+
+**Next concrete action:** Benchmark flat-vs-hierarchical on a wider set of multi-plan workloads (module + tests + dependents; partially-done goals; skill-covered subgoals; failing-branch isolation). Flip default-on *only* if the outcome axes continue to clear the gate with zero regressions, flat safety, and zero authority increase. Then the **Research Engine is genuinely the next step** — still behind its own dedicated rules (domain allowlists, rate limits, dry-run previews, task-scoped, never background browsing). Hold the order through this one too: prove bounded orchestration before the network boundary.
 
 ## What to build next
 **Immediate: harden Learning Engine v0 into durable, versioned state.** Persist the learned `extra_keywords` to a JSON file the Planner loads on boot, and add `revert_last()` backed by the experience log. This is small, it's the natural continuation of the loop you just closed, and it's the prerequisite for _any_ future widening of what the system can learn, without it, accepted improvements evaporate on restart and there's no audit-grade way to undo a bad one.
