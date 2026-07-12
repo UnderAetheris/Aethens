@@ -206,8 +206,23 @@ class SkillRegistry:
         if skill is None:
             return False
         retired = SkillTemplate.from_dict({**skill.to_dict(), "active": False,
-                                           "version": skill.version + 1})
+                                            "version": skill.version + 1})
         self._store.append(retired.to_dict())
+        return True
+
+    def unretire(self, skill_id: str) -> bool:
+        """Re-activate a retired skill (append-only reversal). Returns False if not found.
+
+        Mirrors the reversible-retire discipline used by lessons: the latest
+        record per id wins, so re-appending an active version cleanly undoes a
+        retirement.  Retirement is bounded and reversible, never a hard delete.
+        """
+        skill = self.get(skill_id)
+        if skill is None:
+            return False
+        restored = SkillTemplate.from_dict({**skill.to_dict(), "active": True,
+                                             "version": skill.version + 1})
+        self._store.append(restored.to_dict())
         return True
 
     # ------------------------------------------------------------------ #

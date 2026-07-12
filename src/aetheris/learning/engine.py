@@ -9,6 +9,7 @@ from ..memory.experience_rerank import experience_bias
 from ..memory.knowledge import KnowledgeStore
 from ..memory.learned import LearnedKeywordStore, LearnedStep
 from ..memory.store import MemoryStore
+from .experience_retire import ExperienceGuidedRetirer
 
 
 _TOOL_TO_INTENT = {"write_file": "write", "read_file": "read", "list_dir": "list"}
@@ -311,3 +312,37 @@ class LearningEngine:
                 {"skill_id": skill_id, "reason": reason},
             )
         return retired
+
+    def retire_stale_skills(
+        self, registry, experience_lessons=None, memory=None
+    ) -> list[str]:
+        """Close the loop: retire skills real-run evidence has turned against.
+
+        Bounded and reversible.  Only acts on ``experience.query()`` (the gated
+        consume surface), so with consumption off — or no ``experience_lessons``
+        handle — nothing is retired and the skill library is unchanged (the
+        promotion-only floor).  Each retirement is an append-only tombstone;
+        ``restore_retired_skill`` re-activates it.
+
+        Args:
+            registry: the SkillRegistry to scan/retire against.
+            experience_lessons: optional ExperienceMemory handle (defaults to the
+                one wired at construction).  None -> no-op.
+            memory: optional MemoryStore for provenance journaling.
+        """
+        exp = experience_lessons if experience_lessons is not None else self._experience_lessons
+        if exp is None:
+            return []
+        retirer = ExperienceGuidedRetirer(exp)
+        return retirer.retire_stale(registry, memory=memory or self._memory)
+
+    def restore_retired_skill(
+        self, skill_id: str, registry, experience_lessons=None, memory=None
+    ) -> bool:
+        """Reverse an experience-guided retirement. Returns True if restored."""
+        exp = experience_lessons if experience_lessons is not None else self._experience_lessons
+        if exp is None:
+            return False
+        return ExperienceGuidedRetirer(exp).restore(
+            skill_id, registry, memory=memory or self._memory
+        )
