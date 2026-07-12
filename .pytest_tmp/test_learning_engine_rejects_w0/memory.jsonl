@@ -1,4 +1,0 @@
-{"ts": 1783597116.679591, "kind": "eval_case", "data": {"name": "known_echo", "passed": true, "detail": "tool echo==echo:True"}}
-{"ts": 1783597116.6811163, "kind": "eval_summary", "data": {"ts": 1783597116.681014, "passed": 1, "total": 1, "pass_rate": 1.0}}
-{"ts": 1783597116.691893, "kind": "eval_case", "data": {"name": "known_echo", "passed": true, "detail": "tool echo==echo:True"}}
-{"ts": 1783597116.6926618, "kind": "eval_summary", "data": {"ts": 1783597116.6926308, "passed": 1, "total": 1, "pass_rate": 1.0}}

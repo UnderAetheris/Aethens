@@ -1,3 +1,0 @@
-{"ts": 1783597118.0684538, "kind": "queue_transition", "data": {"id": "task-0001-1fefef", "to": "queued", "detail": "enqueued"}}
-{"ts": 1783597118.10284, "kind": "queue_transition", "data": {"id": "task-0002-6ef7c9", "to": "queued", "detail": "enqueued"}}
-{"ts": 1783597118.1368814, "kind": "queue_transition", "data": {"id": "task-0003-fdc90d", "to": "queued", "detail": "enqueued"}}

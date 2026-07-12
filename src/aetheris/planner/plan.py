@@ -72,6 +72,28 @@ class MultiStepPlan:
                     return step
         return None
 
+    def is_valid_dag(self) -> bool:
+        """Validate step dependency structure: in-range, forward-only, acyclic."""
+        n = len(self.steps)
+        if n == 0:
+            return True
+        for i, step in enumerate(self.steps):
+            for d in step.depends_on:
+                if d < 0 or d >= n or d >= i:
+                    return False
+        done: set[int] = set()
+        for _ in range(n):
+            progressed = False
+            for i, step in enumerate(self.steps):
+                if i in done:
+                    continue
+                if all(d in done for d in step.depends_on):
+                    done.add(i)
+                    progressed = True
+            if not progressed:
+                return False
+        return len(done) == n
+
     def is_complete(self) -> bool:
         return all(s.status == StepStatus.DONE for s in self.steps)
 

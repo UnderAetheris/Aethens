@@ -1,1 +1,0 @@
-{"ts": 1783597117.5262227, "kind": "action_allowed", "data": {"tool": "danger", "arg": "x", "safe": false, "dry_run": false, "safe_mode": false, "allowed": true, "reason": "passed all safety rules", "output": "did something risky", "preview": null}}

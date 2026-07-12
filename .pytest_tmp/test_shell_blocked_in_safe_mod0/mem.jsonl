@@ -1,1 +1,0 @@
-{"ts": 1783597118.3532379, "kind": "action_blocked", "data": {"tool": "shell", "arg": "{\"cmd\": \"echo hi\"}", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'shell' is not marked safe", "output": null, "preview": null}}

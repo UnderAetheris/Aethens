@@ -1,4 +1,0 @@
-{"ts": 1783597115.437874, "kind": "task_received", "data": {"task": "hello"}}
-{"ts": 1783597115.4392228, "kind": "plan_selected", "data": {"task": "hello", "tool": "echo", "arg": "hello", "reason": "no tool intent detected; default echo", "confident": true}}
-{"ts": 1783597115.4398322, "kind": "action_allowed", "data": {"tool": "echo", "arg": "hello", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "hello", "preview": null}}
-{"ts": 1783597115.4405236, "kind": "task_completed", "data": {"task": "hello", "output": "hello"}}

@@ -1,4 +1,0 @@
-{"ts": 1783597117.5791209, "kind": "task_received", "data": {"task": "do risky thing"}}
-{"ts": 1783597117.5804055, "kind": "plan_selected", "data": {"task": "do risky thing", "tool": "echo", "arg": "do risky thing", "reason": "no tool intent detected; default echo", "confident": true}}
-{"ts": 1783597117.5814145, "kind": "action_blocked", "data": {"tool": "echo", "arg": "do risky thing", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'echo' is not marked safe", "output": null, "preview": null}}
-{"ts": 1783597117.584237, "kind": "task_blocked", "data": {"task": "do risky thing", "reason": "safe_mode is on and tool 'echo' is not marked safe"}}

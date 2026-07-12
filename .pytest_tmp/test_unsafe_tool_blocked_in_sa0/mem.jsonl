@@ -1,1 +1,0 @@
-{"ts": 1783597117.4894783, "kind": "action_blocked", "data": {"tool": "danger", "arg": "x", "safe": false, "dry_run": false, "safe_mode": true, "allowed": false, "reason": "safe_mode is on and tool 'danger' is not marked safe", "output": null, "preview": null}}

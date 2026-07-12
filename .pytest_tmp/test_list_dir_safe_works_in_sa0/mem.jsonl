@@ -1,1 +1,0 @@
-{"ts": 1783597118.2885122, "kind": "action_allowed", "data": {"tool": "list_dir", "arg": "{\"path\": \"D:\\\\Desktop\\\\AiTools\\\\Aethens\\\\.pytest_tmp\\\\test_list_dir_safe_works_in_sa0\"}", "safe": true, "dry_run": false, "safe_mode": true, "allowed": true, "reason": "passed all safety rules", "output": "a.txt\nb.txt", "preview": null}}

@@ -1,4 +1,0 @@
-{"ts": 1783597115.2099462, "kind": "queue_transition", "data": {"id": "task-0001-8a9961", "to": "queued", "detail": "enqueued"}}
-{"ts": 1783597115.250323, "kind": "queue_transition", "data": {"id": "task-0001-8a9961", "to": "planning", "detail": "executive picked up"}}
-{"ts": 1783597115.2798836, "kind": "queue_transition", "data": {"id": "task-0001-8a9961", "to": "executing", "detail": "handed to controller"}}
-{"ts": 1783597115.3098867, "kind": "queue_transition", "data": {"id": "task-0001-8a9961", "to": "blocked", "detail": "blocked: safe_mode is on and tool 'write_file' is not marked safe"}}

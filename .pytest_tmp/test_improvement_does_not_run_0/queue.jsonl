@@ -1,4 +1,0 @@
-{"id": "task-0001-2cf24d", "task": "hello", "state": "queued", "detail": "", "priority": 0, "created_at": 1783597115.3839622, "updated_at": 1783597115.3839622}
-{"id": "task-0001-2cf24d", "task": "hello", "state": "planning", "detail": "executive picked up", "priority": 0, "created_at": 1783597115.3839622, "updated_at": 1783597115.4112518}
-{"id": "task-0001-2cf24d", "task": "hello", "state": "executing", "detail": "handed to controller", "priority": 0, "created_at": 1783597115.3839622, "updated_at": 1783597115.4364038}
-{"id": "task-0001-2cf24d", "task": "hello", "state": "done", "detail": "hello", "priority": 0, "created_at": 1783597115.3839622, "updated_at": 1783597115.4625769}
