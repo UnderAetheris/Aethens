@@ -34,3 +34,32 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_research_gate.py
+  research-wide-gate:
+    # The wider, realistic workload (six source classes + three adversarial
+    # honesty classes) is continuously re-proven: completion up, hallucination
+    # down, citations correct, the three honesty axes above threshold, usefulness
+    # > 0, zero regressions/authority/unsafe-requests. Fails the build on any
+    # regression (including an honesty regression) so research can never be
+    # talked into a confident-but-wrong or confident-but-dishonest answer.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python scripts/run_research_wide_gate.py
+  research-hardening:
+    # The NetworkPerimeter hardening suite is continuously re-proven: every rule
+    # (allowlist, HTTPS, redirect cap, budgets, MIME, robots, no auth/cookies/JS,
+    # dry-run, task-scope) is deny-wins with zero egress, and the absolute
+    # unsafe-request clause holds. A future refactor that weakens a rule fails
+    # the build -- the one regression an open network boundary can never afford.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python scripts/run_research_hardening.py
