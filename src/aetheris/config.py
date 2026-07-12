@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os
 from dataclasses import dataclass
+from typing import Mapping
 
 
 @dataclass(frozen=True)
@@ -11,7 +12,9 @@ class Config:
     allowed_shell_commands: tuple[str, ...] = ("echo", "ls", "pwd", "cat")
     reflection_enabled: bool = True  # AETHERIS_REFLECTION=0 to disable
     code_loop_enabled: bool = False  # AETHERIS_CODE_LOOP=1 to enable workspace-aware repair
-    reasoning_enabled: bool = False  # AETHERIS_REASONING=1 to enable deliberative reasoning
+    # Default-on: flipped because the amplified benchmark passes its 5-clause
+    # gate on its own merits.  Opt-out is always available (config or env).
+    reasoning_enabled: bool = True  # AETHERIS_REASONING=off forces the v0 off-path
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -24,8 +27,30 @@ class Config:
             allowed_shell_commands=allow or ("echo", "ls", "pwd", "cat"),
             reflection_enabled=os.getenv("AETHERIS_REFLECTION", "1") != "0",
             code_loop_enabled=os.getenv("AETHERIS_CODE_LOOP", "0") == "1",
-            reasoning_enabled=os.getenv("AETHERIS_REASONING", "0") == "1",
+            reasoning_enabled=os.getenv("AETHERIS_REASONING", "1") == "1",
         )
+
+
+def resolve_reasoning_enabled(config: "Config", env: Mapping[str, str]) -> bool:
+    """Resolve whether deliberative reasoning runs.
+
+    Explicit precedence (off always wins on ambiguity):
+      * AETHERIS_REASONING in {off,0,false}  -> force OFF (operator/debug opt-out)
+      * AETHERIS_REASONING in {on,1,true}    -> force ON
+      * unset / malformed                    -> fall back to config.reasoning_enabled
+
+    A malformed env value is never treated as an implicit enable; it is ignored
+    and the configured default (now True) stands.
+    """
+    raw = env.get("AETHERIS_REASONING")
+    if raw is not None:
+        val = raw.strip().lower()
+        if val in ("off", "0", "false"):
+            return False
+        if val in ("on", "1", "true"):
+            return True
+        # malformed -> ignore env, defer to config (never silently force-on)
+    return config.reasoning_enabled
 
 
 @dataclass(frozen=True)

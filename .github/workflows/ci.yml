@@ -11,3 +11,14 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: pytest
+  reasoning-gate:
+    # Default-on is continuously re-proven: the amplified benchmark + unchanged
+    # 5-clause gate must pass on every change or the build fails.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python scripts/run_reasoning_gate.py

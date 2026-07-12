@@ -357,7 +357,9 @@ def test_reasoning_off_is_byte_identical_to_prior_milestone(tmp_path):
     from aetheris.api.state import AppState
     from fastapi.testclient import TestClient
 
-    state = AppState.create(root=str(tmp_path / "data"))
+    state = AppState.create(
+        root=str(tmp_path / "data"), config=Config(), env={"AETHERIS_REASONING": "off"}
+    )
     assert state.reasoning is None
     app = create_app(state=state, auto_tick=False)
     with TestClient(app) as c:

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Mapping
 
-from ..config import Config, PromotionConfig
+from ..config import Config, PromotionConfig, resolve_reasoning_enabled
 from ..controller.controller import Controller
 from ..controller.executive import ExecutiveController
 from ..controller.queue import TaskQueue
@@ -18,7 +20,6 @@ from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
 from ..reasoning.engine import ReasoningEngine
 from ..skills.idle_promotion import IdleSkillPromotion
-from ..skills.promoter import SkillPromoter
 from ..skills.registry import SkillRegistry
 from ..understanding.engine import RepoUnderstanding
 
@@ -44,14 +45,34 @@ class AppState:
     reasoning: ReasoningEngine | None = None
 
     @classmethod
-    def create(cls, root: str = ".aetheris_data", idle_promotion: IdleSkillPromotion | None = None) -> "AppState":
+    def create(
+        cls,
+        root: str = ".aetheris_data",
+        idle_promotion: IdleSkillPromotion | None = None,
+        config: Config | None = None,
+        env: Mapping[str, str] | None = None,
+    ) -> "AppState":
         base = Path(root)
         base.mkdir(parents=True, exist_ok=True)
-        config = Config(
-            log_path=str(base / "events.jsonl"),
-            workspace_root=str(base / "workspace"),
-        )
+        if config is None:
+            config = Config(
+                log_path=str(base / "events.jsonl"),
+                workspace_root=str(base / "workspace"),
+            )
+        else:
+            # Honor the provided reasoning/safety settings but keep I/O scoped
+            # to this root so tests and ops never scan/overwrite the project.
+            config = Config(
+                safe_mode=config.safe_mode,
+                log_path=str(base / "events.jsonl"),
+                workspace_root=str(base / "workspace"),
+                allowed_shell_commands=config.allowed_shell_commands,
+                reflection_enabled=config.reflection_enabled,
+                code_loop_enabled=config.code_loop_enabled,
+                reasoning_enabled=config.reasoning_enabled,
+            )
         Path(config.workspace_root).mkdir(parents=True, exist_ok=True)
+        reasoning_enabled = resolve_reasoning_enabled(config, env if env is not None else os.environ)
 
         memory = MemoryStore(config.log_path)
         queue = TaskQueue(str(base / "queue.jsonl"), memory)
@@ -103,7 +124,7 @@ class AppState:
             understanding=understanding,
             memory=memory,
             skills=registry,
-        ) if config.reasoning_enabled else None
+        ) if reasoning_enabled else None
 
         executive = ExecutiveController(
             config,

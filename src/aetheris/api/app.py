@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import os
 from collections.abc import AsyncIterator
 
 from fastapi import FastAPI, HTTPException
@@ -383,11 +384,26 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
 
     @app.get("/reasoning/status")
     def reasoning_status() -> dict[str, Any]:
-        """Reasoning engine status."""
+        """Reasoning engine status (read-only).
+
+        Reflects the live configuration: reasoning is now default-on, and an
+        env override (AETHERIS_REASONING) is reported when present.  This is a
+        window onto state, never a control surface.
+        """
+        env_override = os.environ.get("AETHERIS_REASONING")
         if s.reasoning is None:
-            return {"enabled": False}
+            return {
+                "enabled": False,
+                "mode": "opt-out",
+                "default_on": True,
+                "env_override": env_override,
+                "history_count": 0,
+            }
         return {
             "enabled": True,
+            "mode": "default-on",
+            "default_on": True,
+            "env_override": env_override,
             "budget": {
                 "max_depth": s.reasoning._budget.max_depth,
                 "max_hypotheses": s.reasoning._budget.max_hypotheses,
