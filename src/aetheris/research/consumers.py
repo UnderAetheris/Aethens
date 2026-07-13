@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from .model import EvidenceBundle
+from .model import EvidenceBundle, ResearchFinding
 
 # Reasoning schema is the existing, proven advisory contract.
 from ..reasoning.schema import (
@@ -27,7 +27,7 @@ from ..reasoning.schema import (
 
 
 # --------------------------------------------------------------------------- #
-# Reasoning -> Research                                                        #
+# Reasoning -> Research + Reliability                                          #
 # --------------------------------------------------------------------------- #
 
 def deliberate_with_research(
@@ -73,6 +73,75 @@ def deliberate_with_research(
             if thin else "research evidence cited and corroborated"
         ),
     )
+
+
+def deliberate_with_research_and_reliability(
+    reasoning: Any,
+    *,
+    query: str = "",
+    evidence: EvidenceBundle | None = None,
+    reliability: Any = None,
+    understanding: Any = None,
+    seam: Seam = Seam.PLANNER,
+) -> Deliberation:
+    """Fold evidence + reliability signals into a Deliberation.
+
+    Reliability adds Observations with Provenance(source="reliability").  Thin
+    research evidence -> Reasoning ABSTAINS exactly as before; reliability does
+    not change the abstention threshold on its own.
+    """
+    observations: list[Observation] = []
+    if evidence is not None:
+        for f in evidence.findings:
+            observations.append(Observation(
+                statement=f.claim,
+                provenance=ReasoningProvenance(source="research", ref=f.citation.url),
+            ))
+
+    if reliability is not None and evidence is not None and evidence.findings:
+        source_keys = tuple({f.source.domain for f in evidence.findings})
+        rel_obs = reliability.as_observations(source_keys)
+        observations.extend(rel_obs)
+
+    thin = (
+        evidence is None
+        or evidence.overall_confidence < 0.6
+        or bool(evidence.contradictions)
+        or bool(evidence.unknowns)
+    )
+    rec = Recommendation.ABSTAIN if thin else Recommendation.PREFER
+    return Deliberation(
+        seam=seam,
+        subject=query,
+        observations=tuple(observations),
+        confidence=evidence.overall_confidence if evidence else 0.0,
+        recommendation=rec,
+        abstained=(rec == Recommendation.ABSTAIN),
+        reason=(
+            "research evidence thin/contradictory -> abstain"
+            if thin else "research evidence cited and corroborated"
+        ),
+    )
+
+
+def rank_findings_with_reliability(
+    findings: tuple["ResearchFinding", ...],
+    reliability: Any = None,
+) -> tuple["ResearchFinding", ...]:
+    """Rank findings by reliability. Off/floored -> byte-identical to input."""
+    if reliability is None or not findings:
+        return findings
+    return reliability.rank_findings(findings)
+
+
+def weight_confidence_with_reliability(
+    finding: "ResearchFinding",
+    reliability: Any = None,
+) -> float:
+    """Advisory confidence weighted by reliability. Off/floored -> finding's own."""
+    if reliability is None:
+        return finding.confidence
+    return reliability.weight_confidence(finding)
 
 
 # --------------------------------------------------------------------------- #
@@ -160,4 +229,20 @@ def learn_with_research(candidate: Any, evidence: EvidenceBundle | None) -> Prom
         owner="learning",
         adopted=getattr(candidate, "passes_gate", True),
         reason="research consulted; no contradiction found",
+    )
+
+
+def learn_with_reliability(candidate: Any, reliability: Any = None) -> PromotionAnalysis:
+    """Reliability is cautionary context only; never force-adopts a gate-failing candidate.
+
+    Reliability can only make Learning more conservative: an approach grounded in
+    an unreliable or stale source earns extra scrutiny.  The measured gate remains
+    the sole adopter.
+    """
+    if candidate is not None and getattr(candidate, "passes_gate", True) is False:
+        return PromotionAnalysis(owner="learning", adopted=False, reason="fails measured gate")
+    return PromotionAnalysis(
+        owner="learning",
+        adopted=getattr(candidate, "passes_gate", True),
+        reason="reliability consulted; no contradiction found",
     )

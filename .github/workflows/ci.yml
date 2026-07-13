@@ -63,3 +63,29 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_research_hardening.py
+  reliability-gate:
+    # The reliability adoption gate is continuously re-proven: the advisory
+    # weighting layer compounds without widening authority; no object carries a
+    # perimeter / fetch / allowlist handle, and the schema carries no action/
+    # egress field. A failure is a structural regression (a new handle or
+    # field), never a flake.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python scripts/run_reliability_gate.py
+  reliability-coverage-canary:
+    # The single most important invariant for reliability: the set of sources
+    # fetched must be identical off vs on. Reliability is a weighting, never a
+    # gate. A single coverage reduction is an automatic build failure.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python scripts/run_reliability_coverage_canary.py

@@ -48,9 +48,13 @@ from .benchmark import (
 from .consumers import (
     annotate_symbol_with_research,
     deliberate_with_research,
+    deliberate_with_research_and_reliability,
     execute,
     learn_with_research,
+    learn_with_reliability,
+    rank_findings_with_reliability,
     reflect_with_research,
+    weight_confidence_with_reliability,
     _all_edits_gated,
 )
 from .engine import ResearchEngine
@@ -73,6 +77,15 @@ from .model import (
     content_hash,
 )
 from .perimeter import NetworkPerimeter
+from .reliability import (
+    DecayReport,
+    ReliabilityObservation,
+    ReliabilityProvenance,
+    ReliabilityTrend,
+    SourceReliability,
+    SourceStanding,
+    deterministic_confidence,
+)
 
 __all__ = [
     "ALLOWLIST",
@@ -109,9 +122,13 @@ __all__ = [
     "run_benchmark",
     "annotate_symbol_with_research",
     "deliberate_with_research",
+    "deliberate_with_research_and_reliability",
     "execute",
     "learn_with_research",
+    "learn_with_reliability",
+    "rank_findings_with_reliability",
     "reflect_with_research",
+    "weight_confidence_with_reliability",
     "_all_edits_gated",
     "ResearchEngine",
     "ResearchJournal",
@@ -131,4 +148,12 @@ __all__ = [
     "bundle_from_parts",
     "content_hash",
     "NetworkPerimeter",
+    # reliability
+    "DecayReport",
+    "ReliabilityObservation",
+    "ReliabilityProvenance",
+    "ReliabilityTrend",
+    "SourceReliability",
+    "SourceStanding",
+    "deterministic_confidence",
 ]
