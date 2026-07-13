@@ -21,6 +21,19 @@ from .model import (
     WatchdogThresholds,
     make_session_id,
 )
+from .outcome_learning import (
+    SessionOutcome,
+    SessionOutcomeLearning,
+    SessionOutcomeRecord,
+    SessionLesson,
+    SessionProvenance,
+    SessionVerdict,
+    StartDecision,
+    WorkloadShapeKey,
+    default_bounds,
+    is_equal_or_tighter,
+    shape_from_session,
+)
 from .sampler import StaticSampler, build_sampler
 from .supervisor import UnattendedSupervisor
 from .watchdog import HealthWatchdog
@@ -39,4 +52,15 @@ __all__ = [
     "build_sampler",
     "UnattendedSupervisor",
     "make_session_id",
+    "SessionOutcome",
+    "SessionOutcomeLearning",
+    "SessionOutcomeRecord",
+    "SessionLesson",
+    "SessionProvenance",
+    "SessionVerdict",
+    "StartDecision",
+    "WorkloadShapeKey",
+    "default_bounds",
+    "is_equal_or_tighter",
+    "shape_from_session",
 ]

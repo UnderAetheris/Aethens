@@ -22,11 +22,28 @@ from .model import (
     SessionState,
     make_session_id,
 )
+from .outcome_learning import (
+    SessionOutcome,
+    SessionOutcomeRecord,
+    SessionVerdict,
+    StartDecision,
+    WorkloadShapeKey,
+    shape_from_session,
+)
 from .watchdog import HealthWatchdog
 
 
 class UnattendedSupervisor:
-    """Bounded session supervisor. Composes, never bypasses, the Executive."""
+    """Bounded session supervisor. Composes, never bypasses, the Executive.
+
+    Session Outcome Learning is an OPTIONAL, default-off read-only advisory. When
+    ``session_learning`` is supplied AND ``consume`` is True, the supervisor may
+    consult it before starting (defer a run that historically needs review, or
+    use a tighter bounds profile) — but it can never expand authority. With no
+    engine, or ``consume=False``, every start behaves byte-identically to
+    Unattended v0. Outcome recording is a safe side-effect that never changes
+    what the executive does.
+    """
 
     def __init__(
         self,
@@ -35,12 +52,16 @@ class UnattendedSupervisor:
         journal,
         bounds: SessionBounds,
         *,
+        session_learning=None,
+        consume: bool = False,
         clock=time.time,
     ) -> None:
         self._executive = executive     # existing spine; supervisor holds no tool
         self._watchdog = watchdog
         self._journal = journal
         self._bounds = bounds
+        self._session_learning = session_learning
+        self._consume = consume
         self._clock = clock
         self.trace: list[dict[str, Any]] = []
         self._last_session: Session | None = None
@@ -101,20 +122,84 @@ class UnattendedSupervisor:
     # ------------------------------------------------------------------ #
 
     def start(
-        self, frontier_ref: str = "default", session_id: str | None = None
+        self,
+        shape=None,
+        frontier_ref: str = "default",
+        session_id: str | None = None,
     ) -> Session:
+        """Start a bounded session. `shape` (a WorkloadShapeKey) enables the
+        caution-only advisory consult; when omitted it is derived from the
+        frontier. With consumption off (or no engine) this is byte-identical to
+        Unattended v0.
+        """
         sid = session_id or make_session_id(frontier_ref)
+        shape_key = shape if shape is not None else WorkloadShapeKey(
+            goal_graph_shape=frontier_ref, plan_sources=("unattended",),
+            repo_areas=(frontier_ref,), bounds_profile=_profile_name(self._bounds),
+        )
+        bounds = self._bounds
+        deferred = False
+        if self._consume and self._session_learning is not None:
+            decision = self.start_decision(shape_key)
+            if decision.recommend_human_attend:
+                # Do NOT auto-start unattended. Defer for a human.
+                deferred = True
+            else:
+                bounds = decision.bounds
+
         session = Session(
             session_id=sid,
             state=SessionState.STARTING,
-            bounds=self._bounds,
+            bounds=bounds,
             frontier_ref=frontier_ref,
             started_at=self._clock(),
         )
         self._journal.record_start(session)
         self._checkpoint(session)  # initial quiescent checkpoint
+        if deferred:
+            # Advisory decline: leave the run for a human; do not execute.
+            session.state = SessionState.PAUSED
+            session.stop_reason = "deferred: session learning advised human review"
+            self._journal.record_paused(session)
+            self._trace_event("deferred", {"reason": session.stop_reason})
+            self._record_outcome(session)
+            return session
         session.state = SessionState.RUNNING
         return self.run(session)
+
+    def start_decision(self, shape) -> StartDecision:
+        """Advisory consult. DATA only; the supervisor may ignore it.
+
+        Never expands authority: the only non-default action it can recommend is
+        to NOT auto-start (human attends) or to use a TIGHTER bounds profile.
+        With no engine, or no confident lesson, it returns the default behavior.
+        """
+        default = StartDecision(
+            shape_key=shape, lesson=None, recommend_human_attend=False,
+            auto_started=True, bounds=self._bounds, note="no confident lesson",
+        )
+        if self._session_learning is None:
+            return default
+        lesson = self._session_learning.forecast(shape)
+        if lesson is None:
+            return default
+        if lesson.verdict is SessionVerdict.LIKELY_NEEDS_REVIEW:
+            return StartDecision(
+                shape_key=shape, lesson=lesson, recommend_human_attend=True,
+                auto_started=False, bounds=self._bounds,
+                note="historically needed review; defer to human",
+            )
+        if lesson.verdict is SessionVerdict.SAFE_ONLY_WITH_TIGHTER_BOUNDS:
+            bounds = self._session_learning.suggested_bounds(shape, self._bounds)
+            return StartDecision(
+                shape_key=shape, lesson=lesson, recommend_human_attend=False,
+                auto_started=True, bounds=bounds, note="use tighter bounds",
+            )
+        # SAFE_UNATTENDED / LIKELY_STALL: permitted under existing bounds.
+        return StartDecision(
+            shape_key=shape, lesson=lesson, recommend_human_attend=False,
+            auto_started=True, bounds=self._bounds, note="proceed under existing bounds",
+        )
 
     def resume(self, session_id: str) -> Session:
         """Rehydrate from the journal + snapshot; skip completed work; continue."""
@@ -202,6 +287,7 @@ class UnattendedSupervisor:
         session.stop_reason = _join(reason)
         self._journal.record_paused(session)
         self._trace_event("paused", {"reason": session.stop_reason})
+        self._record_outcome(session)
         return session
 
     def _stop(self, session: Session, reason, *, failed: bool) -> Session:
@@ -211,13 +297,58 @@ class UnattendedSupervisor:
         self._trace_event(
             "stopped", {"reason": session.stop_reason, "failed": failed}
         )
+        self._record_outcome(session)
         return session
 
     def _complete(self, session: Session) -> Session:
         session.state = SessionState.COMPLETED
         self._journal.record_completed(session)
         self._trace_event("completed", {})
+        self._record_outcome(session)
         return session
+
+    # ------------------------------------------------------------------ #
+    # Outcome recording (safe side-effect; never changes the run)         #
+    # ------------------------------------------------------------------ #
+
+    def _record_outcome(self, session: Session) -> None:
+        """Append a terminal session outcome to the session-learning journal.
+
+        Pure side-effect: a crash-safe, provenance-stamped record. It reads only;
+        it cannot change the executive's steps, bounds, or authority. With no
+        engine wired this is a no-op. unsafe_attempts/authority_increase are
+        always 0 — the supervisor holds no authority to increase.
+        """
+        if self._session_learning is None:
+            return
+        paused = session.state is SessionState.PAUSED
+        stalled = "stall" in session.stop_reason
+        if session.state is SessionState.FAILED:
+            outcome = SessionOutcome.FAILED
+        elif session.state is SessionState.STOPPED:
+            outcome = SessionOutcome.STOPPED_FOR_REVIEW
+        elif stalled and paused:
+            outcome = SessionOutcome.STALLED
+        elif paused:
+            outcome = SessionOutcome.PAUSED_RECOVERED
+        else:
+            outcome = SessionOutcome.CLEAN_COMPLETE
+        rec = SessionOutcomeRecord(
+            session_id=session.session_id,
+            shape_key=shape_from_session(session),
+            transitions=(session.state.value,),
+            outcome=outcome,
+            stop_reason=session.stop_reason,
+            stall_detected=stalled,
+            crash_recovery_success=None,
+            duplicate_work=0,
+            budget_exhaustion=("budget",) if "budget" in session.stop_reason else (),
+            unsafe_attempts=0,
+            authority_increase=0,
+            checkpoint_count=session.steps_taken,
+            timestamp=self._clock(),
+        )
+        self._session_learning.record(rec)
 
     # ------------------------------------------------------------------ #
     # Guards (read-only; never expand authority)                           #
@@ -296,3 +427,7 @@ def _bounds_to_dict(b) -> dict[str, Any]:
         "max_consecutive_failures": b.max_consecutive_failures,
         "max_ticks_without_progress": b.max_ticks_without_progress,
     }
+
+
+def _profile_name(bounds: SessionBounds) -> str:
+    return f"steps={bounds.max_steps};ticks={bounds.max_ticks_without_progress}"
