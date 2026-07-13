@@ -24,7 +24,7 @@ blacklisted — it is still fetched, still cited, just no longer *preferred*.
 ``unretire`` restores standing.  Retired sources remain fully within the
 perimeter's allow.
 
-Consumers (advisory, default-off):
+Consumers (advisory, consumption default-on; earned by the passing eval gate):
   - **ranking**: higher-reliability findings first (permutation; nothing dropped).
   - **confidence**: advisory weight on a finding's displayed confidence.
   - **reasoning observations**: foldable into a Deliberation as Observations with
@@ -32,9 +32,10 @@ Consumers (advisory, default-off):
   - **abstention**: not triggered by low reliability alone; requires both low
     reliability AND contradicted support.
 
-Default-off consumption; adoption gated by a benchmark that proves benefit
-while preserving coverage identity (the canary: ``fetched_sources`` must be
-identical off vs on).
+Consumption default-on; earned by the passing eval gate. The eval gate and the
+permanent coverage-identity canary must keep passing on every change or the build
+fails. The one guarantee never traded: coverage identity (the canary:
+``fetched_sources`` must be identical off vs on).
 """
 from __future__ import annotations
 
@@ -185,7 +186,7 @@ class SourceReliability:
         retire_confidence_floor: float = _RETIRE_CONFIDENCE_FLOOR,
         max_contradictions_for_auto_retire: int = _MAX_CONTRADICTIONS_FOR_AUTO_RETIRE,
         history_cap: int = _HISTORY_CAP,
-        consume_enabled: bool = False,
+        consume_enabled: bool = True,
     ) -> None:
         self._journal_dir = journal_dir
         self._store = JsonlStore(Path(journal_dir) / "reliability.journal.jsonl")

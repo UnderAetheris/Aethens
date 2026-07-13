@@ -75,8 +75,28 @@ def main() -> int:
         print("extra in on:  ", sorted(sources_on - sources_off))
         return 1
 
+    # ---- wider benchmark: identity off vs on across every source-behavior class ----
+    from aetheris.research.reliability_benchmark import (
+        coverage_identical_off_vs_on,
+        reliability_cases,
+        run_reliability_case,
+    )
+
+    if not coverage_identical_off_vs_on():
+        print("BUILD FAILURE: wider-benchmark coverage changed off vs on.")
+        return 1
+
+    for case in reliability_cases():
+        off = run_reliability_case(case, consume=False).fetched_sources
+        on = run_reliability_case(case, consume=True).fetched_sources
+        if off != on:
+            print(f"BUILD FAILURE: case {case.case_id} coverage changed off vs on.")
+            print("  off:", sorted(off))
+            print("  on: ", sorted(on))
+            return 1
+
     print("reliability coverage canary: PASS")
-    print("BUILD OK: fetched-source set is identical off vs on.")
+    print("BUILD OK: fetched-source set is identical off vs on (base + wider benchmark).")
     return 0
 
 
