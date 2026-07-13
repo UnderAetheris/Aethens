@@ -131,6 +131,30 @@ class RepairOut(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Unattended Run Loop & Health Watchdog (v0 — read-only status + brakes)
+# ---------------------------------------------------------------------------
+
+class SessionStatusOut(BaseModel):
+    enabled: bool = True
+    active: bool = False
+    session_id: str | None = None
+    state: str | None = None
+    frontier_ref: str | None = None
+    steps_taken: int = 0
+    last_checkpoint: str | None = None
+    stop_reason: str = ""
+    bounds: dict = {}
+    recent: list[dict] = []
+
+
+class SessionControlOut(BaseModel):
+    session_id: str
+    state: str
+    stop_reason: str = ""
+    steps_taken: int = 0
+
+
+# ---------------------------------------------------------------------------
 # Skill Library Observability models (v0 — additive, read-only)
 # ---------------------------------------------------------------------------
 

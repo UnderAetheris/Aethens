@@ -33,6 +33,11 @@ class Config:
     # authority and is byte-identical to Hierarchical v0 when off.  Opt-out
     # (config or AETHERIS_RESEARCH=off) seals the boundary completely.
     research_enabled: bool = True      # AETHERIS_RESEARCH=off forces the sealed off-path
+    # Unattended Run Loop & Health Watchdog (v0). Default-OFF: the supervisor
+    # is a bounded, fail-closed brake that *may stop work but never expand it*.
+    # It only drives the existing gated spine; it adds no authority. Opt-in via
+    # AETHERIS_UNATTENDED=1. Off == the unchanged manual-stepping path.
+    unattended_enabled: bool = False    # AETHERIS_UNATTENDED=1 to enable
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -50,6 +55,7 @@ class Config:
             experience_consume=os.getenv("AETHERIS_EXPERIENCE_CONSUME", "0") == "1",
             hierarchy_enabled=os.getenv("AETHERIS_HIERARCHY", "0") == "1",
             research_enabled=resolve_research_enabled(Config(), os.environ),
+            unattended_enabled=resolve_unattended_enabled(Config(), os.environ),
         )
 
 
@@ -97,6 +103,29 @@ def resolve_research_enabled(config: "Config", env: Mapping[str, str]) -> bool:
             return True
         # malformed -> ignore env, defer to config (never silently force-on)
     return config.research_enabled
+
+
+def resolve_unattended_enabled(config: "Config", env: Mapping[str, str]) -> bool:
+    """Resolve whether the Unattended Supervisor runs.
+
+    Default-OFF (the whole point: a conservative brake). Explicit precedence:
+      * AETHERIS_UNATTENDED in {off,0,false}  -> force OFF
+      * AETHERIS_UNATTENDED in {on,1,true}    -> force ON
+      * unset / malformed                    -> fall back to config.unattended_enabled
+
+    A malformed/ambiguous env value never silently force-enables a subsystem
+    whose only job is to be a conservative, stop-only supervisor; it defers to
+    the operator's explicit default (off). Off == the unchanged manual path.
+    """
+    raw = env.get("AETHERIS_UNATTENDED")
+    if raw is not None:
+        val = raw.strip().lower()
+        if val in ("off", "0", "false"):
+            return False
+        if val in ("on", "1", "true"):
+            return True
+        # malformed -> ignore env, defer to config (never silently force-on)
+    return config.unattended_enabled
 
 
 @dataclass(frozen=True)

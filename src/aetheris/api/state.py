@@ -5,7 +5,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping
 
-from ..config import Config, PromotionConfig, resolve_reasoning_enabled, resolve_research_enabled
+from ..config import (
+    Config,
+    PromotionConfig,
+    resolve_reasoning_enabled,
+    resolve_research_enabled,
+    resolve_unattended_enabled,
+)
 from ..controller.controller import Controller
 from ..controller.executive import ExecutiveController
 from ..controller.queue import TaskQueue
@@ -23,6 +29,13 @@ from ..research import ALLOWLIST, NetworkPerimeter, ResearchEngine, ResearchJour
 from ..skills.idle_promotion import IdleSkillPromotion
 from ..skills.registry import SkillRegistry
 from ..understanding.engine import RepoUnderstanding
+from ..unattended import (
+    HealthWatchdog,
+    SessionBounds,
+    SessionJournal,
+    UnattendedSupervisor,
+    build_sampler,
+)
 
 
 @dataclass
@@ -45,6 +58,7 @@ class AppState:
     understanding: RepoUnderstanding | None = None
     reasoning: ReasoningEngine | None = None
     research: ResearchEngine | None = None
+    unattended: UnattendedSupervisor | None = None
 
     @classmethod
     def create(
@@ -77,6 +91,7 @@ class AppState:
         Path(config.workspace_root).mkdir(parents=True, exist_ok=True)
         reasoning_enabled = resolve_reasoning_enabled(config, env if env is not None else os.environ)
         research_enabled = resolve_research_enabled(config, env if env is not None else os.environ)
+        unattended_enabled = resolve_unattended_enabled(config, env if env is not None else os.environ)
 
         memory = MemoryStore(config.log_path)
         queue = TaskQueue(str(base / "queue.jsonl"), memory)
@@ -159,6 +174,28 @@ class AppState:
 
         plan_review = PlanReviewQueue()
 
+        # Unattended Supervisor: a bounded, fail-closed brake. Default-OFF.
+        # When on, it *composes* the existing executive in a bounded session; it
+        # adds no authority, no execution path, no budget widening. When off it is
+        # None and the executive runs exactly as today (byte-identical off-path).
+        unattended = None
+        if unattended_enabled:
+            u_journal = SessionJournal(
+                str(base / "unattended.journal.jsonl"),
+                str(base / "unattended.snapshot.json"),
+            )
+            u_sampler = build_sampler(executive, research)
+            u_watchdog = HealthWatchdog(u_sampler)
+            u_bounds = SessionBounds(
+                max_wall_clock_s=3600.0,
+                max_steps=10000,
+                max_consecutive_failures=3,
+                max_ticks_without_progress=200,
+            )
+            unattended = UnattendedSupervisor(
+                executive, u_watchdog, u_journal, u_bounds
+            )
+
         return cls(
             config=config,
             memory=memory,
@@ -176,4 +213,5 @@ class AppState:
             understanding=understanding,
             reasoning=reasoning,
             research=research,
+            unattended=unattended,
         )

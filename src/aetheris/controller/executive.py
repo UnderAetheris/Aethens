@@ -104,6 +104,20 @@ class ExecutiveController:
         self._observe_experience(tick)
         return tick
 
+    def step(self) -> Tick:
+        """One already-gated plan step / one orchestrator tick.
+
+        The unattended supervisor drives the existing spine exclusively through
+        this method. It performs exactly the same validated gated step as
+        `run_once`; the supervisor holds no tool, no SafetyLayer, no writer,
+        and adds no execution path of its own.
+        """
+        return self.run_once()
+
+    def has_pending_work(self) -> bool:
+        """True while the frontier (task queue) has work ready to drain."""
+        return self._queue.next_queued() is not None
+
     @staticmethod
     def _outcome_for_tick(tick: Tick) -> OutcomeType | None:
         """Map a terminal Tick to a provenance OutcomeType (or None if non-terminal)."""

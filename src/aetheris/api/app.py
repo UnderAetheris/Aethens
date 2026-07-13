@@ -29,6 +29,8 @@ from .models import (
     RepoModelOut,
     RevertOut,
     ScanReportOut,
+    SessionControlOut,
+    SessionStatusOut,
     SkillActivityOut,
     SkillDetailOut,
     SkillOut,
@@ -670,27 +672,78 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
             ))
         return results
 
-    @app.post("/autonomous/synthesize")
-    def trigger_synthesis() -> dict:
-        """Run auto-skill synthesis on the plan journal."""
-        if s.autonomous is None or s.autonomous._synthesizer is None:
-            raise HTTPException(status_code=404, detail="synthesis disabled")
-        result = s.autonomous._synthesizer.synthesize()
-        return {
-            "proposed": len(result.proposed),
-            "promoted": len(result.promoted),
-            "rejected": len(result.rejected),
-            "errors": result.errors,
-            "skills": [
-                {
-                    "name": skill.name,
-                    "occurrences": skill.occurrences,
-                    "confidence": skill.confidence,
-                    "params": skill.params,
-                }
-                for skill in result.proposed
-            ],
-        }
+    # ------------------------------------------------------------------ #
+    # Unattended Run Loop & Health Watchdog (v0)                         #
+    # Read-only status + conservative lifecycle brakes only.               #
+    # ------------------------------------------------------------------ #
+
+    @app.get("/session/status", response_model=SessionStatusOut)
+    def session_status(session_id: str | None = None) -> SessionStatusOut:
+        """Read-only window onto the supervised session.
+
+        When the supervisor is disabled (unattended off) it returns
+        enabled=False and never drives the executive. This endpoint is a window
+        plus a brake, never an accelerator.
+        """
+        if s.unattended is None:
+            return SessionStatusOut(enabled=False)
+        return SessionStatusOut(**s.unattended.status(session_id))
+
+    @app.post("/session/start", response_model=SessionControlOut)
+    def session_start(frontier_ref: str = "default") -> SessionControlOut:
+        """Start one bounded, fail-closed supervised session.
+
+        Runs to a terminal/paused state (health check, bounds, or drained
+        frontier). Conservative by construction: it may stop, never expand.
+        """
+        if s.unattended is None:
+            raise HTTPException(status_code=404, detail="unattended supervisor disabled")
+        session = s.unattended.start(frontier_ref=frontier_ref)
+        return SessionControlOut(
+            session_id=session.session_id,
+            state=session.state.value,
+            stop_reason=session.stop_reason,
+            steps_taken=session.steps_taken,
+        )
+
+    @app.post("/session/resume", response_model=SessionControlOut)
+    def session_resume(session_id: str) -> SessionControlOut:
+        """Rehydrate from the last confirmed checkpoint and continue."""
+        if s.unattended is None:
+            raise HTTPException(status_code=404, detail="unattended supervisor disabled")
+        session = s.unattended.resume(session_id)
+        return SessionControlOut(
+            session_id=session.session_id,
+            state=session.state.value,
+            stop_reason=session.stop_reason,
+            steps_taken=session.steps_taken,
+        )
+
+    @app.post("/session/pause", response_model=SessionControlOut)
+    def session_pause(session_id: str) -> SessionControlOut:
+        """Conservative brake: pause a paused/idle session (reduces activity)."""
+        if s.unattended is None:
+            raise HTTPException(status_code=404, detail="unattended supervisor disabled")
+        session = s.unattended.brake(session_id, pause=True)
+        return SessionControlOut(
+            session_id=session.session_id,
+            state=session.state.value,
+            stop_reason=session.stop_reason,
+            steps_taken=session.steps_taken,
+        )
+
+    @app.post("/session/stop", response_model=SessionControlOut)
+    def session_stop(session_id: str) -> SessionControlOut:
+        """Conservative brake: stop a paused/idle session (reduces activity)."""
+        if s.unattended is None:
+            raise HTTPException(status_code=404, detail="unattended supervisor disabled")
+        session = s.unattended.brake(session_id, pause=False)
+        return SessionControlOut(
+            session_id=session.session_id,
+            state=session.state.value,
+            stop_reason=session.stop_reason,
+            steps_taken=session.steps_taken,
+        )
 
     return app
 
