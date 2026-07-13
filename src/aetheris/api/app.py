@@ -448,6 +448,36 @@ def create_app(state: AppState | None = None, auto_tick: bool = True, tick_inter
         deliberation = s.reasoning.deliberate_for_promotion(cand)
         return _deliberation_to_dict(deliberation)
 
+    # ------------------------------------------------------------------ #
+    # Research endpoints (v1 — read-only, advisory, network boundary)    #
+    # ------------------------------------------------------------------ #
+
+    @app.get("/research/status")
+    def research_status() -> dict:
+        """Research engine status (read-only).
+
+        Reflects the live configuration: research is now default-on, and an env
+        override (AETHERIS_RESEARCH) is reported when present. This is a window
+        onto state, never a control surface -- it cannot fetch, toggle, or
+        trigger egress. The only way to change research state is config/env at
+        startup. The NetworkPerimeter remains the single egress gate.
+        """
+        env_override = os.environ.get("AETHERIS_RESEARCH")
+        if s.research is None:
+            return {
+                "enabled": False,
+                "mode": "opt-out",
+                "default_on": True,
+                "env_override": env_override,
+            }
+        return {
+            "enabled": True,
+            "mode": "default-on",
+            "default_on": True,
+            "env_override": env_override,
+            "allowlist": list(s.research._perimeter.allowlist()),
+        }
+
     @app.get("/events/recent", response_model=list[EventOut])
     def recent_events(limit: int = 50) -> list[EventOut]:
         history = s.memory.history()[-limit:]

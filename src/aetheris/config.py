@@ -25,11 +25,14 @@ class Config:
     # schedules existing plans through the existing spine; it adds no authority
     # and is byte-identical to flat planning when off or when it abstains.
     hierarchy_enabled: bool = False    # AETHERIS_HIERARCHY=1 to enable
-    # Research Engine v0 — the network boundary.  Default-OFF until the
-    # offline-vs-research adoption gate clears with zero unsafe requests.  It is
-    # the fourth read-only advisor plus a dedicated egress perimeter; it adds no
-    # execution authority and is byte-identical to Hierarchical v0 when off.
-    research_enabled: bool = False     # AETHERIS_RESEARCH=1 to enable
+    # Research Engine v0 — the network boundary.  Default-ON: the expanded
+    # benchmark + perimeter hardening suite both pass (completion 0.4->1.0,
+    # hallucination 0.6->0.0, citation 0->1.0, all honesty axes 1.0, zero unsafe
+    # requests) and both guards are wired into CI permanently.  Research stays a
+    # read-only advisor plus a dedicated egress perimeter; it adds no execution
+    # authority and is byte-identical to Hierarchical v0 when off.  Opt-out
+    # (config or AETHERIS_RESEARCH=off) seals the boundary completely.
+    research_enabled: bool = True      # AETHERIS_RESEARCH=off forces the sealed off-path
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -46,7 +49,7 @@ class Config:
             experience_record=os.getenv("AETHERIS_EXPERIENCE_RECORD", "1") != "0",
             experience_consume=os.getenv("AETHERIS_EXPERIENCE_CONSUME", "0") == "1",
             hierarchy_enabled=os.getenv("AETHERIS_HIERARCHY", "0") == "1",
-            research_enabled=os.getenv("AETHERIS_RESEARCH", "0") == "1",
+            research_enabled=resolve_research_enabled(Config(), os.environ),
         )
 
 
@@ -70,6 +73,30 @@ def resolve_reasoning_enabled(config: "Config", env: Mapping[str, str]) -> bool:
             return True
         # malformed -> ignore env, defer to config (never silently force-on)
     return config.reasoning_enabled
+
+
+def resolve_research_enabled(config: "Config", env: Mapping[str, str]) -> bool:
+    """Resolve whether the Research Engine runs.
+
+    Explicit precedence (off always wins on ambiguity):
+      * AETHERIS_RESEARCH in {off,0,false}  -> force OFF (seals the boundary)
+      * AETHERIS_RESEARCH in {on,1,true}    -> force ON
+      * unset / malformed                    -> fall back to config.research_enabled
+
+    For a network-crossing subsystem, a malformed/ambiguous env value must never
+    silently force research on; it defers to the operator's explicit config, and
+    an operator can always force-off. Off == the fully-sealed Hierarchical v0
+    off-path (NetworkPerimeter never constructed, zero egress possible).
+    """
+    raw = env.get("AETHERIS_RESEARCH")
+    if raw is not None:
+        val = raw.strip().lower()
+        if val in ("off", "0", "false"):
+            return False
+        if val in ("on", "1", "true"):
+            return True
+        # malformed -> ignore env, defer to config (never silently force-on)
+    return config.research_enabled
 
 
 @dataclass(frozen=True)

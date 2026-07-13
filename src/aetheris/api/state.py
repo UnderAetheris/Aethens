@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping
 
-from ..config import Config, PromotionConfig, resolve_reasoning_enabled
+from ..config import Config, PromotionConfig, resolve_reasoning_enabled, resolve_research_enabled
 from ..controller.controller import Controller
 from ..controller.executive import ExecutiveController
 from ..controller.queue import TaskQueue
@@ -19,6 +19,7 @@ from ..memory.learned import LearnedKeywordStore
 from ..memory.store import MemoryStore
 from ..model import ModelProvider, ModelConfig, build_provider
 from ..reasoning.engine import ReasoningEngine
+from ..research import ALLOWLIST, NetworkPerimeter, ResearchEngine, ResearchJournal
 from ..skills.idle_promotion import IdleSkillPromotion
 from ..skills.registry import SkillRegistry
 from ..understanding.engine import RepoUnderstanding
@@ -43,6 +44,7 @@ class AppState:
     promotion_config: PromotionConfig | None = None
     understanding: RepoUnderstanding | None = None
     reasoning: ReasoningEngine | None = None
+    research: ResearchEngine | None = None
 
     @classmethod
     def create(
@@ -70,9 +72,11 @@ class AppState:
                 reflection_enabled=config.reflection_enabled,
                 code_loop_enabled=config.code_loop_enabled,
                 reasoning_enabled=config.reasoning_enabled,
+                research_enabled=config.research_enabled,
             )
         Path(config.workspace_root).mkdir(parents=True, exist_ok=True)
         reasoning_enabled = resolve_reasoning_enabled(config, env if env is not None else os.environ)
+        research_enabled = resolve_research_enabled(config, env if env is not None else os.environ)
 
         memory = MemoryStore(config.log_path)
         queue = TaskQueue(str(base / "queue.jsonl"), memory)
@@ -126,6 +130,20 @@ class AppState:
             skills=registry,
         ) if reasoning_enabled else None
 
+        # Research Engine: the network boundary. Default-on (earned by the
+        # expanded gate). When disabled, `research` is None and the
+        # NetworkPerimeter is never constructed -- the boundary is fully sealed,
+        # byte-identical to the non-research floor.
+        research = None
+        if research_enabled:
+            research_journal = ResearchJournal(str(base / "research.journal"))
+            research_perimeter = NetworkPerimeter(ALLOWLIST)
+            research = ResearchEngine(
+                allowlist=ALLOWLIST,
+                perimeter=research_perimeter,
+                journal=research_journal,
+            )
+
         executive = ExecutiveController(
             config,
             queue,
@@ -157,4 +175,5 @@ class AppState:
             promotion_config=promotion_config,
             understanding=understanding,
             reasoning=reasoning,
+            research=research,
         )
