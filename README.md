@@ -45,3 +45,4 @@ under `src/aetheris/` so they plug in without tangling.
 1. `pre-commit install`
 2. Branch, code, `pytest` green, open a PR.
 3. CI runs ruff + pytest on every push/PR.
+hihhi
