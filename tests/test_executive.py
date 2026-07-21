@@ -44,7 +44,7 @@ def test_idle_triggers_improvement_after_threshold(tmp_path):
     tick1 = ex.run_once()
     assert not tick1.did_work and tick1.improved is None
     assert calls["n"] == 0
-    tick2 = ex.run_once()
+    ex.run_once()  # tick 2: still below threshold
     assert calls["n"] == 0
     # Tick 3: threshold reached, improvement fires
     tick3 = ex.run_once()

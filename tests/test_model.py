@@ -3,7 +3,6 @@ import pytest
 from aetheris.model import (
     FallbackProvider,
     ModelConfig,
-    ModelProvider,
     ModelRequest,
     ModelResponse,
     MockProvider,

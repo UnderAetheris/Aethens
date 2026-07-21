@@ -20,7 +20,6 @@ import json
 import os
 from pathlib import Path
 
-import pytest
 from fastapi.testclient import TestClient
 
 from aetheris.api.app import create_app
@@ -254,7 +253,6 @@ def test_write_outside_workspace_is_blocked(tmp_path):
     mem = MemoryStore(str(tmp_path / "events.jsonl"))
     safety = SafetyLayer(mem, safe_mode=False,
                          rules=build_default_rules(str(tmp_path)))
-    tool = Tool(name="write_file", description="write", run=lambda a: a, safe=False)
     req = ActionRequest(tool="write_file",
                         arg=json.dumps({"path": str(tmp_path.parent / "outside.txt"),
                                        "content": "bad"}),
@@ -291,7 +289,6 @@ def test_run_tests_requires_allowlisted_command(tmp_path):
     mem = MemoryStore(str(tmp_path / "events.jsonl"))
     safety = SafetyLayer(mem, safe_mode=False,
                          rules=build_default_rules(str(tmp_path), ("pytest",)))
-    tool = Tool(name="run_tests", description="tests", run=lambda a: a, safe=False)
     req = ActionRequest(tool="run_tests",
                         arg=json.dumps({"cmd": "make test", "cwd": str(tmp_path)}),
                         safe=False)

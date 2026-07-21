@@ -11,11 +11,9 @@ from __future__ import annotations
 
 import ast
 import hashlib
-import os
 from pathlib import Path
-from typing import Any
 
-from .model import FileFacts, ModuleNode, Symbol, SymbolRef
+from .model import FileFacts, Symbol, SymbolRef
 
 
 def _content_hash(text: str) -> str:

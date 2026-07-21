@@ -36,13 +36,13 @@ under `src/aetheris/` so they plug in without tangling.
 | planner | Chooses tools/steps for a task | complete |
 | skills | Reusable higher-level capabilities | stub |
 | evaluation | Benchmarks + scoring | complete |
-| research | Information gathering | stub |
-| learning | Self-improvement loop | complete |
+| research | Information gathering (default-off, gated) | gated |
+| learning | Self-improvement loop + session telemetry | complete |
 | safety | Guards, logging, reversibility | complete |
 | api | FastAPI bridge for the shell | complete |
+| unattended | Bounded fail-closed supervisor (default-off, gated) | gated |
 
 ## Contributing
 1. `pre-commit install`
 2. Branch, code, `pytest` green, open a PR.
-3. CI runs ruff + pytest on every push/PR.
-hihhi
+3. CI runs ruff + pytest + coverage + repository-integrity + specialized gates (research, reasoning, hierarchy, reliability, unattended) on every push/PR. Lint, test, and specialized gates run independently; a lint failure does not skip tests.

@@ -14,10 +14,7 @@ Tests:
 """
 from __future__ import annotations
 
-import json
-from pathlib import Path
 
-import pytest
 
 from aetheris.config import Config
 from aetheris.controller.controller import Controller
@@ -25,7 +22,6 @@ from aetheris.controller.executive import ExecutiveController
 from aetheris.controller.queue import TaskQueue, TaskState
 from aetheris.memory.store import MemoryStore
 from aetheris.planner.plan import MultiStepPlan, PlanStep, PlanStore
-from aetheris.reflection.engine import ReflectionEngine
 from aetheris.safety.guard import SafetyLayer, build_default_rules
 from aetheris.tools.base import Tool, ToolRegistry
 
@@ -251,7 +247,6 @@ def test_restart_mid_repair_default_on(tmp_path):
     """Default-on means restarts-mid-repair happen in normal use.
     The plan sidecar must survive and resume correctly after a restart.
     """
-    from aetheris.planner.plan import StepStatus
 
     flaky = FlakyTool()
     ex, queue, mem, plan_store = _make_exec(tmp_path, reflection_enabled=True, flaky=flaky)

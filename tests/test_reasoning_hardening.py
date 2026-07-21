@@ -9,7 +9,7 @@ import inspect
 
 import pytest
 
-from aetheris.reasoning.engine import ReasoningEngine, ReasoningBudget
+from aetheris.reasoning.engine import ReasoningEngine
 from aetheris.reasoning.schema import (
     CandidateApproach,
     Deliberation,
@@ -29,8 +29,6 @@ def _make_engine(tmp_path, model=None):
     from pathlib import Path
     from aetheris.memory.store import MemoryStore
     from aetheris.reasoning.engine import ReasoningEngine
-    from aetheris.skills.registry import SkillRegistry
-    from aetheris.tools.base import ToolRegistry
     from aetheris.tools.builtins import default_registry
     from aetheris.understanding.engine import RepoUnderstanding
 
@@ -284,8 +282,6 @@ def test_reasoning_improves_at_least_one_decision_axis(tmp_path):
     """The reasoning engine must be able to produce non-zero decision quality
     when benchmark cases provide better_decision labels."""
     from aetheris.reasoning.benchmark import reasoning_benchmark
-    from aetheris.reasoning.engine import ReasoningEngine
-    from aetheris.reasoning.schema import Seam
 
     cases = reasoning_benchmark(str(tmp_path))
     labeled = [c for c in cases if c.better_decision is not None]

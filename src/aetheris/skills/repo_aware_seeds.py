@@ -13,7 +13,7 @@ disabled, used by the benchmark + the canary test.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Callable
 
 from ..planner.plan import MultiStepPlan
 from .repo_aware import CandidateShape, FactRequest, RepoAwareSkill, SkillMatcher, SkillStep

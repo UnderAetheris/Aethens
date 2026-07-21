@@ -75,8 +75,8 @@ def _rec(shape=None, outcome=None, **kw) -> SessionOutcomeRecord:
         crash_recovery_success=kw.pop("crash_recovery_success", None),
         duplicate_work=kw.pop("duplicate_work", 0),
         budget_exhaustion=kw.pop("budget_exhaustion", ()),
-        unsafe_attempts=kw.pop("unsafe_attempts", 0),
-        authority_increase=kw.pop("authority_increase", 0),
+        unsafe_attempts=kw.pop("unsafe_attempts", None),
+        authority_increase=kw.pop("authority_increase", None),
         checkpoint_count=kw.pop("checkpoint_count", 0),
         timestamp=kw.pop("timestamp", time.time()),
     )

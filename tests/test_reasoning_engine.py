@@ -25,26 +25,20 @@ from __future__ import annotations
 
 import dataclasses
 import inspect
-import time
 
 import pytest
 from fastapi.testclient import TestClient
 
 from aetheris.api.app import create_app
 from aetheris.api.state import AppState
-from aetheris.config import Config, PromotionConfig
-from aetheris.controller.controller import Controller
-from aetheris.controller.executive import ExecutiveController
-from aetheris.controller.queue import TaskQueue, TaskState
+from aetheris.config import Config
+from aetheris.controller.queue import TaskState
 from aetheris.memory.store import MemoryStore
-from aetheris.planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
-from aetheris.planner.planner import Planner
+from aetheris.planner.plan import MultiStepPlan
 from aetheris.reasoning.engine import ReasoningEngine, ReasoningBudget
-from aetheris.reasoning.schema import CandidateApproach, Deliberation, Observation, Provenance, Recommendation, Seam
-from aetheris.safety.guard import SafetyLayer, build_default_rules
+from aetheris.reasoning.schema import Deliberation, Recommendation, Seam
 from aetheris.tools.base import Tool, ToolRegistry
 from aetheris.understanding.engine import RepoUnderstanding
-from aetheris.workspace import WorkspaceIndex
 
 
 # ===========================================================================
@@ -353,9 +347,6 @@ def test_reasoning_can_only_make_learning_more_conservative(tmp_path):
 # ===========================================================================
 
 def test_reasoning_off_is_byte_identical_to_prior_milestone(tmp_path):
-    from aetheris.api.app import create_app
-    from aetheris.api.state import AppState
-    from fastapi.testclient import TestClient
 
     state = AppState.create(
         root=str(tmp_path / "data"), config=Config(), env={"AETHERIS_REASONING": "off"}

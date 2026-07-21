@@ -1,7 +1,8 @@
 name: CI
 on: [push, pull_request]
+
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -10,10 +11,50 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: ruff check .
-      - run: pytest
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: pytest -q --junitxml=reports/junit.xml --durations=20
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: reports/
+          retention-days: 7
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: pytest --cov=src/aetheris --cov-report=json --cov-report=term-missing -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-reports
+          path: coverage.json
+          retention-days: 7
+
+  repository-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest tests/test_repository_hygiene.py tests/test_ci_contract.py tests/test_boundary_architecture.py -q
+
   reasoning-gate:
-    # Default-on is continuously re-proven: the amplified benchmark + unchanged
-    # 5-clause gate must pass on every change or the build fails.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,10 +63,8 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_reasoning_gate.py
+
   research-gate:
-    # The network boundary is continuously re-proven: the offline-vs-research
-    # adoption gate (absolute clause: a single unsafe request fails it) must
-    # pass on every change or the build fails.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,13 +73,8 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_research_gate.py
+
   research-wide-gate:
-    # The wider, realistic workload (six source classes + three adversarial
-    # honesty classes) is continuously re-proven: completion up, hallucination
-    # down, citations correct, the three honesty axes above threshold, usefulness
-    # > 0, zero regressions/authority/unsafe-requests. Fails the build on any
-    # regression (including an honesty regression) so research can never be
-    # talked into a confident-but-wrong or confident-but-dishonest answer.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,12 +83,8 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_research_wide_gate.py
+
   research-hardening:
-    # The NetworkPerimeter hardening suite is continuously re-proven: every rule
-    # (allowlist, HTTPS, redirect cap, budgets, MIME, robots, no auth/cookies/JS,
-    # dry-run, task-scope) is deny-wins with zero egress, and the absolute
-    # unsafe-request clause holds. A future refactor that weakens a rule fails
-    # the build -- the one regression an open network boundary can never afford.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,12 +93,8 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_research_hardening.py
+
   reliability-gate:
-    # The reliability adoption gate is continuously re-proven: the advisory
-    # weighting layer compounds without widening authority; no object carries a
-    # perimeter / fetch / allowlist handle, and the schema carries no action/
-    # egress field. A failure is a structural regression (a new handle or
-    # field), never a flake.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77,15 +103,8 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_reliability_gate.py
+
   reliability-coverage-canary:
-    # The single most important invariant for reliability: the set of sources
-    # fetched must be identical off vs on. Reliability is a weighting, never a
-    # gate. A single coverage reduction is an automatic build failure. This runs
-    # on the base engine AND the wider benchmark (every source-behavior class),
-    # permanently -- same standing as the perimeter's absolute unsafe-request
-    # clause. Those two invariants are the whole reason this subsystem is safe:
-    # one guards "never fetch something forbidden", the other guards "never STOP
-    # fetching something allowed just because you learned to distrust it."
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -94,14 +113,8 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: python scripts/run_reliability_coverage_canary.py
+
   reliability-eval-gate:
-    # Prove consuming learned source reliability helps REAL decisions across a
-    # wider, realistic workload, while hardening the one guarantee that makes it
-    # safe: coverage preservation. The gate requires >=1 decision axis up,
-    # hallucination <= baseline, citations held, usefulness > 0, the three
-    # adversarial honesty axes above threshold, and coverage IDENTICAL off vs on
-    # (mandatory). Consumption stays default-off regardless of outcome -- this
-    # job only measures and hardens.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

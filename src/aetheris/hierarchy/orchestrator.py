@@ -33,7 +33,6 @@ if TYPE_CHECKING:
     from ..memory.store import MemoryStore
     from ..planner.plan import MultiStepPlan
     from ..planner.planner import Planner
-    from .decomposer import GoalDecomposer
 
 _TERMINAL = frozenset({
     SubGoalState.DONE,

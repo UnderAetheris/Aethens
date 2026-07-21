@@ -39,7 +39,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from .model import Session, SessionBounds, now
+from .model import Session, SessionBounds
 
 
 # --------------------------------------------------------------------------- #
@@ -110,8 +110,8 @@ class SessionOutcomeRecord:
     crash_recovery_success: bool | None
     duplicate_work: int
     budget_exhaustion: tuple[str, ...]
-    unsafe_attempts: int
-    authority_increase: int
+    unsafe_attempts: int | None
+    authority_increase: int | None
     checkpoint_count: int
     timestamp: float
 
@@ -133,8 +133,8 @@ class SessionOutcomeRecord:
             crash_recovery_success=d.get("crash_recovery_success"),
             duplicate_work=int(d.get("duplicate_work", 0)),
             budget_exhaustion=tuple(d.get("budget_exhaustion", ())),
-            unsafe_attempts=int(d.get("unsafe_attempts", 0)),
-            authority_increase=int(d.get("authority_increase", 0)),
+            unsafe_attempts=int(d["unsafe_attempts"]) if d.get("unsafe_attempts") is not None else None,
+            authority_increase=int(d["authority_increase"]) if d.get("authority_increase") is not None else None,
             checkpoint_count=int(d.get("checkpoint_count", 0)),
             timestamp=float(d.get("timestamp", 0.0)),
         )
@@ -384,7 +384,7 @@ class SessionOutcomeLearning:
         tmp = self._index_path.with_suffix(".index.tmp")
         data = {
             "version": self._INDEX_VERSION,
-            "lessons": [l.to_dict() for l in self._lessons.values()],
+            "lessons": [lesson.to_dict() for lesson in self._lessons.values()],
         }
         with tmp.open("w", encoding="utf-8") as f:
             json.dump(data, f)

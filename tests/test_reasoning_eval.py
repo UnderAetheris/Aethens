@@ -4,13 +4,11 @@ Runs the decision gate and reports the five-clause verdict.
 """
 from __future__ import annotations
 
-import pytest
 
 from aetheris.reasoning.benchmark import (
     ComparisonResult,
     DecisionCase,
     GateDecision,
-    ReasoningCase,
     ReasoningComparison,
     ReasoningScore,
     reasoning_benchmark,

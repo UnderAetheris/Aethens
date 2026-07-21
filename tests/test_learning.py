@@ -1,4 +1,3 @@
-import json
 
 from aetheris.evaluation.cases import EvalCase
 from aetheris.learning.engine import LearningEngine

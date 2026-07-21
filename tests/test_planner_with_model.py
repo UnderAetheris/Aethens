@@ -1,11 +1,10 @@
-import pytest
 
 from aetheris.model import (
     ModelRequest,
     ModelResponse,
     ResponseKind,
 )
-from aetheris.planner.planner import Plan, Planner
+from aetheris.planner.planner import Planner
 
 
 class FakeSuggestingProvider:

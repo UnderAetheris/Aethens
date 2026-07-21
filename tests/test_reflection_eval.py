@@ -17,10 +17,9 @@ blocked attempts flat → both gates pass → ACCEPT.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
-import pytest
 
 from aetheris.config import Config
 from aetheris.controller.controller import Controller
@@ -34,7 +33,7 @@ from aetheris.reflection.engine import (
     StepOutcome,
     Verdict,
 )
-from aetheris.safety.guard import ActionRequest, SafetyLayer, build_default_rules
+from aetheris.safety.guard import SafetyLayer, build_default_rules
 from aetheris.tools.base import Tool, ToolRegistry
 
 
@@ -481,7 +480,7 @@ def test_unfixable_task_terminates_in_budget(tmp_path):
 
 def test_repaired_plan_is_valid_dag(tmp_path):
     """After repair insertion, the plan must still be a valid DAG with history untouched."""
-    from aetheris.planner.plan import MultiStepPlan, PlanStep, StepStatus
+    from aetheris.planner.plan import MultiStepPlan, PlanStep
 
     plan = MultiStepPlan(task_id="dag_test", steps=[
         PlanStep(tool="echo", arg="a", reason="step0"),

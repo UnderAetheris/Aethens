@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from ..config import Config, PromotionConfig
-from ..learning.plan_review import PlanReviewQueue, ReviewStatus
+from ..learning.plan_review import PlanReviewQueue
 from ..memory.lessons import ExperienceMemory, OutcomeType
 from ..memory.store import MemoryStore
 from ..planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
@@ -398,20 +398,3 @@ class ExecutiveController:
         self._memory.record("executive_improve_done", {"improved": improved})
         return Tick(did_work=False, improved=improved)
 
-    def drain(self, max_tasks: int = 100) -> list[Tick]:
-        """Process all currently queued tasks (up to max_tasks). Does not trigger improvement."""
-        ticks: list[Tick] = []
-        while self._queue.next_queued() is not None and len(ticks) < max_tasks:
-            ticks.append(self.run_once())
-        return ticks
-
-    def trigger_improvement(self) -> Tick:
-        """Run one improvement cycle immediately, regardless of idle state."""
-        if self._improve_fn is None:
-            self._memory.record("executive_improve_skipped", {"reason": "no improver configured"})
-            return Tick(did_work=False, improved=False)
-        self._idle_ticks = 0
-        self._memory.record("executive_improve_start", {"triggered": "manual"})
-        improved = bool(self._improve_fn())
-        self._memory.record("executive_improve_done", {"improved": improved})
-        return Tick(did_work=False, improved=improved)

@@ -13,13 +13,10 @@ import tempfile
 import types
 from pathlib import Path
 
-import pytest
 
 from aetheris.planner.plan import MultiStepPlan
 from aetheris.skills.repo_aware import (
     REPO_AWARE_TOOLS,
-    FactRequest,
-    RepoAwareSkill,
     RepoAwareSkillRenderer,
     _understanding_from_fixtures,
 )
@@ -134,7 +131,7 @@ def test_helper_reuse_shape_chosen_when_helper_exists():
 def test_reasoning_chooses_between_candidate_shapes():
     fx = helper_reuse_fixture()
     root = Path(tempfile.mkdtemp())
-    u = _understanding_from_fixtures(root, fx.fixtures)
+    _understanding_from_fixtures(root, fx.fixtures)
     # force reasoning to prefer the reuse shape regardless of facts
     skill = helper_reuse_skill()
     renderer = RepoAwareSkillRenderer(understanding=None, reasoning=_engine_prefers("reuse_helper"))
@@ -229,7 +226,6 @@ def test_promotion_is_reversible(tmp_path):
         required_params=["symbol"], steps=(), version=1,
     )
     registered = reg.register(tpl)
-    v = registered.version
     reg.retire(registered.id)
     retired = reg.get("missing_import_repair")
     assert retired is not None and retired.active is False

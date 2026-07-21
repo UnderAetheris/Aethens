@@ -74,7 +74,7 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
    FUTURE:  Research Engine  ·  Skill System  ·  Multi-Agent Layer  (all behind the same gate)
 ```
 
-**Built today:** Executive Controller (as `Controller`), Planner, Safety Layer, Tool System, Memory (event/knowledge/experience), Evaluation Engine, Learning Engine, Deliberative Reasoning (default-on, gated), the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated), the Research Engine v0 — the first and only subsystem to cross the machine boundary, behind its own dedicated `NetworkPerimeter` egress gate (default-off, gated) — and the Unattended Run Loop & Health Watchdog (default-off, gated): a bounded, fail-closed supervisor that composes, never bypasses or expands, the existing Executive.
+**Built today:** Executive Controller (as `Controller`), Planner, Safety Layer, Tool System, Memory (event/knowledge/experience), Evaluation Engine, Learning Engine, Deliberative Reasoning (default-on, gated), the Hierarchical Decomposition + Long-Horizon Orchestration layer (default-off, gated), the Research Engine v0 — the first and only subsystem to cross the machine boundary, behind its own dedicated `NetworkPerimeter` egress gate (default-off, gated) — and the Unattended Run Loop & Health Watchdog (default-off, gated): a bounded, fail-closed supervisor that composes, never bypasses or expands, the existing Executive. Recent correctness hardening: session telemetry derives from journal evidence (no fabricated constants), unknown metrics preserved as `None` rather than zero, `LocalProvider`/`ApiProvider` accept injectable transport, CI split into independent jobs, tracked runtime artifacts removed, and new verification suites added (hygiene, CI contract, telemetry truth, evidence gate truth, boundary architecture).
 **Planned:** Task Queue, Research Engine, Skill System, Multi-Agent Layer, Executive Controller v1.
 
 * * *
@@ -92,7 +92,7 @@ Aetheris is a **modular, self-improving agent system** that receives tasks, plan
 | Experience Memory | Problem/cause/fix lessons linked to tasks + eval cases | Store facts (that's Knowledge) | Nothing (fed by Learning) |
 | Evaluation Engine | Running benchmark cases end-to-end; scoring tool choice + output; producing a pass rate | Modify the system it measures; use fuzzy/LLM grading (v0) | Controller, Planner, Memory |
 | Learning Engine | Detecting failures, proposing ONE bounded reversible change, testing it, accepting/rolling back | Rewrite source; batch changes; touch tools/safety; act without an eval verdict | Evaluator, Knowledge, Experience, Planner's `extra_keywords` |
-| Research Engine (future) | Gathering external information through the network boundary | Bypass Safety; act autonomously without task scope | Safety Layer, Tool System, Memory |
+| Research Engine | Gathering immutable, cited evidence from allowlisted sources behind the perimeter; returning an `EvidenceBundle` | Bypass Safety; act autonomously without task scope | Safety Layer, Tool System, Memory |
 | Skill System (future) | Composing tools into higher-level reusable multi-step procedures | Bypass Safety; embed tool logic it doesn't own | Planner, Tool System, Safety, Evaluator |
 | Multi-Agent Layer (future) | Coordinating multiple Aetheris instances/roles | Create an unbounded agent that escapes any single agent's guardrails | Controller, Safety, Memory |
 | NetworkPerimeter | Being the single network-egress choke point; enforcing allowlist/HTTPS/budgets/robots/MIME/no-auth-cookies-JS/dry-run/task-scope | Let any byte leave without passing its rules; become a tool; gain execution authority | Memory (journal), Tool/transport (GET only) |
@@ -399,6 +399,20 @@ Fixtures are fixed in-repo (`DecisionCase.setup`), hermetic, and deterministic; 
 **What did NOT change:** The execution SafetyLayer, Tools, Planner authority, Reflection/Understanding/Learning ownership + the measured gate, the reasoning/experience/research/reliability schemas, the retirement policy, the hierarchical orchestrator, the model-patching trust boundary, and the `NetworkPerimeter` (still the sole egress authority) + every standing CI guard are **all untouched.** The supervisor composes the existing Executive/orchestrator in a bounded session, monitors deterministic health, checkpoints at safe points, and resumes cleanly, adding **no execution path, no background actor, no authority, and no budget-widening.** With unattended mode off, behavior is byte-identical to the prior milestone.
 
 **Next concrete action:** Ship the supervisor default-off for one long multi-goal workload shape; benchmark unattended-vs-manual with injected crashes/stalls; flip on only if it completes safely, resumes cleanly, and never overreaches. Then feed session outcomes into Experience (advisory, reversible), widen supervised workload shapes one measured step at a time, and **hold the line permanently** — the supervisor's authority is, and stays, *continue-one-gated-step / checkpoint / pause-stop*, the power to halt, never to expand.
+
+## 15. Correctness Hardening — session telemetry, boundary architecture, and repository hygiene
+
+**Status (this milestone):** A targeted correctness pass that removes false claims, fixes fabricated telemetry, hardens network boundary claims, and adds permanent verification — no new capabilities, no weakened guarantees.
+
+**Session telemetry truth:** `SessionOutcomeLearning._record_outcome()` previously fabricated `unsafe_attempts`, `authority_increase`, and `checkpoint_count` as constants. It now derives these metrics from journal evidence (`get_events()` on `SessionJournal`). Fields with no observed evidence are stored as `None` rather than `0`, preserving the distinction between "zero observed" and "unknown" — a distinction that matters for fail-closed adoption gates. `SessionOutcomeRecord.from_dict()` preserves `None` vs `0` for these fields.
+
+**Boundary architecture:** `LocalProvider` and `ApiProvider` now accept an injectable `transport` parameter, making the network boundary testable without live HTTP. The `HttpTransport` type alias makes the boundary explicit in the type system. Tests verify that denied research requests never invoke the transport.
+
+**Repository hygiene:** Tracked runtime artifacts (`code_repo/`, `.aetheris_data/*`, `shell/.env`, `shell/package-lock.json`, `shell/node_modules/`, temporary smoke scripts, event JSONL files) were removed from the tracked tree. `.gitignore` was extended to prevent future accidental tracking. `test_repository_hygiene.py` validates tracked paths against forbidden patterns and `.gitignore` consistency.
+
+**CI contract:** The CI workflow was split into independent jobs — `lint`, `test`, `coverage`, `repository-integrity`, and specialized gates — so lint failure cannot skip tests. `test_ci_contract.py` validates the job structure, independence, and artifact upload paths.
+
+**What did NOT change:** All safety canaries, fail-closed defaults, byte-identical off-paths, and existing public interfaces remain intact. The Learning Engine, Research Engine, Unattended Supervisor, and all other subsystems' authority boundaries are unchanged.
 
 ## What to build next
 **Immediate: harden Learning Engine v0 into durable, versioned state.** Persist the learned `extra_keywords` to a JSON file the Planner loads on boot, and add `revert_last()` backed by the experience log. This is small, it's the natural continuation of the loop you just closed, and it's the prerequisite for _any_ future widening of what the system can learn, without it, accepted improvements evaporate on restart and there's no audit-grade way to undo a bad one.

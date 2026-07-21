@@ -16,10 +16,8 @@
 """
 from __future__ import annotations
 
-import pytest
 
 from aetheris.config import Config
-from aetheris.controller.controller import Controller
 from aetheris.controller.executive import ExecutiveController
 from aetheris.controller.queue import TaskQueue, TaskState
 from aetheris.memory.store import MemoryStore
@@ -184,7 +182,7 @@ def test_safety_block_routes_to_waiting_for_context(tmp_path):
 def test_repair_steps_inserted_and_task_requeued(tmp_path):
     """When reflection returns INSERT_REPAIR_STEPS, the plan grows and the
     task is re-queued so the executive picks up the repair steps next tick."""
-    from aetheris.reflection.engine import ReflectionEngine, StepOutcome, Verdict
+    from aetheris.reflection.engine import ReflectionEngine, Verdict
 
     call_count = {"n": 0}
 
@@ -240,7 +238,7 @@ def test_repair_steps_inserted_and_task_requeued(tmp_path):
 # ---------------------------------------------------------------------------
 
 def test_repair_plan_survives_restart(tmp_path):
-    from aetheris.planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
+    from aetheris.planner.plan import MultiStepPlan, PlanStep, PlanStore
 
     plan = MultiStepPlan(task_id="t_restart", steps=[
         PlanStep(tool="echo", arg="step1", reason="original"),

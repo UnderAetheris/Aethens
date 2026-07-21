@@ -15,7 +15,6 @@
 """
 from __future__ import annotations
 
-import os
 
 import pytest
 from fastapi.testclient import TestClient
@@ -24,7 +23,7 @@ from aetheris.api.app import create_app
 from aetheris.api.state import AppState
 from aetheris.config import PromotionConfig
 from aetheris.controller.queue import TaskState
-from aetheris.skills.registry import SkillRegistry, SkillStep, SkillTemplate
+from aetheris.skills.registry import SkillStep, SkillTemplate
 
 
 # ===========================================================================

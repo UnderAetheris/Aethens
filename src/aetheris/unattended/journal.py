@@ -181,6 +181,19 @@ class SessionJournal:
         return self._read_snapshot() is not None \
             and self._read_snapshot().get("session_id") == session_id
 
+    def get_events(self, session_id: str) -> list[dict[str, Any]]:
+        if not self._journal_path.exists():
+            return []
+        events = []
+        for line in self._journal_path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            row = json.loads(line)
+            if row.get("session_id") == session_id:
+                events.append(row)
+        return events
+
 
 def _bounds_to_dict(b) -> dict[str, Any]:
     return {

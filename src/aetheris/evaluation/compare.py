@@ -18,7 +18,6 @@ from .cases import EvalCase, WorkflowCase, default_suite
 from .evaluator import Evaluator, Report
 
 if TYPE_CHECKING:
-    from ..controller.executive import ExecutiveController
     from ..model import ModelProvider
 
 

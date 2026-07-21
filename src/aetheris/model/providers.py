@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import re
-from typing import Any
+from typing import Any, Callable
 
 from .interface import ModelProvider, ModelRequest, ModelResponse, ResponseKind
 
@@ -39,6 +39,14 @@ def _parse_suggestion(text: str, tool_names: tuple[str, ...]) -> dict[str, Any] 
     return None
 
 
+HttpTransport = Callable[[str, dict[str, Any], dict[str, str] | None, int], Any]
+
+
+def _default_http_transport(url: str, payload: dict[str, Any], headers: dict[str, str] | None, timeout: int) -> Any:
+    import requests
+    return requests.post(url, json=payload, headers=headers or {}, timeout=timeout)
+
+
 class MockProvider:
     """Deterministic floor: needs nothing, cannot fail."""
 
@@ -58,17 +66,16 @@ class LocalProvider:
 
     name = "local"
 
-    def __init__(self, endpoint: str, model: str, temperature: float = 0.2) -> None:
+    def __init__(self, endpoint: str, model: str, temperature: float = 0.2, transport: HttpTransport | None = None) -> None:
         self._endpoint = endpoint.rstrip("/")
         self._model = model
         self._temperature = temperature
+        self._transport = transport or _default_http_transport
 
     def complete(self, request: ModelRequest) -> ModelResponse:
         try:
-            import requests  # optional dep; raises ImportError -> FallbackProvider catches
-
             prompt = _build_prompt(request)
-            resp = requests.post(
+            resp = self._transport(
                 f"{self._endpoint}/api/generate",
                 json={
                     "model": self._model,
@@ -76,6 +83,7 @@ class LocalProvider:
                     "stream": False,
                     "options": {"temperature": self._temperature},
                 },
+                headers=None,
                 timeout=30,
             )
             resp.raise_for_status()
@@ -98,18 +106,17 @@ class ApiProvider:
 
     name = "api"
 
-    def __init__(self, base_url: str, model: str, api_key: str, temperature: float = 0.2) -> None:
+    def __init__(self, base_url: str, model: str, api_key: str, temperature: float = 0.2, transport: HttpTransport | None = None) -> None:
         self._base_url = base_url.rstrip("/")
         self._model = model
         self._key = api_key  # held only here; never logged or stored elsewhere
         self._temperature = temperature
+        self._transport = transport or _default_http_transport
 
     def complete(self, request: ModelRequest) -> ModelResponse:
         try:
-            import requests
-
             prompt = _build_prompt(request)
-            resp = requests.post(
+            resp = self._transport(
                 f"{self._base_url}/v1/chat/completions",
                 json={
                     "model": self._model,

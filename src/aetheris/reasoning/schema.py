@@ -6,9 +6,8 @@ The schema cannot express an action.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
 
 class Recommendation(str, Enum):

@@ -8,3 +8,21 @@ build/
 .pytest_cache/
 .ruff_cache/
 aetheris_memory.jsonl
+
+# Runtime data (not fixtures)
+.aetheris_data/
+*.jsonl
+reasoning_*_events.jsonl
+wf_*.jsonl
+tmp_smoke*.py
+
+# Frontend
+shell/node_modules/
+shell/.env
+shell/package-lock.json
+
+# Test / coverage reports
+.coverage
+htmlcov/
+*.cover
+.tox/

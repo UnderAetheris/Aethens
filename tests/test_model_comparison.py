@@ -7,7 +7,6 @@ model never over-reaches into tasks that shouldn't touch a tool.
 """
 from __future__ import annotations
 
-import json
 
 from aetheris.evaluation.cases import (
     AMBIGUITY_GUARD_NAMES,
@@ -94,7 +93,6 @@ class FixtureModel:
             return {"path": path}
         if tool == "write_file":
             # Extract a simple content word from the task; default to "hello"
-            words = task.split()
             content = "hello"
             for kw in ("hello", "world", "text"):
                 if kw in task.lower():

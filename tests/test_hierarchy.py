@@ -9,17 +9,18 @@ when the decomposer abstains.
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from aetheris.config import Config
 from aetheris.controller.executive import ExecutiveController
 from aetheris.controller.queue import TaskQueue
 from aetheris.memory.store import MemoryStore
-from aetheris.planner.plan import MultiStepPlan, PlanStep, PlanStore
+from aetheris.planner.plan import PlanStore
 from aetheris.planner.planner import Planner
 from aetheris.skills.registry import SkillRegistry, SkillStep, SkillTemplate
 from aetheris.hierarchy import (
-    BenchmarkResult,
     CyclicDecomposition,
     Goal,
     GoalGraph,
@@ -210,7 +211,7 @@ def test_dependents_block_when_dependency_fails(tmp_path):
 def test_subtree_rollback_leaves_siblings_intact(tmp_path):
     g = _goal_two_branches(tmp_path)
     orch = _orch(tmp_path, safe_mode=False)
-    result = orch.run_then_rollback(g, subtree="A_leaf")
+    orch.run_then_rollback(g, subtree="A_leaf")
     assert not g._files["A"].exists()                     # A reverted via undo seam
     assert g._files["B"].exists()                         # B untouched
 

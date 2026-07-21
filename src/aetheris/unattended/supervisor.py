@@ -316,8 +316,8 @@ class UnattendedSupervisor:
 
         Pure side-effect: a crash-safe, provenance-stamped record. It reads only;
         it cannot change the executive's steps, bounds, or authority. With no
-        engine wired this is a no-op. unsafe_attempts/authority_increase are
-        always 0 — the supervisor holds no authority to increase.
+        engine wired this is a no-op. Metrics are derived from observed journal
+        evidence; absent evidence is recorded as None, never fabricated as zero.
         """
         if self._session_learning is None:
             return
@@ -333,6 +333,30 @@ class UnattendedSupervisor:
             outcome = SessionOutcome.PAUSED_RECOVERED
         else:
             outcome = SessionOutcome.CLEAN_COMPLETE
+
+        events = self._journal.get_events(session.session_id)
+        was_resumed = any(e.get("kind") == "session_resumed" for e in events)
+        if was_resumed:
+            crash_recovery_success = session.state is SessionState.COMPLETED
+        else:
+            crash_recovery_success = None
+
+        checkpoint_count = sum(1 for e in events if e.get("kind") == "session_checkpoint")
+
+        duplicate_work = 0
+        if was_resumed:
+            resume_idx = next(i for i, e in enumerate(events) if e.get("kind") == "session_resumed")
+            pre_resume_steps = max(
+                (e.get("data", {}).get("steps_taken", 0) for e in events[:resume_idx] if e.get("kind") == "session_checkpoint"),
+                default=0,
+            )
+            post_resume_steps = [
+                e.get("data", {}).get("steps_taken", 0) for e in events[resume_idx:]
+                if e.get("kind") == "session_checkpoint"
+            ]
+            if any(s < pre_resume_steps for s in post_resume_steps):
+                duplicate_work = 1
+
         rec = SessionOutcomeRecord(
             session_id=session.session_id,
             shape_key=shape_from_session(session),
@@ -340,12 +364,12 @@ class UnattendedSupervisor:
             outcome=outcome,
             stop_reason=session.stop_reason,
             stall_detected=stalled,
-            crash_recovery_success=None,
-            duplicate_work=0,
+            crash_recovery_success=crash_recovery_success,
+            duplicate_work=duplicate_work,
             budget_exhaustion=("budget",) if "budget" in session.stop_reason else (),
-            unsafe_attempts=0,
-            authority_increase=0,
-            checkpoint_count=session.steps_taken,
+            unsafe_attempts=None,
+            authority_increase=None,
+            checkpoint_count=checkpoint_count,
             timestamp=self._clock(),
         )
         self._session_learning.record(rec)

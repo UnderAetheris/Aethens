@@ -23,31 +23,26 @@
 """
 from __future__ import annotations
 
-import ast
 import json
 import os
-import time
 from pathlib import Path
 
-import pytest
 from fastapi.testclient import TestClient
 
 from aetheris.api.app import create_app
 from aetheris.api.state import AppState
-from aetheris.config import Config, PromotionConfig
+from aetheris.config import Config
 from aetheris.controller.controller import Controller
 from aetheris.controller.executive import ExecutiveController
 from aetheris.controller.queue import TaskQueue, TaskState
 from aetheris.memory.store import MemoryStore
-from aetheris.planner.plan import MultiStepPlan, PlanStep, PlanStore, StepStatus
+from aetheris.planner.plan import MultiStepPlan, PlanStore
 from aetheris.planner.planner import Planner
 from aetheris.reflection.engine import ReflectionEngine, StepOutcome, Verdict
-from aetheris.reflection.failure_parser import FailureKind, FailureParser
+from aetheris.reflection.failure_parser import FailureKind
 from aetheris.safety.guard import SafetyLayer, build_default_rules
 from aetheris.tools.base import Tool, ToolRegistry
-from aetheris.understanding.engine import RepoUnderstanding, ScanReport
-from aetheris.understanding.model import Symbol, SymbolRef
-from aetheris.workspace import WorkspaceIndex
+from aetheris.understanding.engine import RepoUnderstanding
 
 
 # ===========================================================================
@@ -300,7 +295,6 @@ def test_call_graph_records_function_calls(tmp_path):
     main_syms = u.defines("main")
     assert main_syms, "main should be defined"
     # main() calls parse_config and load_settings (cross-refs)
-    uses = [u.path for u in main_syms[0].uses] if main_syms[0].uses else []
     # At minimum the call graph should have an entry for main
     assert "main" in u._model.call_graph or len(main_syms[0].uses) >= 0
 
@@ -359,7 +353,6 @@ def test_scan_journal_is_appendonly_and_explains_change(tmp_path):
 
 def test_removed_files_dropped_from_model(tmp_path):
     u = _make_understanding(tmp_path)
-    v1 = u.version()
     (tmp_path / "myapp" / "config.py").unlink()
     report = u.scan()
     assert "myapp/config.py" in report.removed or any("config.py" in r for r in report.removed)
@@ -497,9 +490,6 @@ def test_authority_not_widened(tmp_path):
 # ===========================================================================
 
 def test_non_code_and_no_understanding_unchanged(tmp_path):
-    from aetheris.api.app import create_app
-    from aetheris.api.state import AppState
-    from fastapi.testclient import TestClient
 
     state = AppState.create(root=str(tmp_path / "data"))
     app = create_app(state=state, auto_tick=False)

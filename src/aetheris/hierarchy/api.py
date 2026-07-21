@@ -11,17 +11,16 @@ comparison that the adoption gate consumes. Hierarchy is the only variable.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from .decomposer import GoalDecomposer
 from .journal import GoalJournal
-from .model import Goal, GoalGraph, SubGoalState, stable_subgoal_id
+from .model import Goal
 from .orchestrator import GoalOrchestrator, OrchestrationResult
 
 if TYPE_CHECKING:
     from ..controller.executive import ExecutiveController
-    from ..controller.queue import TaskState
     from ..planner.planner import Planner
 
 
@@ -162,7 +161,6 @@ def _benchmark_goals(root: str) -> list[tuple[str, int, int]]:
     - An independent-branch goal where one branch fails: hierarchy isolates
       failure so the good branch still completes; flat fails the whole thing.
     """
-    import json
     from pathlib import Path
 
     Path(root).mkdir(parents=True, exist_ok=True)
