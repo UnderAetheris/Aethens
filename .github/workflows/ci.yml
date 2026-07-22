@@ -124,6 +124,38 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: python scripts/run_reliability_eval_gate.py
 
+  hierarchy-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest tests/test_hierarchy.py -q
+
+  unattended-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest tests/test_unattended.py -q
+
+  trace-replay-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev]"
+      - run: python -m pytest tests/test_trace_envelope.py tests/test_trace_adapters.py tests/test_trace_replay.py tests/test_trace_authority.py -q
+      - run: python scripts/check_architecture_integrity.py --check
+      - run: python scripts/inspect_trace.py --source memory=aetheris_memory.jsonl --format summary --validate-only
+
   architecture-integrity:
     runs-on: ubuntu-latest
     steps:

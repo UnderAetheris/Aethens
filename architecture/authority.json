@@ -26,7 +26,9 @@
         "aetheris.controller.controller.Controller.handle_step",
         "aetheris.controller.executive.ExecutiveController._execute_step"
       ],
-      "allowed_effects": ["registered_tool_execution"],
+      "allowed_effects": [
+        "registered_tool_execution"
+      ],
       "exceptions": []
     },
     {
@@ -40,7 +42,9 @@
       "allowed_callers": [
         "aetheris.research.engine.ResearchEngine._fetch"
       ],
-      "allowed_effects": ["allowlisted_https_egress"],
+      "allowed_effects": [
+        "allowlisted_https_egress"
+      ],
       "exceptions": [
         {
           "boundary": "network_egress.research_perimeter",
@@ -70,7 +74,9 @@
         "aetheris.learning.engine.LearningEngine.attempt",
         "aetheris.reflection.engine.ReflectionEngine.reflect"
       ],
-      "allowed_effects": ["append_only_event_log"],
+      "allowed_effects": [
+        "append_only_event_log"
+      ],
       "exceptions": []
     },
     {
@@ -84,7 +90,9 @@
         "aetheris.research.engine.ResearchEngine.research",
         "aetheris.research.engine.ResearchEngine._fetch"
       ],
-      "allowed_effects": ["append_only_research_log"],
+      "allowed_effects": [
+        "append_only_research_log"
+      ],
       "exceptions": []
     },
     {
@@ -99,7 +107,10 @@
       "allowed_callers": [
         "aetheris.research.reliability.SourceReliability.record_outcome"
       ],
-      "allowed_effects": ["append_only_reliability_log", "snapshot_persistence"],
+      "allowed_effects": [
+        "append_only_reliability_log",
+        "snapshot_persistence"
+      ],
       "exceptions": []
     },
     {
@@ -113,7 +124,9 @@
       "allowed_callers": [
         "aetheris.understanding.engine.RepoUnderstanding.scan"
       ],
-      "allowed_effects": ["model_and_journal_writes"],
+      "allowed_effects": [
+        "model_and_journal_writes"
+      ],
       "exceptions": []
     },
     {
@@ -128,7 +141,9 @@
         "aetheris.controller.executive.ExecutiveController._run_task",
         "aetheris.hierarchy.orchestrator.GoalOrchestrator._transition"
       ],
-      "allowed_effects": ["plan_sidecar_persistence"],
+      "allowed_effects": [
+        "plan_sidecar_persistence"
+      ],
       "exceptions": []
     },
     {
@@ -145,7 +160,9 @@
         "aetheris.learning.autonomous.AutonomousLoop._apply_repair",
         "aetheris.learning.self_repair.SelfRepair.apply"
       ],
-      "allowed_effects": ["append_only_lesson_log"],
+      "allowed_effects": [
+        "append_only_lesson_log"
+      ],
       "exceptions": []
     },
     {
@@ -159,7 +176,9 @@
       "allowed_callers": [
         "aetheris.learning.engine.LearningEngine.attempt"
       ],
-      "allowed_effects": ["append_only_knowledge_log"],
+      "allowed_effects": [
+        "append_only_knowledge_log"
+      ],
       "exceptions": []
     },
     {
@@ -174,7 +193,10 @@
         "aetheris.learning.engine.LearningEngine.attempt",
         "aetheris.learning.engine.LearningEngine.revert_last"
       ],
-      "allowed_effects": ["append_only_keyword_log", "rewrite_revert"],
+      "allowed_effects": [
+        "append_only_keyword_log",
+        "rewrite_revert"
+      ],
       "exceptions": []
     },
     {
@@ -188,7 +210,10 @@
       "allowed_callers": [
         "aetheris.unattended.supervisor.UnattendedSupervisor._record_outcome"
       ],
-      "allowed_effects": ["append_only_session_log", "index_write"],
+      "allowed_effects": [
+        "append_only_session_log",
+        "index_write"
+      ],
       "exceptions": []
     },
     {
@@ -204,7 +229,10 @@
       "allowed_callers": [
         "aetheris.reflection.engine.ReflectionEngine._code_failure_repair"
       ],
-      "allowed_effects": ["sandbox_copy_write", "subprocess_test_execution"],
+      "allowed_effects": [
+        "sandbox_copy_write",
+        "subprocess_test_execution"
+      ],
       "exceptions": [
         {
           "boundary": "sandbox_validation.model_patch",
@@ -270,7 +298,9 @@
         "aetheris.__main__",
         "aetheris.api.app:create_app"
       ],
-      "allowed_effects": ["startup_config_override"],
+      "allowed_effects": [
+        "startup_config_override"
+      ],
       "exceptions": []
     },
     {
@@ -284,7 +314,9 @@
         "aetheris.model.providers.LocalProvider.complete",
         "aetheris.model.providers.ApiProvider.complete"
       ],
-      "allowed_effects": ["model_api_egress"],
+      "allowed_effects": [
+        "model_api_egress"
+      ],
       "exceptions": [
         {
           "boundary": "network_egress.model_provider",
@@ -304,432 +336,1288 @@
       "id": "config",
       "capability_id": "config",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "direct", "boundary": "config.change"},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "direct",
+          "boundary": "config.change"
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "tools",
       "capability_id": "tools",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "safety",
       "capability_id": "safety",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "direct", "boundary": "execution.safety_layer"},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "direct",
+          "boundary": "execution.safety_layer"
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "controller",
       "capability_id": "controller",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "delegated", "boundary": "execution.safety_layer"},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "advisory", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.memory_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "delegated",
+          "boundary": "execution.safety_layer"
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "planner",
       "capability_id": "planner",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "direct", "boundary": "persistence.plan_store"},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "direct",
+          "boundary": "persistence.plan_store"
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "executive",
       "capability_id": "executive",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "delegated", "boundary": "execution.safety_layer"},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "direct", "boundary": "persistence.plan_store"},
-        "modify_memory": {"level": "direct", "boundary": "persistence.memory_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "delegated",
+          "boundary": "execution.safety_layer"
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "direct",
+          "boundary": "persistence.plan_store"
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "memory",
       "capability_id": "memory",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "direct", "boundary": "persistence.memory_store"},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.memory_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "evaluation",
       "capability_id": "evaluation",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "delegated", "boundary": "execution.safety_layer"},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.memory_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "delegated",
+          "boundary": "execution.safety_layer"
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "skills",
       "capability_id": "skills",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "direct", "boundary": "persistence.lesson_store"},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "direct",
+          "boundary": "persistence.lesson_store"
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "skill_promotion",
       "capability_id": "skill_promotion",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "delegated", "boundary": "persistence.lesson_store"},
-        "promote_skills": {"level": "direct", "boundary": "persistence.lesson_store"},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "delegated",
+          "boundary": "persistence.lesson_store"
+        },
+        "promote_skills": {
+          "level": "direct",
+          "boundary": "persistence.lesson_store"
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "plan_review",
       "capability_id": "plan_review",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "advisory", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "reflection",
       "capability_id": "reflection",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "advisory", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "autonomous_loop",
       "capability_id": "autonomous_loop",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.memory_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "self_repair",
       "capability_id": "self_repair",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.memory_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.memory_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "model_providers",
       "capability_id": "model_providers",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "delegated", "boundary": "network_egress.research_perimeter"},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "delegated",
+          "boundary": "network_egress.research_perimeter"
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "model_patch",
       "capability_id": "model_patch",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "direct", "boundary": "sandbox_validation.model_patch"},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "direct",
+          "boundary": "sandbox_validation.model_patch"
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "understanding",
       "capability_id": "understanding",
       "authority": {
-        "read_files": {"level": "direct", "boundary": "persistence.understanding_model"},
-        "write_files": {"level": "direct", "boundary": "persistence.understanding_model"},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "direct",
+          "boundary": "persistence.understanding_model"
+        },
+        "write_files": {
+          "level": "direct",
+          "boundary": "persistence.understanding_model"
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "reasoning",
       "capability_id": "reasoning",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "experience_recording",
       "capability_id": "experience_recording",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "direct", "boundary": "persistence.experience_store"},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.experience_store"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "direct",
+          "boundary": "persistence.experience_store"
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.experience_store"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "experience_consumption",
       "capability_id": "experience_consumption",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "advisory", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "hierarchy",
       "capability_id": "hierarchy",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "direct", "boundary": "persistence.plan_store"},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "direct",
+          "boundary": "persistence.plan_store"
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "research",
       "capability_id": "research",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "direct", "boundary": "persistence.research_journal"},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "direct", "boundary": "network_egress.research_perimeter"},
-        "modify_plans": {"level": "advisory", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "direct",
+          "boundary": "persistence.research_journal"
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "direct",
+          "boundary": "network_egress.research_perimeter"
+        },
+        "modify_plans": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "research_reliability",
       "capability_id": "research_reliability",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "direct", "boundary": "persistence.reliability_journal"},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "direct",
+          "boundary": "persistence.reliability_journal"
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "api_bridge",
       "capability_id": "api_bridge",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "unattended_supervisor",
       "capability_id": "unattended_supervisor",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "advisory", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "unattended_outcome_learning",
       "capability_id": "unattended_outcome_learning",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "direct", "boundary": "persistence.session_learning_journal"},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "none", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "direct", "boundary": "persistence.session_learning_journal"},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "direct",
+          "boundary": "persistence.session_learning_journal"
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "direct",
+          "boundary": "persistence.session_learning_journal"
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     },
     {
       "id": "frontend_shell",
       "capability_id": "frontend_shell",
       "authority": {
-        "read_files": {"level": "none", "boundary": null},
-        "write_files": {"level": "none", "boundary": null},
-        "execute_commands": {"level": "none", "boundary": null},
-        "reach_network": {"level": "advisory", "boundary": null},
-        "modify_plans": {"level": "none", "boundary": null},
-        "modify_memory": {"level": "none", "boundary": null},
-        "create_skills": {"level": "none", "boundary": null},
-        "promote_skills": {"level": "none", "boundary": null},
-        "change_config": {"level": "none", "boundary": null},
-        "approve_own_proposals": {"level": "none", "boundary": null}
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "advisory",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
+      }
+    },
+    {
+      "id": "trace_replay",
+      "capability_id": "trace_replay",
+      "authority": {
+        "read_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "write_files": {
+          "level": "none",
+          "boundary": null
+        },
+        "execute_commands": {
+          "level": "none",
+          "boundary": null
+        },
+        "reach_network": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_plans": {
+          "level": "none",
+          "boundary": null
+        },
+        "modify_memory": {
+          "level": "none",
+          "boundary": null
+        },
+        "create_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "promote_skills": {
+          "level": "none",
+          "boundary": null
+        },
+        "change_config": {
+          "level": "none",
+          "boundary": null
+        },
+        "approve_own_proposals": {
+          "level": "none",
+          "boundary": null
+        }
       }
     }
   ]

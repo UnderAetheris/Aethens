@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "capability_id": "plan_review",
-  "revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736",
+  "revision": "31704237fd52ae7738ffd8d5f615f6fd48880713",
   "recorded_at": "2026-07-22T10:00:00Z",
   "configuration": {},
   "benchmark": {
@@ -20,12 +20,12 @@
     }
   },
   "gate": {
-    "verdict": "adopted",
+    "verdict": "stale",
     "exit_code": 0,
-    "output_sha256": "not_captured_in_v0",
+    "output_sha256": null,
     "artifact": "plan_review-v0"
   },
-  "rollback_token": "plan_review: bypass review queue",
+  "rollback_token": "plan_review: revert plan_review commit",
   "limitations": [
     "Only active when plan_review is provided to executive"
   ]

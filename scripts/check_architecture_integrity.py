@@ -37,7 +37,7 @@ ALLOWED_MEASUREMENT = {"unmeasured", "measured", "stale", "unknown"}
 ALLOWED_ADOPTION = {"not_applicable", "hold", "adopted", "rejected", "retired", "unknown"}
 ALLOWED_RUNTIME_STATE = {"on", "off", "not_applicable", "unknown"}
 ALLOWED_READINESS = {"not_ready", "ready", "unknown"}
-ALLOWED_EVIDENCE_DECISION = {"not_applicable", "pass", "hold", "reject", "unknown", "adopted"}
+ALLOWED_EVIDENCE_DECISION = {"not_applicable", "pass", "hold", "reject", "unknown", "adopted", "stale"}
 ALLOWED_ROLLBACK_KIND = {
     "config_disable", "git_revert", "tombstone", "restore_backup",
     "discard_sandbox", "restart_rehydrate", "not_applicable", "unknown",
@@ -248,8 +248,6 @@ def check_runtime_defaults(findings: list[Finding], caps: list[dict[str, Any]]) 
         findings.append(Finding("runtime_defaults", f"failed to import Config: {exc}"))
         return
 
-        # Skip non-boolean runtime defaults - only boolean fields have on/off semantics
-        pass
     field_map = {
         "safe_mode": "safe_mode",
         "reflection_enabled": "reflection_enabled",
@@ -441,7 +439,7 @@ def _scan_ast_for_side_effects(findings: list[Finding]) -> None:
                                     break
                             if matched:
                                 continue
-                        if func.attr if isinstance(func, ast.Attribute) else name in registered_exceptions:
+                        if (func.attr if isinstance(func, ast.Attribute) else name) in registered_exceptions:
                             continue
                         findings.append(Finding(
                             "side_effects",

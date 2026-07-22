@@ -61,6 +61,8 @@ Every ordinary registered tool action executes through `SafetyLayer`; network eg
 | unattended_supervisor | complete | measured | adopted | off | unknown |
 | unattended_outcome_learning | complete | measured | hold | off | unknown |
 | frontend_shell | complete | unmeasured | not_applicable | off | unknown |
+| trace_replay | complete | measured | adopted | not_applicable | unknown |
+
 <!-- architecture-capabilities:end -->
 
 

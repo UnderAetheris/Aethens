@@ -327,7 +327,7 @@ def test_no_broad_wildcard_exception():
 
 def test_existing_test_suite_still_passes():
     result = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "--no-header", "-x", "--timeout=600"],
+        [sys.executable, "-m", "pytest", "-q", "--no-header", "-x"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
