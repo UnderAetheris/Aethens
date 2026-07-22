@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "capability_id": "config",
+  "revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736",
+  "recorded_at": "2026-07-22T10:00:00Z",
+  "configuration": {
+    "safe_mode": true,
+    "reflection_enabled": true,
+    "reasoning_enabled": true,
+    "experience_record": true,
+    "experience_consume": false,
+    "hierarchy_enabled": false,
+    "research_enabled": true,
+    "unattended_enabled": false
+  },
+  "benchmark": {
+    "id": "config-defaults-v0",
+    "command": "python -c 'from aetheris.config import Config; print(Config())'",
+    "implementation_paths": [
+      "src/aetheris/config.py"
+    ]
+  },
+  "raw_metrics": {
+    "default_safe_mode": {
+      "value": 1,
+      "observed": true,
+      "observation_count": 1
+    },
+    "default_reasoning": {
+      "value": 1,
+      "observed": true,
+      "observation_count": 1
+    },
+    "default_research": {
+      "value": 1,
+      "observed": true,
+      "observation_count": 1
+    },
+    "default_experience_record": {
+      "value": 1,
+      "observed": true,
+      "observation_count": 1
+    }
+  },
+  "gate": {
+    "verdict": "pass",
+    "exit_code": 0,
+    "output_sha256": "not_captured_in_v0",
+    "artifact": "config-defaults-v0"
+  },
+  "rollback_token": "config: revert to previous dataclass defaults",
+  "limitations": [
+    "Environment overrides limited to explicitly declared fields"
+  ]
+}

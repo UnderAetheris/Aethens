@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "capability_id": "experience_recording",
+  "revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736",
+  "recorded_at": "2026-07-22T10:00:00Z",
+  "configuration": {},
+  "benchmark": {
+    "id": "experience_recording-v0",
+    "command": "python -m pytest tests/ -q --no-header",
+    "implementation_paths": [
+      "src/aetheris/memory/experience.py",
+      "src/aetheris/memory/lessons.py"
+    ]
+  },
+  "raw_metrics": {
+    "metric_a": {
+      "value": null,
+      "observed": false,
+      "reason": "not emitted by captured run"
+    }
+  },
+  "gate": {
+    "verdict": "adopted",
+    "exit_code": 0,
+    "output_sha256": "not_captured_in_v0",
+    "artifact": "experience_recording-v0"
+  },
+  "rollback_token": "config: experience_record=false",
+  "limitations": [
+    "Consumption is gated off by default"
+  ]
+}

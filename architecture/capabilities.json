@@ -1,0 +1,1111 @@
+{
+  "schema_version": 1,
+  "baseline_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736",
+  "verified_at": "2026-07-22T10:00:00Z",
+  "project_version": "0.1.0",
+  "capabilities": [
+    {
+      "id": "config",
+      "name": "Configuration",
+      "owner_paths": [
+        "src/aetheris/config.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "safe_mode",
+        "env_override": "AETHERIS_SAFE_MODE"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Central dataclass for all runtime defaults and environment overrides.",
+      "authority_profile": "config",
+      "required_permissions": [
+        "change_config"
+      ],
+      "safety_gate_path": [
+        "Config",
+        "from_env"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/config-v0.json",
+        "gate_version": "config-defaults-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: revert to previous dataclass defaults",
+        "restores": "previous frozen config state"
+      },
+      "known_limitations": [
+        "Environment overrides limited to explicitly declared fields"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "tools",
+      "name": "Tool Registry",
+      "owner_paths": [
+        "src/aetheris/tools/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "allowed_shell_commands",
+        "env_override": "AETHERIS_SHELL_ALLOWLIST"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Registry of safe actions plus built-in tool implementations.",
+      "authority_profile": "tools",
+      "required_permissions": [
+        "read_files",
+        "write_files",
+        "execute_commands"
+      ],
+      "safety_gate_path": [
+        "ToolRegistry",
+        "default_registry"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/tools-v0.json",
+        "gate_version": "tool-registry-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: allowed_shell_commands=echo,ls,pwd,cat",
+        "restores": "default allowlist only"
+      },
+      "known_limitations": [
+        "Built-in tools only; no dynamic plugin loading"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "safety",
+      "name": "SafetyLayer",
+      "owner_paths": [
+        "src/aetheris/safety/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "safe_mode",
+        "env_override": "AETHERIS_SAFE_MODE"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Single guard every registered tool action routes through.",
+      "authority_profile": "safety",
+      "required_permissions": [
+        "execute_commands"
+      ],
+      "safety_gate_path": [
+        "SafetyLayer",
+        "run"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/safety-v0.json",
+        "gate_version": "safety-layer-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: safe_mode=false",
+        "restores": "unrestricted tool execution path"
+      },
+      "known_limitations": [
+        "Rule pipeline is ordered deny-wins; first block wins"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "controller",
+      "name": "Controller",
+      "owner_paths": [
+        "src/aetheris/controller/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Receives tasks, asks planner, routes tools through SafetyLayer.",
+      "authority_profile": "controller",
+      "required_permissions": [
+        "read_files",
+        "write_files",
+        "execute_commands"
+      ],
+      "safety_gate_path": [
+        "Controller",
+        "handle",
+        "Controller",
+        "handle_step"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/controller-v0.json",
+        "gate_version": "controller-spine-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "controller: revert to prior controller commit",
+        "restores": "previous controller behavior"
+      },
+      "known_limitations": [
+        "Single-threaded request handling"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "planner",
+      "name": "Planner",
+      "owner_paths": [
+        "src/aetheris/planner/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Deterministic rule-based planner with optional model assistance.",
+      "authority_profile": "planner",
+      "required_permissions": [
+        "modify_plans"
+      ],
+      "safety_gate_path": [
+        "Planner",
+        "plan",
+        "Planner",
+        "plan_multi"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/planner-v0.json",
+        "gate_version": "planner-deterministic-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "planner: revert keyword changes",
+        "restores": "prior keyword set via LearnedKeywordStore revert"
+      },
+      "known_limitations": [
+        "Model suggestion path falls back to echo if invalid"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "executive",
+      "name": "Executive Task Queue",
+      "owner_paths": [
+        "src/aetheris/controller/executive.py",
+        "src/aetheris/controller/queue.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Drains queued tasks through the existing gated spine.",
+      "authority_profile": "executive",
+      "required_permissions": [
+        "modify_plans",
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "ExecutiveController",
+        "run_once",
+        "ExecutiveController",
+        "step"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/executive-v0.json",
+        "gate_version": "executive-spine-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "executive: revert executive changes",
+        "restores": "previous executive behavior"
+      },
+      "known_limitations": [
+        "Single-plan-at-a-time execution"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "memory",
+      "name": "Memory and Event Journal",
+      "owner_paths": [
+        "src/aetheris/memory/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "log_path",
+        "env_override": "AETHERIS_LOG_PATH"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Append-only task history, lessons, journals, and stores.",
+      "authority_profile": "memory",
+      "required_permissions": [
+        "write_files",
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "MemoryStore",
+        "record",
+        "JsonlStore",
+        "append"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/memory-v0.json",
+        "gate_version": "memory-appendonly-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "discard_sandbox",
+        "token": "memory: truncate journal files",
+        "restores": "empty journals"
+      },
+      "known_limitations": [
+        "No query engine beyond deterministic filter/search"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "evaluation",
+      "name": "Evaluation",
+      "owner_paths": [
+        "src/aetheris/evaluation/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Benchmark cases and deterministic scoring for adoption gates.",
+      "authority_profile": "evaluation",
+      "required_permissions": [
+        "read_files",
+        "write_files",
+        "execute_commands"
+      ],
+      "safety_gate_path": [
+        "Evaluator",
+        "run"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/evaluation-v0.json",
+        "gate_version": "evaluation-gate-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "evaluation: revert to prior case suite",
+        "restores": "previous benchmark case set"
+      },
+      "known_limitations": [
+        "Cases are static; no dynamic generation in v0"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "skills",
+      "name": "Skills",
+      "owner_paths": [
+        "src/aetheris/skills/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Named reusable plan templates with registry, matching, and rendering.",
+      "authority_profile": "skills",
+      "required_permissions": [
+        "create_skills",
+        "promote_skills"
+      ],
+      "safety_gate_path": [
+        "SkillRegistry",
+        "register",
+        "SkillRegistry",
+        "match"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/skills-v0.json",
+        "gate_version": "skill-registry-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "tombstone",
+        "token": "skills: registry retire/restore",
+        "restores": "previous skill library state"
+      },
+      "known_limitations": [
+        "_other_task_texts returns empty list (documented limitation)"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "skill_promotion",
+      "name": "Skill Promotion and Synthesis",
+      "owner_paths": [
+        "src/aetheris/skills/promoter.py",
+        "src/aetheris/learning/engine.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "promotion_budget",
+        "env_override": "AETHERIS_PROMOTION_BUDGET"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Mine recurring plan shapes and promote validated skills through the measured gate.",
+      "authority_profile": "learning",
+      "required_permissions": [
+        "promote_skills"
+      ],
+      "safety_gate_path": [
+        "SkillPromoter",
+        "candidates",
+        "LearningEngine",
+        "promote_skill"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/skill_promotion-v0.json",
+        "gate_version": "skill-promotion-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "tombstone",
+        "token": "skill_promotion: registry retire promoted skill",
+        "restores": "previous skill state"
+      },
+      "known_limitations": [
+        "Promotion is idle-gated and budget-bounded"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "plan_review",
+      "name": "Plan Review",
+      "owner_paths": [
+        "src/aetheris/controller/executive.py",
+        "src/aetheris/api/app.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Human review queue for complex multi-step plans before execution.",
+      "authority_profile": "plan_review",
+      "required_permissions": [
+        "modify_plans"
+      ],
+      "safety_gate_path": [
+        "PlanReviewQueue",
+        "submit",
+        "ExecutiveController",
+        "_run_task"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/plan_review-v0.json",
+        "gate_version": "plan-review-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "plan_review: bypass review queue",
+        "restores": "direct execution path"
+      },
+      "known_limitations": [
+        "Only active when plan_review is provided to executive"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "reflection",
+      "name": "Reflection",
+      "owner_paths": [
+        "src/aetheris/reflection/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "reflection_enabled",
+        "env_override": "AETHERIS_REFLECTION"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Deterministic reflection advisor that returns verdicts for step outcomes.",
+      "authority_profile": "reflection",
+      "required_permissions": [
+        "modify_plans"
+      ],
+      "safety_gate_path": [
+        "ReflectionEngine",
+        "reflect"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/reflection-v0.json",
+        "gate_version": "reflection-engine-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: reflection_enabled=false",
+        "restores": "no-reflection path"
+      },
+      "known_limitations": [
+        "Cannot execute; executive enacts verdicts"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "autonomous_loop",
+      "name": "Autonomous Loop",
+      "owner_paths": [
+        "src/aetheris/learning/autonomous.py"
+      ],
+      "implementation": "partial",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Runs improvement cycles when the executive queue is idle.",
+      "authority_profile": "autonomous",
+      "required_permissions": [
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "AutonomousLoop",
+        "cycle"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/autonomous_loop-v0.json",
+        "gate_version": "autonomous-loop-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "autonomous: set improve_fn to None",
+        "restores": "manual-only improvement path"
+      },
+      "known_limitations": [
+        "_run_discovery is a no-op placeholder"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "self_repair",
+      "name": "Self-Repair",
+      "owner_paths": [
+        "src/aetheris/learning/self_repair.py",
+        "src/aetheris/learning/autonomous.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Detect recurring failures and propose fixes through the eval gate.",
+      "authority_profile": "self_repair",
+      "required_permissions": [
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "SelfRepair",
+        "detect",
+        "SelfRepair",
+        "apply"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/self_repair-v0.json",
+        "gate_version": "self-repair-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "self_repair: disable detect/apply calls",
+        "restores": "no auto-repair path"
+      },
+      "known_limitations": [
+        "Keyword repair strategy only; other types recorded as experience"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "model_providers",
+      "name": "Model Providers",
+      "owner_paths": [
+        "src/aetheris/model/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Model interface and fallback provider for optional model-assisted paths.",
+      "authority_profile": "model",
+      "required_permissions": [
+        "reach_network"
+      ],
+      "safety_gate_path": [
+        "ModelProvider",
+        "complete"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/model_providers-v0.json",
+        "gate_version": "model-providers-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "model: set model=None",
+        "restores": "deterministic-only paths"
+      },
+      "known_limitations": [
+        "Default off; only mock provider in baseline"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "model_patch",
+      "name": "Model-Assisted Patch Validation",
+      "owner_paths": [
+        "src/aetheris/learning/model_patch.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Validates model-authored diffs in an isolated sandbox before handing to Reflection.",
+      "authority_profile": "model_patch",
+      "required_permissions": [
+        "execute_commands",
+        "write_files"
+      ],
+      "safety_gate_path": [
+        "ModelAssistedPatcher",
+        "propose_repair",
+        "PatchTestRunner"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/model_patch-v0.json",
+        "gate_version": "model-patch-sandbox-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "discard_sandbox",
+        "token": "model_patch: sandbox discarded on failure",
+        "restores": "deterministic repair path"
+      },
+      "known_limitations": [
+        "Single-file patches only in v0"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "understanding",
+      "name": "Repository Understanding",
+      "owner_paths": [
+        "src/aetheris/understanding/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Read-only semantic model of the workspace with AST-derived facts.",
+      "authority_profile": "understanding",
+      "required_permissions": [
+        "read_files",
+        "write_files"
+      ],
+      "safety_gate_path": [
+        "RepoUnderstanding",
+        "scan"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/understanding-v0.json",
+        "gate_version": "repo-understanding-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "restore_backup",
+        "token": "understanding: restore model from backup",
+        "restores": "previous model snapshot"
+      },
+      "known_limitations": [
+        "Python source only; no multi-language support"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "reasoning",
+      "name": "Reasoning Engine",
+      "owner_paths": [
+        "src/aetheris/reasoning/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "reasoning_enabled",
+        "env_override": "AETHERIS_REASONING"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Read-only deliberator producing immutable Deliberation objects.",
+      "authority_profile": "reasoning",
+      "required_permissions": [],
+      "safety_gate_path": [
+        "ReasoningEngine",
+        "deliberate_for_planning",
+        "ReasoningEngine",
+        "deliberate_for_repair",
+        "ReasoningEngine",
+        "deliberate_for_promotion"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/reasoning-v0.json",
+        "gate_version": "reasoning-engine-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: reasoning_enabled=false",
+        "restores": "deterministic-only path"
+      },
+      "known_limitations": [
+        "No execution authority; abstention governs thin evidence"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "experience_recording",
+      "name": "Experience Recording",
+      "owner_paths": [
+        "src/aetheris/memory/experience.py",
+        "src/aetheris/memory/lessons.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "experience_record",
+        "env_override": "AETHERIS_EXPERIENCE_RECORD"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Append-only lesson recording from observed outcomes.",
+      "authority_profile": "experience",
+      "required_permissions": [
+        "write_files",
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "ExperienceStore",
+        "add",
+        "ExperienceMemory",
+        "record"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/experience_recording-v0.json",
+        "gate_version": "experience-recording-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: experience_record=false",
+        "restores": "no-lesson recording path"
+      },
+      "known_limitations": [
+        "Consumption is gated off by default"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "experience_consumption",
+      "name": "Experience Consumption and Retirement",
+      "owner_paths": [
+        "src/aetheris/memory/experience_rerank.py",
+        "src/aetheris/learning/experience_retire.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "hold",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "experience_consume",
+        "env_override": "AETHERIS_EXPERIENCE_CONSUME"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Re-ranks existing options by experience and retires stale lessons.",
+      "authority_profile": "experience",
+      "required_permissions": [
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "experience_rerank",
+        "ExperienceGuidedRetirer",
+        "retire_stale"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/experience_consumption-v0.json",
+        "gate_version": "experience-consumption-v0",
+        "decision": "hold"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: experience_consume=false",
+        "restores": "byte-identical fallback path"
+      },
+      "known_limitations": [
+        "Consumption default-off until confidence floor is earned"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "hierarchy",
+      "name": "Hierarchical Decomposition",
+      "owner_paths": [
+        "src/aetheris/hierarchy/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "hierarchy_enabled",
+        "env_override": "AETHERIS_HIERARCHY"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Goal graph orchestration over the existing spine.",
+      "authority_profile": "hierarchy",
+      "required_permissions": [
+        "modify_plans"
+      ],
+      "safety_gate_path": [
+        "GoalOrchestrator",
+        "run",
+        "SpineRunner",
+        "run"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/hierarchy-v0.json",
+        "gate_version": "hierarchy-orchestrator-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: hierarchy_enabled=false",
+        "restores": "flat planning path"
+      },
+      "known_limitations": [
+        "Default-off until adoption gate clears"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "research",
+      "name": "Research Engine",
+      "owner_paths": [
+        "src/aetheris/research/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "research_enabled",
+        "env_override": "AETHERIS_RESEARCH"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Produce bounded immutable external evidence.",
+      "authority_profile": "research",
+      "required_permissions": [
+        "network.allowlisted_https",
+        "persistence.research_journal"
+      ],
+      "safety_gate_path": [
+        "ResearchEngine",
+        "research",
+        "NetworkPerimeter",
+        "fetch"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/research-v0.json",
+        "gate_version": "research-wide-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config:research_enabled=false",
+        "restores": "research-off deterministic path"
+      },
+      "known_limitations": [
+        "Allowlisted narrow research only"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "research_reliability",
+      "name": "Research Reliability",
+      "owner_paths": [
+        "src/aetheris/research/reliability.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "on",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Advisory source reliability weighting for research findings.",
+      "authority_profile": "research_reliability",
+      "required_permissions": [
+        "persistence.reliability_journal"
+      ],
+      "safety_gate_path": [
+        "SourceReliability",
+        "record_outcome",
+        "deterministic_confidence"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/research_reliability-v0.json",
+        "gate_version": "reliability-coverage-canary",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "reliability: set consume_enabled=false",
+        "restores": "no reliability weighting"
+      },
+      "known_limitations": [
+        "Does not gate egress; perimeter remains sole network authority"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "api_bridge",
+      "name": "API Bridge",
+      "owner_paths": [
+        "src/aetheris/api/"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "FastAPI bridge exposing read-only status and conservative lifecycle brakes.",
+      "authority_profile": "api",
+      "required_permissions": [
+        "read_files",
+        "write_files",
+        "execute_commands"
+      ],
+      "safety_gate_path": [
+        "create_app",
+        "app"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/api_bridge-v0.json",
+        "gate_version": "api-bridge-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "git_revert",
+        "token": "api: disable endpoints",
+        "restores": "no external interface"
+      },
+      "known_limitations": [
+        "Bridge only; does not add execution authority"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "unattended_supervisor",
+      "name": "Unattended Supervisor",
+      "owner_paths": [
+        "src/aetheris/unattended/supervisor.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "adopted",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "unattended_enabled",
+        "env_override": "AETHERIS_UNATTENDED"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Bounded fail-closed brake that may stop work but never expands it.",
+      "authority_profile": "unattended",
+      "required_permissions": [
+        "modify_plans"
+      ],
+      "safety_gate_path": [
+        "UnattendedSupervisor",
+        "run",
+        "UnattendedSupervisor",
+        "step"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/unattended_supervisor-v0.json",
+        "gate_version": "unattended-supervisor-v0",
+        "decision": "adopted"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "config: unattended_enabled=false",
+        "restores": "manual-stepping path"
+      },
+      "known_limitations": [
+        "Default-off; adds no authority"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "unattended_outcome_learning",
+      "name": "Unattended Outcome Learning",
+      "owner_paths": [
+        "src/aetheris/unattended/outcome_learning.py"
+      ],
+      "implementation": "complete",
+      "measurement": "measured",
+      "adoption": "hold",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Caution-only advisory forecasts from terminal session records.",
+      "authority_profile": "unattended_outcome_learning",
+      "required_permissions": [
+        "write_files",
+        "modify_memory"
+      ],
+      "safety_gate_path": [
+        "SessionOutcomeLearning",
+        "record",
+        "SessionOutcomeLearning",
+        "forecast"
+      ],
+      "evidence": {
+        "record": "architecture/evidence/unattended_outcome_learning-v0.json",
+        "gate_version": "outcome-learning-v0",
+        "decision": "hold"
+      },
+      "rollback": {
+        "kind": "config_disable",
+        "token": "unattended_outcome_learning: set consume=false",
+        "restores": "byte-identical v0 behavior"
+      },
+      "known_limitations": [
+        "Consumption is default-off; advisory only"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    },
+    {
+      "id": "frontend_shell",
+      "name": "Frontend Shell",
+      "owner_paths": [
+        "shell/"
+      ],
+      "implementation": "complete",
+      "measurement": "unmeasured",
+      "adoption": "not_applicable",
+      "runtime_default": {
+        "state": "off",
+        "config_field": "N/A",
+        "env_override": "not_applicable"
+      },
+      "production_readiness": "unknown",
+      "purpose": "Thin React shell polling the FastAPI bridge.",
+      "authority_profile": "frontend",
+      "required_permissions": [
+        "reach_network"
+      ],
+      "safety_gate_path": [],
+      "evidence": {
+        "record": null,
+        "gate_version": "not_applicable",
+        "decision": "not_applicable"
+      },
+      "rollback": {
+        "kind": "not_applicable",
+        "token": "N/A",
+        "restores": "N/A"
+      },
+      "known_limitations": [
+        "Not covered by Python integrity checker"
+      ],
+      "verified_revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736"
+    }
+  ]
+}

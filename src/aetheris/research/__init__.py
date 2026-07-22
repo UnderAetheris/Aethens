@@ -5,7 +5,7 @@ SafetyLayer (execution gate), no plan mutator, no memory/skill/config writer, no
 executive. Its only outputs are frozen ``EvidenceBundle`` objects produced by a
 one-directional pipeline that terminates in data. Every byte that leaves the
 machine does so through the ``NetworkPerimeter``, the strongest gate in the
-project. Default-off until the adoption gate clears.
+project. Default-on; opt-out is always available (config or env).
 """
 from __future__ import annotations
 

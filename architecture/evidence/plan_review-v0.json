@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "capability_id": "plan_review",
+  "revision": "48abe6736a59fddd00c3d1a1338bc29ac1636736",
+  "recorded_at": "2026-07-22T10:00:00Z",
+  "configuration": {},
+  "benchmark": {
+    "id": "plan_review-v0",
+    "command": "python -m pytest tests/ -q --no-header",
+    "implementation_paths": [
+      "src/aetheris/controller/executive.py",
+      "src/aetheris/api/app.py"
+    ]
+  },
+  "raw_metrics": {
+    "metric_a": {
+      "value": null,
+      "observed": false,
+      "reason": "not emitted by captured run"
+    }
+  },
+  "gate": {
+    "verdict": "adopted",
+    "exit_code": 0,
+    "output_sha256": "not_captured_in_v0",
+    "artifact": "plan_review-v0"
+  },
+  "rollback_token": "plan_review: bypass review queue",
+  "limitations": [
+    "Only active when plan_review is provided to executive"
+  ]
+}
