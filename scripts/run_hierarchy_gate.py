@@ -6,6 +6,9 @@ from __future__ import annotations
 
 import subprocess
 import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> int:
@@ -14,10 +17,6 @@ def main() -> int:
         cwd=REPO_ROOT,
     )
     return result.returncode
-
-
-from pathlib import Path
-REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 if __name__ == "__main__":
