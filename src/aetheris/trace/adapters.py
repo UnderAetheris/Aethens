@@ -19,11 +19,12 @@ from .model import (
     TraceValue,
 )
 
-try:
-    from aetheris.changeset.model import ChangeKind, RollbackKind, ChangeSet, RollbackReceipt
-    _HAS_CHANGESET = True
-except ImportError:
-    _HAS_CHANGESET = False
+
+class AdapterProjectionError(Exception):
+    def __init__(self, message: str, source: SourceLocator | None = None, record: Any = None) -> None:
+        self.source = source
+        self.record = record
+        super().__init__(message)
 
 
 class TraceAdapter(Protocol):
@@ -38,10 +39,6 @@ class TraceAdapter(Protocol):
     ) -> tuple[TraceEnvelope, ...]:
         ...
 
-
-# ---------------------------------------------------------------------------
-# Helper utilities
-# ---------------------------------------------------------------------------
 
 def _known_value(value: Any, source: str) -> TraceValue:
     return TraceValue(state="known", value=value, source=source)
@@ -113,9 +110,21 @@ def _base_envelope(
     rollback_ref: TraceValue | None = None,
     ordering_basis: str = "stream_sequence",
 ) -> TraceEnvelope:
-    raw_bytes = json.dumps(record, sort_keys=True, default=str).encode("utf-8")
-    src_hash = sha256_hex(raw_bytes)
-    payload_hash_str = canonical_hash(record)
+    raw_bytes = record.get("_raw_bytes") if isinstance(record, dict) else None
+    unknowns = list(unknowns)
+    if raw_bytes is not None:
+        src_hash = sha256_hex(raw_bytes)
+    else:
+        src_hash = "unknown"
+        unknowns.append(TraceUnknown(
+            code="missing_raw_bytes",
+            field="source_hash",
+            reason="exact source bytes unavailable; cannot compute source_hash",
+            required_for=("trace_membership", "hash_verification"),
+            source_locator=source.path_hint or source.stream_id,
+        ))
+    payload_record = {k: v for k, v in record.items() if k != "_raw_bytes"} if isinstance(record, dict) else record
+    payload_hash_str = canonical_hash(payload_record)
     evt_id = _event_id(adapter.adapter_id, adapter.adapter_version, source, src_hash)
     trace_id = _trace_id_for(
         context.expected_trace_id, session_id, goal_id, task_id, plan_id
@@ -161,14 +170,10 @@ def _base_envelope(
         ordering_basis=ordering_basis,
         provenance=Provenance(origin="persisted", confidence="exact"),
         outcome=outcome or _na_value("no outcome captured"),
-        unknowns=unknowns,
+        unknowns=tuple(unknowns),
         rollback_ref=rollback_ref or _na_value("no rollback reference"),
     )
 
-
-# ---------------------------------------------------------------------------
-# Adapter 1: MemoryStore JSONL
-# ---------------------------------------------------------------------------
 
 class MemoryStoreAdapter:
     adapter_id = "memory_store"
@@ -184,14 +189,19 @@ class MemoryStoreAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "MemoryStore adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
-        task_id = record.get("task_id")
+        data = record.get("data", {})
+        task_id = data.get("task_id") if isinstance(data, dict) else None
         if task_id is None:
             unknowns.append(TraceUnknown(
                 code="missing_parent",
                 field="task_id",
-                reason="MemoryStore record has no task_id",
+                reason="MemoryStore record has no task_id in data",
                 required_for=("trace_membership",),
                 source_locator=source.path_hint,
             ))
@@ -200,7 +210,7 @@ class MemoryStoreAdapter:
         goal_id = None
         step_id = None
         kind = record.get("kind", "unknown")
-        if kind == "action_allowed" or kind == "action_blocked" or kind == "action_preview":
+        if kind in ("action_allowed", "action_blocked", "action_preview"):
             authority_class = "execution"
         elif kind == "step_result":
             authority_class = "execution"
@@ -228,10 +238,6 @@ class MemoryStoreAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 2: Generic JsonlStore
-# ---------------------------------------------------------------------------
-
 class JsonlStoreAdapter:
     adapter_id = "jsonl_store"
     adapter_version = 1
@@ -257,7 +263,11 @@ class JsonlStoreAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "JsonlStore adapter requires dict record",
+                source=source,
+                record=record,
+            )
         stream = source.stream_id
         subsystem = self._SUBSYSTEM_MAP.get(stream, "unknown")
         capability_id = self._CAPABILITY_MAP.get(stream, "unknown")
@@ -289,10 +299,6 @@ class JsonlStoreAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 3: PlanStore sidecar
-# ---------------------------------------------------------------------------
-
 class PlanStoreAdapter:
     adapter_id = "plan_store"
     adapter_version = 1
@@ -307,7 +313,11 @@ class PlanStoreAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "PlanStore adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         task_id = record.get("task_id")
         if task_id is None:
@@ -340,10 +350,6 @@ class PlanStoreAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 4: ResearchJournal JSONL
-# ---------------------------------------------------------------------------
-
 class ResearchJournalAdapter:
     adapter_id = "research_journal"
     adapter_version = 1
@@ -361,7 +367,11 @@ class ResearchJournalAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "ResearchJournal adapter requires dict record",
+                source=source,
+                record=record,
+            )
         kind = record.get("kind", "unknown")
         if kind in self._NETWORK_KINDS:
             authority_class = "network_egress"
@@ -387,10 +397,6 @@ class ResearchJournalAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 5: Hierarchy goal journal + snapshots
-# ---------------------------------------------------------------------------
-
 class HierarchyAdapter:
     adapter_id = "hierarchy"
     adapter_version = 1
@@ -405,7 +411,11 @@ class HierarchyAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "Hierarchy adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         goal_id = record.get("goal_id")
         if goal_id is None:
@@ -441,10 +451,6 @@ class HierarchyAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 6: Unattended session journal + snapshots
-# ---------------------------------------------------------------------------
-
 class UnattendedAdapter:
     adapter_id = "unattended"
     adapter_version = 1
@@ -459,7 +465,11 @@ class UnattendedAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "Unattended adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         session_id = record.get("session_id")
         if session_id is None:
@@ -497,10 +507,6 @@ class UnattendedAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 7: Repository understanding scan journal / model snapshot
-# ---------------------------------------------------------------------------
-
 class UnderstandingAdapter:
     adapter_id = "understanding"
     adapter_version = 1
@@ -515,7 +521,11 @@ class UnderstandingAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "Understanding adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         version = record.get("version")
         if version is None:
@@ -550,10 +560,6 @@ class UnderstandingAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 8: Reliability journal / snapshot
-# ---------------------------------------------------------------------------
-
 class ReliabilityAdapter:
     adapter_id = "reliability"
     adapter_version = 1
@@ -568,7 +574,11 @@ class ReliabilityAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "Reliability adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         kind = record.get("kind", "unknown")
         source_key = record.get("source_key")
@@ -609,10 +619,6 @@ class ReliabilityAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 9: Architecture adoption evidence
-# ---------------------------------------------------------------------------
-
 class EvidenceAdapter:
     adapter_id = "evidence"
     adapter_version = 1
@@ -627,7 +633,11 @@ class EvidenceAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "Evidence adapter requires dict record",
+                source=source,
+                record=record,
+            )
         capability_id = record.get("capability_id", "unknown")
         gate = record.get("gate") or {}
         verdict = gate.get("verdict", "unknown")
@@ -663,10 +673,6 @@ class EvidenceAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 10: Skill promotion / retirement and learning records
-# ---------------------------------------------------------------------------
-
 class SkillLearningAdapter:
     adapter_id = "skill_learning"
     adapter_version = 1
@@ -681,7 +687,11 @@ class SkillLearningAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "SkillLearning adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         kind = record.get("kind", "unknown")
         task_id = record.get("related_task") or record.get("task_id")
@@ -710,10 +720,6 @@ class SkillLearningAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 11: Model-assisted patch proposal / validation records
-# ---------------------------------------------------------------------------
-
 class ModelPatchAdapter:
     adapter_id = "model_patch"
     adapter_version = 1
@@ -728,7 +734,11 @@ class ModelPatchAdapter:
         self, source: SourceLocator, record: Any, context: ReplayContext
     ) -> tuple[TraceEnvelope, ...]:
         if not isinstance(record, dict):
-            return ()
+            raise AdapterProjectionError(
+                "ModelPatch adapter requires dict record",
+                source=source,
+                record=record,
+            )
         unknowns: list[TraceUnknown] = []
         kind = record.get("kind", "unknown")
         verdict = record.get("verdict", "unknown")
@@ -749,222 +759,6 @@ class ModelPatchAdapter:
         )
 
 
-# ---------------------------------------------------------------------------
-# Adapter 12: ChangeSet
-# ---------------------------------------------------------------------------
-
-if _HAS_CHANGESET:
-
-    class ChangeSetAdapter:
-        adapter_id = "change_set"
-        adapter_version = 1
-
-        ADAPTER_ID = "change_set"
-        ADAPTER_VERSION = 1
-
-        def supports(self, source: SourceLocator) -> bool:
-            return source.store_kind == "change_set"
-
-        def project(
-            self, source: SourceLocator, record: Any, context: ReplayContext
-        ) -> tuple[TraceEnvelope, ...]:
-            if not isinstance(record, dict):
-                return ()
-            try:
-                cs = ChangeSet(
-                    change_id=record.get("change_id", ""),
-                    trace_id=record.get("trace_id"),
-                    task_id=record.get("task_id"),
-                    session_id=record.get("session_id"),
-                    plan_id=record.get("plan_id"),
-                    capability_id=record.get("capability_id", "unknown"),
-                    subsystem=record.get("subsystem", "unknown"),
-                    change_kind=record.get("change_kind", ChangeKind.UNKNOWN),
-                    before_hash=record.get("before_hash", ""),
-                    after_hash=record.get("after_hash", ""),
-                    before_ref=TraceValue(
-                        state=record.get("before_ref", {}).get("state", "unknown"),
-                        value=record.get("before_ref", {}).get("value"),
-                        reason=record.get("before_ref", {}).get("reason"),
-                        source=record.get("before_ref", {}).get("source"),
-                    ),
-                    after_ref=TraceValue(
-                        state=record.get("after_ref", {}).get("state", "unknown"),
-                        value=record.get("after_ref", {}).get("value"),
-                        reason=record.get("after_ref", {}).get("reason"),
-                        source=record.get("after_ref", {}).get("source"),
-                    ),
-                    inverse_operation=record.get("inverse_operation", "unknown"),
-                    rollback_token=record.get("rollback_token"),
-                    revision=TraceValue(
-                        state=record.get("revision", {}).get("state", "unknown"),
-                        value=record.get("revision", {}).get("value"),
-                        reason=record.get("revision", {}).get("reason"),
-                        source=record.get("revision", {}).get("source"),
-                    ),
-                    config_fingerprint=TraceValue(
-                        state=record.get("config_fingerprint", {}).get("state", "unknown"),
-                        value=record.get("config_fingerprint", {}).get("value"),
-                        reason=record.get("config_fingerprint", {}).get("reason"),
-                        source=record.get("config_fingerprint", {}).get("source"),
-                    ),
-                    evidence_refs=tuple(record.get("evidence_refs", [])),
-                    authority_class=record.get("authority_class", "none"),
-                    provenance=Provenance(
-                        origin=record.get("provenance", {}).get("origin", "persisted"),
-                        derivation_rule=record.get("provenance", {}).get("derivation_rule"),
-                        source_ids=tuple(record.get("provenance", {}).get("source_ids", [])),
-                        confidence=record.get("provenance", {}).get("confidence", "exact"),
-                    ),
-                    unknowns=tuple(),
-                    created_at=TraceValue(
-                        state=record.get("created_at", {}).get("state", "unknown"),
-                        value=record.get("created_at", {}).get("value"),
-                        reason=record.get("created_at", {}).get("reason"),
-                        source=record.get("created_at", {}).get("source"),
-                    ),
-                )
-            except Exception:
-                return ()
-
-            unknowns: list[TraceUnknown] = []
-            if not cs.change_id:
-                unknowns.append(TraceUnknown(
-                    code="missing_payload",
-                    field="change_id",
-                    reason="ChangeSet record has no change_id",
-                    required_for=("change_set_identity",),
-                ))
-
-            outcome = _known_value(cs.change_kind, "source_record.change_kind")
-            return (
-                _base_envelope(
-                    adapter=self,
-                    source=source,
-                    record=record,
-                    context=context,
-                    subsystem=cs.subsystem,
-                    capability_id=cs.capability_id,
-                    event_type="change_set",
-                    authority_class=cs.authority_class,
-                    task_id=cs.task_id,
-                    session_id=cs.session_id,
-                    plan_id=cs.plan_id,
-                    outcome=outcome,
-                    unknowns=tuple(unknowns),
-                    rollback_ref=_known_value(cs.inverse_operation, "source_record.inverse_operation"),
-                ),
-            )
-
-
-    class RollbackReceiptAdapter:
-        adapter_id = "rollback_receipt"
-        adapter_version = 1
-
-        ADAPTER_ID = "rollback_receipt"
-        ADAPTER_VERSION = 1
-
-        def supports(self, source: SourceLocator) -> bool:
-            return source.store_kind == "rollback_receipt"
-
-        def project(
-            self, source: SourceLocator, record: Any, context: ReplayContext
-        ) -> tuple[TraceEnvelope, ...]:
-            if not isinstance(record, dict):
-                return ()
-            try:
-                rr = RollbackReceipt(
-                    receipt_id=record.get("receipt_id", ""),
-                    change_id=record.get("change_id", ""),
-                    rollback_kind=record.get("rollback_kind", RollbackKind.UNKNOWN),
-                    rollback_target=TraceValue(
-                        state=record.get("rollback_target", {}).get("state", "unknown"),
-                        value=record.get("rollback_target", {}).get("value"),
-                        reason=record.get("rollback_target", {}).get("reason"),
-                        source=record.get("rollback_target", {}).get("source"),
-                    ),
-                    rollback_outcome=TraceValue(
-                        state=record.get("rollback_outcome", {}).get("state", "unknown"),
-                        value=record.get("rollback_outcome", {}).get("value"),
-                        reason=record.get("rollback_outcome", {}).get("reason"),
-                        source=record.get("rollback_outcome", {}).get("source"),
-                    ),
-                    confirmed_restored_state=TraceValue(
-                        state=record.get("confirmed_restored_state", {}).get("state", "unknown"),
-                        value=record.get("confirmed_restored_state", {}).get("value"),
-                        reason=record.get("confirmed_restored_state", {}).get("reason"),
-                        source=record.get("confirmed_restored_state", {}).get("source"),
-                    ),
-                    unknowns=tuple(),
-                    provenance=Provenance(
-                        origin=record.get("provenance", {}).get("origin", "persisted"),
-                        derivation_rule=record.get("provenance", {}).get("derivation_rule"),
-                        source_ids=tuple(record.get("provenance", {}).get("source_ids", [])),
-                        confidence=record.get("provenance", {}).get("confidence", "exact"),
-                    ),
-                    before_hash=record.get("before_hash", ""),
-                    after_hash=record.get("after_hash", ""),
-                    revision=TraceValue(
-                        state=record.get("revision", {}).get("state", "unknown"),
-                        value=record.get("revision", {}).get("value"),
-                        reason=record.get("revision", {}).get("reason"),
-                        source=record.get("revision", {}).get("source"),
-                    ),
-                    config_fingerprint=TraceValue(
-                        state=record.get("config_fingerprint", {}).get("state", "unknown"),
-                        value=record.get("config_fingerprint", {}).get("value"),
-                        reason=record.get("config_fingerprint", {}).get("reason"),
-                        source=record.get("config_fingerprint", {}).get("source"),
-                    ),
-                    evidence_refs=tuple(record.get("evidence_refs", [])),
-                    created_at=TraceValue(
-                        state=record.get("created_at", {}).get("state", "unknown"),
-                        value=record.get("created_at", {}).get("value"),
-                        reason=record.get("created_at", {}).get("reason"),
-                        source=record.get("created_at", {}).get("source"),
-                    ),
-                )
-            except Exception:
-                return ()
-
-            unknowns: list[TraceUnknown] = []
-            if not rr.change_id:
-                unknowns.append(TraceUnknown(
-                    code="missing_parent",
-                    field="change_id",
-                    reason="RollbackReceipt has no change_id",
-                    required_for=("change_set_linkage",),
-                ))
-            if not rr.rollback_kind or rr.rollback_kind == RollbackKind.UNKNOWN:
-                unknowns.append(TraceUnknown(
-                    code="missing_cause",
-                    field="rollback_kind",
-                    reason="RollbackReceipt has no explicit rollback kind",
-                    required_for=("rollback_verification",),
-                ))
-
-            outcome = _known_value(rr.rollback_kind, "source_record.rollback_kind")
-            return (
-                _base_envelope(
-                    adapter=self,
-                    source=source,
-                    record=record,
-                    context=context,
-                    subsystem="changeset",
-                    capability_id="changeset",
-                    event_type="rollback_receipt",
-                    authority_class="none",
-                    outcome=outcome,
-                    unknowns=tuple(unknowns),
-                    rollback_ref=_na_value("rollback receipt is itself rollback evidence"),
-                ),
-            )
-
-
-# ---------------------------------------------------------------------------
-# Static adapter registry
-# ---------------------------------------------------------------------------
-
 _ADAPTERS: list[Any] = [
     MemoryStoreAdapter(),
     JsonlStoreAdapter(),
@@ -978,9 +772,6 @@ _ADAPTERS: list[Any] = [
     SkillLearningAdapter(),
     ModelPatchAdapter(),
 ]
-
-if _HAS_CHANGESET:
-    _ADAPTERS.extend([ChangeSetAdapter(), RollbackReceiptAdapter()])
 
 ADAPTERS: tuple[TraceAdapter, ...] = tuple(_ADAPTERS)
 

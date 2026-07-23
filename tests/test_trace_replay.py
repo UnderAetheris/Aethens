@@ -1,18 +1,23 @@
-"""Tests for trace replay engine."""
+"""Tests for trace replay engine — Phase 0 corrected."""
 from __future__ import annotations
 
+import hashlib
+import os
 
+
+from aetheris.trace.adapters import _base_envelope, _known_value
 from aetheris.trace.model import (
     Provenance,
     ReplayContext,
     SourceLocator,
     TraceEnvelope,
+    TraceUnknown,
     TraceValue,
 )
 from aetheris.trace.replay import ReplayEngine, _Edge, _topological_sort
 
 
-def _make_env(event_id, parent=None, causes=(), unknowns=()) -> TraceEnvelope:
+def _make_env(event_id, parent=None, causes=(), unknowns=(), subsystem="test", event_type="test", capability_id="test") -> TraceEnvelope:
     return TraceEnvelope(
         schema_version=1,
         adapter_id="test",
@@ -26,9 +31,9 @@ def _make_env(event_id, parent=None, causes=(), unknowns=()) -> TraceEnvelope:
         plan_id=None,
         goal_id=None,
         step_id=None,
-        subsystem="test",
-        capability_id="test",
-        event_type="test",
+        subsystem=subsystem,
+        capability_id=capability_id,
+        event_type=event_type,
         authority_class="none",
         revision=TraceValue(state="unknown", value=None, reason="test"),
         config_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
@@ -102,7 +107,108 @@ class TestReplayLevels:
 
     def test_state_reconstruction(self):
         from aetheris.trace.replay import reduce_task_outcome
-        env = _make_env("evt_1")
-        state: dict = {}
+        env = _make_env("evt_1", subsystem="memory", event_type="action_allowed", capability_id="memory")
+        state = {}
         state = reduce_task_outcome(state, env)
         assert "tasks" in state
+
+
+class TestParentCauseValidation:
+    def test_missing_parent_fails(self):
+        env = _make_env("evt_1", parent="missing_parent")
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert any(f.code == "missing_parent" for f in result.failures)
+
+    def test_missing_cause_fails(self):
+        env = _make_env("evt_1", causes=("missing_cause",))
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert any(f.code == "missing_cause" for f in result.failures)
+
+    def test_external_root_allowed(self):
+        env = _make_env("evt_1", parent="root_trace")
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert not any(f.code == "missing_parent" for f in result.failures)
+
+
+class TestHashValidation:
+    def test_source_hash_from_raw_bytes(self):
+        raw = b'{"kind":"test","data":{"task_id":"t1"}}'
+        rec = {"kind": "test", "data": {"task_id": "t1"}, "_raw_bytes": raw}
+        env = _base_envelope(
+            adapter=type("X", (), {"adapter_id": "x", "adapter_version": 1})(),
+            source=SourceLocator(store_kind="memory_store", stream_id="memory", path_hint="x"),
+            record=rec,
+            context=_ctx(),
+            subsystem="memory", capability_id="memory", event_type="test",
+            authority_class="none",
+            outcome=_known_value("test", "test"),
+        )
+        assert env.source_hash == hashlib.sha256(raw).hexdigest()
+
+    def test_missing_raw_bytes_unknown(self):
+        rec = {"kind": "test", "data": {"task_id": "t1"}}
+        env = _base_envelope(
+            adapter=type("X", (), {"adapter_id": "x", "adapter_version": 1})(),
+            source=SourceLocator(store_kind="memory_store", stream_id="memory", path_hint="x"),
+            record=rec,
+            context=_ctx(),
+            subsystem="memory", capability_id="memory", event_type="test",
+            authority_class="none",
+            outcome=_known_value("test", "test"),
+        )
+        assert env.source_hash == "unknown"
+        assert any(u.code == "missing_raw_bytes" for u in env.unknowns)
+
+
+class TestReplayLevelsMax:
+    def test_provenance_alone_does_not_grant_level_4(self):
+        engine = ReplayEngine()
+        env = _make_env("evt_1", subsystem="test", event_type="test")
+        result = engine.replay([env], _ctx())
+        assert result.achieved_level <= 3
+
+
+class TestReducerRouting:
+    def test_research_events_do_not_create_task_entries(self):
+        engine = ReplayEngine()
+        env = _make_env("evt_1", subsystem="research", event_type="fetch", capability_id="research")
+        result = engine.replay([env], _ctx())
+        assert "tasks" not in result.reconstructed_state or not result.reconstructed_state.get("tasks")
+
+    def test_plan_events_do_not_create_tasks(self):
+        engine = ReplayEngine()
+        env = _make_env("evt_1", subsystem="planner", event_type="plan_snapshot", capability_id="planner")
+        result = engine.replay([env], _ctx())
+        assert "tasks" not in result.reconstructed_state or not result.reconstructed_state.get("tasks")
+
+
+class TestUnknownHandling:
+    def test_required_unknown_makes_replay_incomplete(self):
+        unknowns = (TraceUnknown(code="missing_parent", field="task_id", reason="missing", required_for=("strict",)),)
+        env = _make_env("evt_1", unknowns=unknowns)
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert result.achieved_level < 3
+
+
+class TestFingerprintCanonical:
+    def test_result_fingerprint_canonical_json(self):
+        engine = ReplayEngine()
+        env = _make_env("evt_1")
+        result = engine.replay([env], _ctx())
+        assert len(result.result_fingerprint) == 64
+
+
+class TestTraceChangesetIsolation:
+    def test_trace_core_has_no_changeset_import(self):
+        trace_path = os.path.join(os.path.dirname(__file__), "..", "src", "aetheris", "trace")
+        for root, _, files in os.walk(trace_path):
+            for f in files:
+                if not f.endswith(".py"):
+                    continue
+                path = os.path.join(root, f)
+                text = open(path, "r", encoding="utf-8").read()
+                assert "aetheris.changeset" not in text, f"trace module {path} imports changeset"

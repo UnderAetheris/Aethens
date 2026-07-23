@@ -21,11 +21,51 @@ from .model import (
 )
 
 
+def _is_external_root(event_id: str) -> bool:
+    return event_id.startswith(("root_", "trace_", "session_", "global_"))
+
+
 # ---------------------------------------------------------------------------
 # Pure reducer protocol
 # ---------------------------------------------------------------------------
 
 Reducer = Callable[[dict[str, JsonValue], TraceEnvelope], dict[str, JsonValue]]
+
+
+def _route_task_outcome(env: TraceEnvelope) -> bool:
+    return env.subsystem == "memory" and env.event_type in (
+        "action_allowed", "action_blocked", "action_preview", "step_result",
+    )
+
+
+def _route_plan_state(env: TraceEnvelope) -> bool:
+    return env.subsystem == "planner" and env.event_type == "plan_snapshot"
+
+
+def _route_hierarchy_state(env: TraceEnvelope) -> bool:
+    return env.subsystem == "hierarchy" and env.event_type == "goal_transition"
+
+
+def _route_unattended_state(env: TraceEnvelope) -> bool:
+    return env.subsystem == "unattended" and env.event_type in (
+        "session_stopped", "session_checkpoint",
+    )
+
+
+def _route_research_summary(env: TraceEnvelope) -> bool:
+    return env.subsystem == "research"
+
+
+def _route_adoption_summary(env: TraceEnvelope) -> bool:
+    return env.capability_id in ("memory", "experience_recording", "skills")
+
+
+def _route_change_set_summary(env: TraceEnvelope) -> bool:
+    return env.event_type == "change_set"
+
+
+def _route_rollback_summary(env: TraceEnvelope) -> bool:
+    return env.event_type == "rollback_receipt"
 
 
 # ---------------------------------------------------------------------------
@@ -35,6 +75,8 @@ Reducer = Callable[[dict[str, JsonValue], TraceEnvelope], dict[str, JsonValue]]
 def reduce_task_outcome(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
+    if not _route_task_outcome(env):
+        return state
     task_id = env.task_id or "unknown"
     task_state = dict(state.get("tasks", {}).get(task_id, {}))
     kind = env.event_type
@@ -63,6 +105,8 @@ def reduce_task_outcome(
 def reduce_plan_state(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
+    if not _route_plan_state(env):
+        return state
     plan_id = env.plan_id or "unknown"
     plan_state = dict(state.get("plans", {}).get(plan_id, {}))
     if env.event_type == "plan_snapshot":
@@ -85,6 +129,8 @@ def reduce_plan_state(
 def reduce_hierarchy_state(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
+    if not _route_hierarchy_state(env):
+        return state
     goal_id = env.goal_id or "unknown"
     goal_state = dict(state.get("goals", {}).get(goal_id, {}))
     step_id = env.step_id or "unknown"
@@ -106,6 +152,8 @@ def reduce_hierarchy_state(
 def reduce_unattended_state(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
+    if not _route_unattended_state(env):
+        return state
     session_id = env.session_id or "unknown"
     session_state = dict(state.get("sessions", {}).get(session_id, {}))
     if env.event_type == "session_stopped":
@@ -124,6 +172,8 @@ def reduce_unattended_state(
 def reduce_research_summary(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
+    if not _route_research_summary(env):
+        return state
     kinds: dict[str, int] = dict(state.get("research_kind_counts", {}))
     kind = env.event_type
     kinds[kind] = kinds.get(kind, 0) + 1
@@ -134,6 +184,8 @@ def reduce_research_summary(
 def reduce_adoption_summary(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
+    if not _route_adoption_summary(env):
+        return state
     capability_id = env.capability_id or "unknown"
     caps = dict(state.get("adoption", {}))
     entry = dict(caps.get(capability_id, {}))
@@ -146,7 +198,7 @@ def reduce_adoption_summary(
 def reduce_change_set_summary(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
-    if env.event_type != "change_set":
+    if not _route_change_set_summary(env):
         return state
     change_kind = env.outcome.value if env.outcome and env.outcome.value else "unknown"
     kinds: dict[str, int] = dict(state.get("change_kind_counts", {}))
@@ -162,7 +214,7 @@ def reduce_change_set_summary(
 def reduce_rollback_summary(
     state: dict[str, JsonValue], env: TraceEnvelope
 ) -> dict[str, JsonValue]:
-    if env.event_type != "rollback_receipt":
+    if not _route_rollback_summary(env):
         return state
     rollback_kind = env.outcome.value if env.outcome and env.outcome.value else "unknown"
     kinds: dict[str, int] = dict(state.get("rollback_kind_counts", {}))
@@ -170,6 +222,17 @@ def reduce_rollback_summary(
     state["rollback_kind_counts"] = kinds
     return state
 
+
+_REDUCER_ROUTES: dict[str, Callable[[TraceEnvelope], bool]] = {
+    "task_outcome": _route_task_outcome,
+    "plan_state": _route_plan_state,
+    "hierarchy_state": _route_hierarchy_state,
+    "unattended_state": _route_unattended_state,
+    "research_summary": _route_research_summary,
+    "adoption_summary": _route_adoption_summary,
+    "change_set_summary": _route_change_set_summary,
+    "rollback_summary": _route_rollback_summary,
+}
 
 _REGISTERED_REDUCERS: dict[str, Reducer] = {
     "task_outcome": reduce_task_outcome,
@@ -196,7 +259,6 @@ class _Edge:
 def _topological_sort(
     nodes: list[str], edges: list[_Edge]
 ) -> tuple[list[str], list[str] | None]:
-    """Return (order, cycle_nodes_or_None)."""
     in_degree: dict[str, int] = {n: 0 for n in nodes}
     children: dict[str, list[str]] = defaultdict(list)
     for e in edges:
@@ -275,13 +337,11 @@ class ReplayEngine:
         failures: list[ReplayFailure] = []
         unknowns: list[TraceUnknown] = []
 
-        # Level 1 / 2 validation
         seen_ids: set[str] = set()
         id_map: dict[str, TraceEnvelope] = {}
         edges: list[_Edge] = []
 
         for env in envelopes:
-            # Duplicate check
             if env.event_id in seen_ids:
                 failures.append(ReplayFailure(
                     code="malformed_record",
@@ -294,21 +354,31 @@ class ReplayEngine:
             seen_ids.add(env.event_id)
             id_map[env.event_id] = env
 
-            # Hash validation (if source hash is known)
-            if env.source_hash and env.payload_hash:
-                if env.source_hash == env.payload_hash:
-                    pass
-
-            # Parent / cause edges
             if env.parent_event_id:
+                if env.parent_event_id not in id_map and not _is_external_root(env.parent_event_id):
+                    failures.append(ReplayFailure(
+                        code="missing_parent",
+                        event_id=env.event_id,
+                        source_id=env.source.stream_id,
+                        why=f"parent_event_id {env.parent_event_id} not in envelope set",
+                        required_level=2,
+                        remediation="ensure parent event is included in replay input",
+                    ))
                 edges.append(_Edge(src=env.parent_event_id, dst=env.event_id))
             for cid in env.cause_event_ids:
+                if cid not in id_map and not _is_external_root(cid):
+                    failures.append(ReplayFailure(
+                        code="missing_cause",
+                        event_id=env.event_id,
+                        source_id=env.source.stream_id,
+                        why=f"cause_event_id {cid} not in envelope set",
+                        required_level=2,
+                        remediation="ensure cause event is included in replay input",
+                    ))
                 edges.append(_Edge(src=cid, dst=env.event_id))
 
-            # Collect unknowns
             unknowns.extend(env.unknowns)
 
-        # Cycle detection
         cycle_nodes = _topological_sort(
             [e.event_id for e in envelopes], edges
         )[1]
@@ -333,7 +403,6 @@ class ReplayEngine:
                 result_fingerprint="",
             )
 
-        # Topological order
         topo_order, _ = _topological_sort(
             [e.event_id for e in envelopes], edges
         )
@@ -346,29 +415,32 @@ class ReplayEngine:
                 e.event_id,
             ))
 
-        # Determine achieved level
         level = 1
         if not failures:
             level = 2
             if not unknowns:
                 level = 3
-                if any(e.provenance.origin != "unknown" for e in ordered):
-                    level = 4
-
-        # State reconstruction
-        reconstructed: dict[str, JsonValue] = {}
-        reducer_names_used: list[str] = []
-        for env in ordered:
-            for name, reducer in self._reducers.items():
-                reconstructed = reducer(reconstructed, env)
-                if reconstructed is not None:
-                    reducer_names_used.append(name)
+                # Level 4 requires event-type-specific deterministic decision verifiers.
+                # No verifier means unsupported, not level 4.
+                if self._reducers:
+                    pass
 
         status: Literal["complete", "incomplete", "invalid", "unsupported"]
         if failures:
             status = "incomplete" if level >= 2 else "invalid"
         else:
-            status = "complete"
+            if level >= 3 and not self._reducers:
+                status = "unsupported"
+            else:
+                status = "complete"
+
+        reconstructed: dict[str, JsonValue] = {}
+        for env in ordered:
+            for name, reducer in self._reducers.items():
+                route = _REDUCER_ROUTES.get(name)
+                if route is not None and not route(env):
+                    continue
+                reconstructed = reducer(reconstructed, env)
 
         input_fp = sha256_str(
             canonical_json({
@@ -380,8 +452,9 @@ class ReplayEngine:
         )
         result_fp = sha256_str(
             canonical_json({
-                "reconstructed": str(reconstructed),
+                "reconstructed": reconstructed,
                 "failure_codes": [f.code for f in failures],
+                "unknown_codes": [u.code for u in unknowns],
             })
         )
 

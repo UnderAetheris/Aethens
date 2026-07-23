@@ -66,6 +66,7 @@ REQUIRED_UNKNOWN_CODES = (
     "missing_cause",
     "missing_snapshot",
     "missing_payload",
+    "missing_raw_bytes",
     "unsupported_record_version",
     "ambiguous_order",
     "redacted_secret",

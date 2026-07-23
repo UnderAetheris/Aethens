@@ -1,9 +1,10 @@
-"""Tests for trace adapters."""
+"""Tests for trace adapters — Phase 0 corrected."""
 from __future__ import annotations
 
-
+import pytest
 
 from aetheris.trace.adapters import (
+    AdapterProjectionError,
     EvidenceAdapter,
     HierarchyAdapter,
     JsonlStoreAdapter,
@@ -42,7 +43,7 @@ class TestMemoryStoreAdapter:
 
     def test_project_memory_record(self):
         loc = SourceLocator(store_kind="memory_store", stream_id="memory", path_hint="x", line_number=1)
-        rec = {"ts": 123.0, "kind": "action_allowed", "data": {"tool": "ls"}}
+        rec = {"ts": 123.0, "kind": "action_allowed", "data": {"tool": "ls", "task_id": "task_1"}}
         envs = MemoryStoreAdapter().project(loc, rec, _ctx())
         assert len(envs) == 1
         env = envs[0]
@@ -51,14 +52,22 @@ class TestMemoryStoreAdapter:
         assert env.event_type == "action_allowed"
         assert env.authority_class == "execution"
         assert env.stream_sequence == 1
+        assert env.task_id == "task_1"
 
-    def test_malformed_record_returns_empty(self):
-        envs = MemoryStoreAdapter().project(
-            SourceLocator(store_kind="memory_store", stream_id="memory", path_hint="x"),
-            "not_a_dict",
-            _ctx(),
-        )
-        assert envs == ()
+    def test_task_id_from_nested_data(self):
+        loc = SourceLocator(store_kind="memory_store", stream_id="memory", path_hint="x", line_number=1)
+        rec = {"ts": 123.0, "kind": "action_allowed", "data": {"task_id": "task_from_data"}}
+        envs = MemoryStoreAdapter().project(loc, rec, _ctx())
+        assert len(envs) == 1
+        assert envs[0].task_id == "task_from_data"
+
+    def test_malformed_record_raises(self):
+        with pytest.raises(AdapterProjectionError):
+            MemoryStoreAdapter().project(
+                SourceLocator(store_kind="memory_store", stream_id="memory", path_hint="x"),
+                "not_a_dict",
+                _ctx(),
+            )
 
 
 class TestJsonlStoreAdapter:
@@ -74,7 +83,7 @@ class TestJsonlStoreAdapter:
 class TestPlanStoreAdapter:
     def test_project_plan_sidecar(self):
         loc = SourceLocator(store_kind="plan_store", stream_id="plans", path_hint="x",
-                           record_key="task-1", snapshot_version="1")
+                            record_key="task-1", snapshot_version="1")
         rec = {"task_id": "task-1", "steps": [{"tool": "ls", "status": "pending"}], "created_at": 1.0}
         envs = PlanStoreAdapter().project(loc, rec, _ctx())
         assert len(envs) == 1

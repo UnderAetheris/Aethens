@@ -6,6 +6,7 @@ store writer references.
 """
 from __future__ import annotations
 
+from .adapters import AdapterProjectionError
 from .canonical import canonical_json, sha256_hex
 from .model import (
     EvidenceRef,
@@ -22,6 +23,7 @@ from .replay import ReplayEngine
 from .view import TraceView, render_summary, render_json
 
 __all__ = [
+    "AdapterProjectionError",
     "canonical_json",
     "sha256_hex",
     "EvidenceRef",

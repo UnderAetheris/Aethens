@@ -1,0 +1,58 @@
+[
+  {
+    "schema_version": 1,
+    "change_id": "chg_b09ddcb8327fc6d73e708bf935f6cc4e",
+    "trace_id": {"state": "known", "value": "trace_1", "source": "test"},
+    "task_id": {"state": "known", "value": "task_1", "source": "test"},
+    "session_id": {"state": "unknown", "value": null, "reason": "no session", "source": "test"},
+    "plan_id": {"state": "unknown", "value": null, "reason": "no plan", "source": "test"},
+    "capability_id": "tools",
+    "owner_subsystem": "tools",
+    "change_kind": "file_edit",
+    "disposition": "reversible",
+    "authority_class": "execution",
+    "target": {
+      "object_type": "file", "scope": "repo",
+      "locator": {"state": "known", "value": "src/main.py", "source": "test"},
+      "hash_algorithm": "sha256",
+      "digest": {"state": "known", "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source": "test"},
+      "size_bytes": {"state": "known", "value": 100, "source": "test"},
+      "version_ref": {"state": "known", "value": "v1", "source": "test"}
+    },
+    "before": {
+      "object_type": "file", "scope": "repo",
+      "locator": {"state": "known", "value": "src/old.py", "source": "test"},
+      "hash_algorithm": "sha256",
+      "digest": {"state": "known", "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "source": "test"},
+      "size_bytes": {"state": "known", "value": 100, "source": "test"},
+      "version_ref": {"state": "known", "value": "v0", "source": "test"}
+    },
+    "after": {
+      "object_type": "file", "scope": "repo",
+      "locator": {"state": "known", "value": "src/new.py", "source": "test"},
+      "hash_algorithm": "sha256",
+      "digest": {"state": "known", "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "source": "test"},
+      "size_bytes": {"state": "known", "value": 100, "source": "test"},
+      "version_ref": {"state": "known", "value": "v1", "source": "test"}
+    },
+    "inverse": {
+      "kind": "git_revert",
+      "owner_subsystem": "version_control",
+      "authority_boundary": "sandbox_validation",
+      "target": {"state": "known", "value": {"commit": "abc123"}, "source": "test"},
+      "preconditions": ["independent_review"],
+      "expected_restore_identity": null,
+      "authorization_required": {"state": "known", "value": "commit_signer", "source": "test"},
+      "executable": false
+    },
+    "rollback_ref": {"state": "unknown", "value": null, "reason": "no rollback ref", "source": "test"},
+    "revision": {"state": "known", "value": "abc123sha", "source": "test"},
+    "config_fingerprint": {"state": "unknown", "value": null, "reason": "no config", "source": "test"},
+    "policy_fingerprint": {"state": "unknown", "value": null, "reason": "no policy", "source": "test"},
+    "evidence_refs": [],
+    "source_event_ids": [],
+    "provenance": {"origin": "persisted", "confidence": "exact"},
+    "unknowns": [],
+    "observed_at": {"state": "known", "value": 1000.0, "source": "test"}
+  }
+]

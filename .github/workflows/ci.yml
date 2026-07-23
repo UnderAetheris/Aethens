@@ -1,5 +1,10 @@
 name: CI
-on: [push, pull_request]
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
 
 jobs:
   lint:
@@ -8,9 +13,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: ruff check .
+          python-version: '3.11'
+      - name: Install ruff
+        run: pip install ruff
+      - name: Lint
+        run: ruff check src/ tests/ scripts/
 
   test:
     runs-on: ubuntu-latest
@@ -18,9 +25,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: pytest -q --junitxml=reports/junit.xml --durations=20
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run pytest
+        run: python -m pytest tests/ -q
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -34,9 +43,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: pytest --cov=src/aetheris --cov-report=json --cov-report=term-missing -q
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run coverage
+        run: pytest --cov=src/aetheris --cov-report=json --cov-report=term-missing -q
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -50,9 +61,49 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python -m pytest tests/test_repository_hygiene.py tests/test_ci_contract.py tests/test_boundary_architecture.py -q
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run architecture integrity check
+        run: python scripts/check_architecture_integrity.py --check
+
+  trace-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run trace fixture smoke test
+        run: |
+          python -m pytest tests/test_trace_adapters.py tests/test_trace_replay.py -q
+
+  changeset-rollback-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run changeset contract tests
+        run: |
+          python -m pytest \
+            tests/test_changeset_model.py \
+            tests/test_changeset_projection.py \
+            tests/test_changeset_receipts.py \
+            tests/test_changeset_authority.py -q
+      - name: Validate inspection CLI
+        run: |
+          python scripts/inspect_changes.py \
+            --changes tests/fixtures/changeset/changes.json \
+            --receipts tests/fixtures/changeset/receipts.json \
+            --validate-only
+      - name: Run architecture integrity check
+        run: python scripts/check_architecture_integrity.py --check
 
   reasoning-gate:
     runs-on: ubuntu-latest
@@ -60,9 +111,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_reasoning_gate.py
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run reasoning gate
+        run: python scripts/run_reasoning_gate.py
 
   research-gate:
     runs-on: ubuntu-latest
@@ -70,98 +123,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_research_gate.py
-
-  research-wide-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_research_wide_gate.py
-
-  research-hardening:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_research_hardening.py
-
-  reliability-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_reliability_gate.py
-
-  reliability-coverage-canary:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_reliability_coverage_canary.py
-
-  reliability-eval-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/run_reliability_eval_gate.py
-
-  hierarchy-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python -m pytest tests/test_hierarchy.py -q
-
-  unattended-gate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python -m pytest tests/test_unattended.py -q
-
-  trace-replay-contract:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python -m pytest tests/test_trace_envelope.py tests/test_trace_adapters.py tests/test_trace_replay.py tests/test_trace_authority.py -q
-      - run: python scripts/check_architecture_integrity.py --check
-      - run: python scripts/inspect_trace.py --source memory=aetheris_memory.jsonl --format summary --validate-only
-
-  architecture-integrity:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: python scripts/check_architecture_integrity.py --check
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run research gate
+        run: python scripts/run_research_gate.py

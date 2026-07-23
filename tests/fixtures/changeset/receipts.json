@@ -1,0 +1,69 @@
+[
+  {
+    "schema_version": 1,
+    "receipt_id": "rcpt_3d53bba1e1b7daca1bfbbda347103bd6",
+    "change_id": "chg_b09ddcb8327fc6d73e708bf935f6cc4e",
+    "trace_id": {"state": "known", "value": "trace_1", "source": "test"},
+    "rollback_group_id": {"state": "known", "value": "grp_chg_test", "source": "test"},
+    "sequence_index": 0,
+    "parent_receipt_id": {"state": "not_applicable", "value": null, "reason": "first in group", "source": "test"},
+    "depends_on_receipt_ids": [],
+    "rollback_kind": "git_revert",
+    "rollback_target": {
+      "object_type": "file", "scope": "repo",
+      "locator": {"state": "known", "value": "src/main.py", "source": "test"},
+      "hash_algorithm": "sha256",
+      "digest": {"state": "known", "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "source": "test"},
+      "size_bytes": {"state": "known", "value": 100, "source": "test"},
+      "version_ref": {"state": "known", "value": "v1", "source": "test"}
+    },
+    "outcome": "succeeded",
+    "observed_pre_rollback": {
+      "object_type": "file", "scope": "repo",
+      "locator": {"state": "known", "value": "src/new.py", "source": "test"},
+      "hash_algorithm": "sha256",
+      "digest": {"state": "known", "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "source": "test"},
+      "size_bytes": {"state": "known", "value": 100, "source": "test"},
+      "version_ref": {"state": "known", "value": "v1", "source": "test"}
+    },
+    "observed_post_rollback": {
+      "object_type": "file", "scope": "repo",
+      "locator": {"state": "known", "value": "src/old.py", "source": "test"},
+      "hash_algorithm": "sha256",
+      "digest": {"state": "known", "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "source": "test"},
+      "size_bytes": {"state": "known", "value": 100, "source": "test"},
+      "version_ref": {"state": "known", "value": "v0", "source": "test"}
+    },
+    "confirmation": {
+      "status": "confirmed",
+      "expected": {
+        "object_type": "file", "scope": "repo",
+        "locator": {"state": "known", "value": "src/old.py", "source": "test"},
+        "hash_algorithm": "sha256",
+        "digest": {"state": "known", "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "source": "test"},
+        "size_bytes": {"state": "known", "value": 100, "source": "test"},
+        "version_ref": {"state": "known", "value": "v0", "source": "test"}
+      },
+      "observed": {
+        "object_type": "file", "scope": "repo",
+        "locator": {"state": "known", "value": "src/old.py", "source": "test"},
+        "hash_algorithm": "sha256",
+        "digest": {"state": "known", "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "source": "test"},
+        "size_bytes": {"state": "known", "value": 100, "source": "test"},
+        "version_ref": {"state": "known", "value": "v0", "source": "test"}
+      },
+      "verifier": {"state": "known", "value": "persisted", "source": "snapshot_provenance"},
+      "compared_fields": ["object_type", "scope", "digest"],
+      "mismatches": []
+    },
+    "revision": {"state": "known", "value": "r1", "source": "test"},
+    "config_fingerprint": {"state": "unknown", "value": null, "reason": "no config", "source": "test"},
+    "policy_fingerprint": {"state": "unknown", "value": null, "reason": "no policy", "source": "test"},
+    "evidence_refs": [],
+    "source_event_ids": [],
+    "provenance": {"origin": "persisted", "confidence": "exact"},
+    "unknowns": [],
+    "attempted_at": {"state": "known", "value": 1000.0, "source": "test"},
+    "confirmed_at": {"state": "known", "value": 1010.0, "source": "test"}
+  }
+]

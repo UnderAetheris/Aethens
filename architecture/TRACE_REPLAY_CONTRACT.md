@@ -2,7 +2,7 @@
 
 **Document type:** Implementation contract and persisted-format inventory
 **Milestone class:** Identity, causality, provenance, and read-only reconstruction
-**Candidate base revision:** `31704237fd52ae7738ffd8d5f615f6fd48880713`
+**Verification note:** Phase 0 trace corrections applied at revision `31704237fd52ae7738ffd8d5f615f6fd48880713` corrected: adapter malformed-record handling, MemoryStore task_id extraction, source_hash exact-byte semantics, parent/cause validation, actual hash verification, level 4 policy, reducer routing, unknown propagation, canonical fingerprinting, and trace/changeset decoupling.
 
 ---
 

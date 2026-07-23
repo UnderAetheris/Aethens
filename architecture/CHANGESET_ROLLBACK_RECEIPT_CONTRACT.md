@@ -1,23 +1,41 @@
 # Aetheris ChangeSet & Rollback Receipt Contract v0
 
-**Document type:** Implementation specification for mutation accountability and reversible receipts
-**Milestone class:** Change identification, before/after hashing, inverse-operation reference, rollback evidence
+**Document type:** Corrective implementation specification for the coding agent
+**Milestone class:** Mutation accountability, rollback evidence, and read-only audit linkage
 **Implementation posture:** Minimal-first, additive-only, fail-closed
 **Authority change:** None permitted
+**Verified repository revision:** `31704237fd52ae7738ffd8d5f615f6fd48880713`
 
 ---
 
 ## 0. Executive decision
 
-This milestone adds machine-readable change-set and rollback-receipt records so every meaningful mutation in Aetheris can be explained, reversed, and linked to the trace/replay system without adding new runtime authority.
+The project is moving in the right direction, but this milestone is **not greenfield**. The checked repository already contains:
 
-The v0 meaning of a change set is deliberately narrow:
+```text
+src/aetheris/changeset/__init__.py
+src/aetheris/changeset/model.py
+src/aetheris/changeset/canonical.py
+src/aetheris/changeset/view.py
+tests/test_changeset.py
+```
 
-> A change set records the before/after identity of a single meaningful mutation, the inverse operation that would reverse it, and the trace/capability/evidence context in which it occurred. It does not execute the inverse operation.
+The trace layer also already imports ChangeSet types and contains ChangeSet/Rollback reducers. Therefore, the coding agent must treat v0 as an **audit, correction, separation, and completion** milestone—not as permission to add a second implementation.
 
-The v0 meaning of a rollback receipt is deliberately narrow:
+The existing code is a useful prototype, but it does not yet prove the requested contract. In particular:
 
-> A rollback receipt records that an inverse operation was performed, what the target was, what the outcome was, and what restored state was confirmed. It does not perform the rollback itself.
+- models accept arbitrary IDs instead of validating derived IDs;
+- mandatory hash strings cannot represent unknown identity safely;
+- inverse operations are free-form strings and could be mistaken for executable instructions;
+- rollback restoration is not cryptographically linked to the original before-state;
+- multi-step rollback evidence has no ordering/group contract;
+- trace imports changeset code, coupling the earlier trace milestone to the later milestone;
+- existing tests mostly prove object construction, rendering, and deterministic helper output, not restoration truthfulness;
+- the current trace replay implementation itself has correctness gaps that must be closed before ChangeSet integration can be trusted.
+
+The minimal safe design is:
+
+> ChangeSet and RollbackReceipt remain immutable data contracts projected from already persisted evidence or constructed by pure factories. They do not perform changes or rollbacks, own no writer, and add no runtime hook in v0.
 
 ---
 
