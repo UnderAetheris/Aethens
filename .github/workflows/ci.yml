@@ -128,3 +128,27 @@ jobs:
         run: pip install -e ".[dev]"
       - name: Run research gate
         run: python scripts/run_research_gate.py
+
+  hierarchy-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run hierarchy gate
+        run: python scripts/run_hierarchy_gate.py
+
+  unattended-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+      - name: Run unattended gate
+        run: python scripts/run_unattended_gate.py

@@ -115,27 +115,30 @@ File: `src/aetheris/changeset/model.py`
 ```python
 @dataclass(frozen=True)
 class ChangeSet:
+    schema_version: int
     change_id: str
-    trace_id: str | None
-    task_id: str | None
-    session_id: str | None
-    plan_id: str | None
+    trace_id: TraceValue
+    task_id: TraceValue
+    session_id: TraceValue
+    plan_id: TraceValue
     capability_id: str
-    subsystem: str
-    change_kind: str
-    before_hash: str
-    after_hash: str
-    before_ref: TraceValue
-    after_ref: TraceValue
-    inverse_operation: str
-    rollback_token: str | None
+    owner_subsystem: str
+    change_kind: ChangeKind
+    disposition: MutationDisposition
+    authority_class: str
+    target: ObjectIdentity
+    before: ObjectIdentity
+    after: ObjectIdentity
+    inverse: InverseReference
+    rollback_ref: TraceValue
     revision: TraceValue
     config_fingerprint: TraceValue
+    policy_fingerprint: TraceValue
     evidence_refs: tuple[str, ...]
-    authority_class: str
+    source_event_ids: tuple[str, ...]
     provenance: Provenance
     unknowns: tuple[TraceUnknown, ...]
-    created_at: TraceValue
+    observed_at: TraceValue
 ```
 
 ### 4.1 ChangeKind
@@ -148,45 +151,92 @@ Allowed values:
 - `learning_adoption`
 - `learning_demotion`
 - `session_checkpoint`
-- `research_evidence_update`
+- `research_evidence_append`
 - `config_toggle`
 - `benchmark_adoption`
-- `journal_update`
+- `journal_append`
 - `snapshot_update`
 - `model_patch_proposal`
 - `model_patch_validation`
-- `experience_record`
-- `knowledge_update`
+- `experience_append`
+- `knowledge_append`
 - `unknown`
 
 No broad wildcard category.
 
-### 4.2 before_ref / after_ref
+### 4.2 MutationDisposition
 
-These are `TraceValue` carriers that may reference:
-- a snapshot path or key;
-- a journal line number;
-- a config field name;
-- an evidence artifact hash;
-- or `unknown` when the exact reference cannot be preserved.
+Allowed values:
+- `reversible`
+- `compensatable`
+- `append_only`
+- `rebuildable_snapshot`
+- `ephemeral`
+- `unknown`
 
-### 4.3 inverse_operation
+The disposition declares whether the mutation can be undone, compensated, or is append-only.
 
-A string naming the declared reverse action. Allowed forms:
-- `git_revert:<commit_range>`
-- `restore_snapshot:<snapshot_version>`
-- `tombstone_unretire:<skill_id>`
-- `config_disable:<config_field>`
-- `discard_sandbox:<sandbox_path>`
-- `resume_checkpoint:<checkpoint_id>`
+### 4.3 before / after
+
+These are `ObjectIdentity` carriers that reference:
+- a snapshot path or key via `locator`;
+- the exact SHA-256 digest of the pre-mutation or post-mutation state;
+- the `size_bytes` and `version_ref` of the object state;
+- or `unknown` when the exact identity cannot be preserved.
+
+Each `ObjectIdentity` carries `object_type`, `scope`, `locator`, `hash_algorithm`, `digest`, `size_bytes`, and `version_ref`.  
+When `hash_algorithm == "sha256"`, the digest must be exactly 64 lowercase hex characters.
+
+### 4.4 target
+
+An `ObjectIdentity` declaring the logical target of the mutation. `target.scope` and `target.object_type` must match `before` and `after` for direct restoration claims.
+
+### 4.5 inverse
+
+An `InverseReference` declaring the named reverse action:
+
+```python
+@dataclass(frozen=True)
+class InverseReference:
+    kind: RollbackKind
+    owner_subsystem: str
+    authority_boundary: str | None
+    target: TraceValue
+    preconditions: tuple[str, ...]
+    expected_restore_identity: ObjectIdentity | None
+    authorization_required: TraceValue
+    executable: Literal[False] = False
+```
+
+The `executable` field is always `False`. This is a descriptive reference, not an executable instruction.
+
+Allowed `RollbackKind` values:
+- `git_revert`
+- `restore_snapshot`
+- `tombstone_unretire`
+- `config_disable`
+- `discard_sandbox`
+- `resume_checkpoint`
 - `not_applicable`
 - `unknown`
 
-The string is descriptive. It is not executed by the change-set package.
+Append-only mutations must have `inverse.kind` of `not_applicable` or `unknown`.
 
-### 4.4 rollback_token
+### 4.6 rollback_ref
 
-An opaque string that existing subsystems may use to correlate change sets with their rollback mechanisms. The token is never interpreted or executed by the change-set package.
+A `TraceValue` carrier that may reference a persisted rollback record. It is never interpreted or executed by the change-set package.
+
+### 4.7 policy_fingerprint
+
+A `TraceValue` carrier for the active policy configuration at the time of the mutation.
+
+### 4.8 source_event_ids
+
+Ordered tuple of trace event IDs that contributed evidence for this change set.
+
+### 4.9 observed_at
+
+A `TraceValue` carrier recording when the mutation was observed in the persisted record.
 
 ---
 
@@ -197,43 +247,105 @@ File: `src/aetheris/changeset/model.py`
 ```python
 @dataclass(frozen=True)
 class RollbackReceipt:
+    schema_version: int
     receipt_id: str
     change_id: str
-    rollback_kind: str
-    rollback_target: TraceValue
-    rollback_outcome: TraceValue
-    confirmed_restored_state: TraceValue
-    unknowns: tuple[TraceUnknown, ...]
-    provenance: Provenance
-    before_hash: str
-    after_hash: str
+    trace_id: TraceValue
+    rollback_group_id: TraceValue
+    sequence_index: int | None
+    parent_receipt_id: TraceValue
+    depends_on_receipt_ids: tuple[str, ...]
+    rollback_kind: RollbackKind
+    rollback_target: ObjectIdentity
+    outcome: RollbackOutcome
+    observed_pre_rollback: ObjectIdentity
+    observed_post_rollback: ObjectIdentity
+    confirmation: RestorationConfirmation
     revision: TraceValue
     config_fingerprint: TraceValue
+    policy_fingerprint: TraceValue
     evidence_refs: tuple[str, ...]
-    created_at: TraceValue
+    source_event_ids: tuple[str, ...]
+    provenance: Provenance
+    unknowns: tuple[TraceUnknown, ...]
+    attempted_at: TraceValue
+    confirmed_at: TraceValue
 ```
 
-### 5.1 RollbackKind
+### 5.1 RollbackOutcome
 
 Allowed values:
-- `git_revert`
-- `restore_snapshot`
-- `tombstone_unretire`
-- `config_disable`
-- `discard_sandbox`
-- `resume_checkpoint`
-- `not_applicable`
+- `not_attempted`
+- `succeeded`
+- `failed`
+- `partial`
+- `blocked`
 - `unknown`
 
-### 5.2 confirmed_restored_state
+### 5.2 RestorationConfirmation
 
-A `TraceValue` carrier that records the state verified after the rollback completed. It may be `unknown` when verification did not occur.
+```python
+@dataclass(frozen=True)
+class RestorationConfirmation:
+    status: Literal[
+        "confirmed",
+        "partially_confirmed",
+        "not_confirmed",
+        "not_applicable",
+        "unknown",
+    ]
+    expected: ObjectIdentity | None
+    observed: ObjectIdentity | None
+    verifier: TraceValue
+    compared_fields: tuple[str, ...]
+    mismatches: tuple[str, ...]
+```
 
-### 5.3 Hash linkage
+A `confirmed` status requires:
+- `outcome == RollbackOutcome.SUCCEEDED`
+- `expected` and `observed` are both non-None
+- both have the same `object_type` and `scope`
+- both digests are known and equal
+- `verifier.state == "known"`
+- no mismatches
+- no required unknowns beyond `missing_config` and `missing_policy`
 
-- `before_hash`: hash of the change-set record before the rollback was applied
-- `after_hash`: hash of the change-set record after the rollback was applied (or the same as before_hash if no state change occurred)
-- Together they form a tamper-evident chain.
+A `partially_confirmed` status indicates a `succeeded` or `partial` outcome with known mismatches or unverified fields.
+
+### 5.3 rollback_group_id
+
+A `TraceValue` carrier identifying the group this receipt belongs to. All receipts in a multi-step rollback share the same group ID.
+
+### 5.4 sequence_index
+
+Zero-based position within the rollback group. `None` for unordered receipts.
+
+### 5.5 parent_receipt_id
+
+For ordered multi-step groups, the preceding receipt. `not_applicable` for the first receipt in a group.
+
+### 5.6 depends_on_receipt_ids
+
+Ordered tuple of receipt IDs this receipt depends on.
+
+### 5.7 observed_pre_rollback / observed_post_rollback
+
+`ObjectIdentity` carriers for the state before and after the rollback attempt:
+- `observed_pre_rollback.digest` must match `change_set.after.digest` (when both known)
+- `observed_post_rollback.digest` must match `change_set.before.digest` (when both known)
+
+### 5.8 Hash linkage
+
+- `observed_pre_rollback` links to the change-set's `after` state
+- `observed_post_rollback` links to the change-set's `before` state
+- The `confirmation` struct independently verifies verifier, compared fields, and mismatches
+- Together they form a tamper-evident chain grounded in `ObjectIdentity` digests
+
+### 5.9 Append-only and checkpoint semantics
+
+- Rollback receipts for append-only mutations may record outcomes but must not claim `confirmed` when the underlying evidence cannot be restored.
+- `resume_checkpoint` is valid only for `rebuildable_snapshot` or `ephemeral` dispositions.
+- `discard_sandbox` applies only to `scope == "sandbox"` targets.
 
 ---
 
@@ -243,8 +355,50 @@ File: `src/aetheris/changeset/canonical.py`
 
 - `canonical_json`: same as trace package (sort_keys, compact separators, reject NaN/Infinity)
 - `canonical_hash`: SHA-256 of canonical JSON (with dataclass auto-conversion)
-- `change_id`: derived from `subsystem|capability_id|change_kind|before_hash|after_hash|created_at`
-- `receipt_id`: derived from `change_id|rollback_kind|before_hash|after_hash|created_at`
+
+### 6.1 ChangeSet preimage
+
+```json
+{
+  "schema_version": 1,
+  "trace_id": [state, value],
+  "capability_id": "...",
+  "owner_subsystem": "...",
+  "change_kind": "file_edit",
+  "disposition": "reversible",
+  "target": { "object_type": "...", "scope": "...", "locator": [state, value], "hash_algorithm": "...", "digest": [state, value], "size_bytes": [state, value], "version_ref": [state, value] },
+  "before": { ...same structure... },
+  "after": { ...same structure... },
+  "revision": [state, value],
+  "source_event_ids": ["evt_..."],
+  "observed_at": [state, value]
+}
+```
+
+### 6.2 RollbackReceipt preimage
+
+```json
+{
+  "schema_version": 1,
+  "change_id": "chg_...",
+  "rollback_group_id": [state, value],
+  "sequence_index": 0,
+  "rollback_kind": "git_revert",
+  "rollback_target": { "object_type": "...", "scope": "...", "locator": [state, value], "hash_algorithm": "...", "digest": [state, value], "size_bytes": [state, value], "version_ref": [state, value] },
+  "observed_pre_rollback": { ...same structure... },
+  "observed_post_rollback": { ...same structure... },
+  "confirmation": { "status": "...", "expected": { ...identity preimage... }, "observed": { ...identity preimage... }, "verifier": [state, value], "compared_fields": [...], "mismatches": [...] },
+  "outcome": "succeeded",
+  "revision": [state, value],
+  "source_event_ids": ["evt_..."],
+  "attempted_at": [state, value]
+}
+```
+
+### 6.3 Identity derivation
+
+- `change_id`: `chg_` + SHA-256(canonical JSON of ChangeSet preimage)[:32]
+- `receipt_id`: `rcpt_` + SHA-256(canonical JSON of RollbackReceipt preimage)[:32]
 
 Deterministic: same fields produce the same ID every time.
 
@@ -273,11 +427,11 @@ No subsystem is required to emit these records. The contract defines the format 
 
 ## 8. Trace/replay integration
 
-File: `src/aetheris/trace/adapters.py`
+File: `src/aetheris/changeset/projector.py`
 
-Two new adapters project change-set and rollback-receipt records into `TraceEnvelope` objects:
-- `ChangeSetAdapter` — projects `change_set` records
-- `RollbackReceiptAdapter` — projects `rollback_receipt` records
+Two projector functions project ChangeSet and RollbackReceipt objects into `TraceEnvelope` objects:
+- `change_set_to_envelope` — projects a `ChangeSet` record
+- `rollback_receipt_to_envelope` — projects a `RollbackReceipt` record
 
 This allows trace/replay to:
 - include change sets in envelope lineage;
@@ -285,13 +439,18 @@ This allows trace/replay to:
 - reconstruct change-set summary state via reducers;
 - inspect rollback chains through the existing trace view.
 
-The adapters are additive. They do not modify existing adapters or the `TraceEnvelope` schema.
+The projectors are additive. They do not modify existing adapters or the `TraceEnvelope` schema.
 
 ### 8.1 Replay reducers
 
-Two new reducers are registered:
-- `reduce_change_set_summary` — counts change kinds and capability frequencies
-- `reduce_rollback_summary` — counts rollback kinds
+Four new reducers are registered in `src/aetheris/trace/replay.py`:
+
+| Reducer name | Input | Output |
+| --- | --- | --- |
+| `change_set_summary` | `event_type == "change_set"` | `state["change_kind_counts"]`, `state["change_capabilities"]` |
+| `rollback_summary` | `event_type == "rollback_receipt"` | `state["rollback_kind_counts"]` |
+
+These are invoked alongside the existing reducers in the `ReplayEngine`.
 
 ---
 

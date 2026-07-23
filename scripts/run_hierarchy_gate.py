@@ -4,13 +4,20 @@ Runs hierarchy-specific tests and exits non-zero on failure.
 """
 from __future__ import annotations
 
+import subprocess
 import sys
 
 
 def main() -> int:
-    print("hierarchy gate: running tests...")
-    # Tests verify GoalOrchestrator, SpineRunner, and journal behavior.
-    return 0
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", "tests/test_hierarchy.py", "-q"],
+        cwd=REPO_ROOT,
+    )
+    return result.returncode
+
+
+from pathlib import Path
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 if __name__ == "__main__":

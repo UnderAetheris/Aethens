@@ -110,6 +110,8 @@ Level 4 is optional per event type. Unsupported replay classes remain `unsupport
 | unattended_state | unattended | SessionJournal events | `state["sessions"][session_id]` |
 | research_summary | research | ResearchJournal events | `state["research_kind_counts"]` |
 | adoption_summary | architecture | Evidence events | `state["adoption"][capability_id]` |
+| change_set_summary | changeset | ChangeSet envelopes | `state["change_kind_counts"]`, `state["change_capabilities"]` |
+| rollback_summary | changeset | RollbackReceipt envelopes | `state["rollback_kind_counts"]` |
 
 ---
 
