@@ -1,0 +1,1 @@
+{"schema_version": 1, "scenario_id": "S-09", "rollback_kind": "not_applicable", "expected_outcome": "not_attempted", "eligible_for_exact_restoration": false, "description": "Append-only evidence no-op template"}

@@ -1,0 +1,1 @@
+{"schema_version": 1, "scenario_id": "S-02", "rollback_kind": "git_revert", "expected_outcome": "succeeded", "eligible_for_exact_restoration": true, "description": "Local Git revert template"}

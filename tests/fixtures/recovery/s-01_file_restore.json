@@ -1,0 +1,1 @@
+{"schema_version": 1, "scenario_id": "S-01", "rollback_kind": "restore_snapshot", "expected_outcome": "succeeded", "eligible_for_exact_restoration": true, "description": "File restore from prior snapshot template"}
