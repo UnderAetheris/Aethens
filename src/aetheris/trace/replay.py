@@ -10,7 +10,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass
 from typing import Any, Callable, Literal
 
-from .canonical import canonical_json, sha256_str
+from .canonical import canonical_json, sha256_hex, sha256_str
 from .model import (
     JsonValue,
     ReplayContext,
@@ -320,6 +320,44 @@ def _find_cycle(nodes: list[str], edges: list[_Edge]) -> list[str] | None:
 
 
 # ---------------------------------------------------------------------------
+# Hash verification
+# ---------------------------------------------------------------------------
+
+def _verify_source_hash(env: TraceEnvelope) -> ReplayFailure | None:
+    if env.source_hash == "unknown":
+        return None
+    if not env.preserved_raw_bytes:
+        return None
+    expected = sha256_hex(env.preserved_raw_bytes)
+    if env.source_hash != expected:
+        return ReplayFailure(
+            code="source_hash_mismatch",
+            event_id=env.event_id,
+            source_id=env.source.stream_id,
+            why=f"source_hash {env.source_hash} != recomputed {expected}",
+            required_level=2,
+            remediation="reject envelope; source bytes do not match recorded hash",
+        )
+    return None
+
+
+def _verify_payload_hash(env: TraceEnvelope) -> ReplayFailure | None:
+    if not env.preserved_payload:
+        return None
+    expected = sha256_str(canonical_json(env.preserved_payload))
+    if env.payload_hash != expected:
+        return ReplayFailure(
+            code="payload_hash_mismatch",
+            event_id=env.event_id,
+            source_id=env.source.stream_id,
+            why=f"payload_hash {env.payload_hash} != recomputed {expected}",
+            required_level=2,
+            remediation="reject envelope; payload does not match recorded hash",
+        )
+    return None
+
+
+# ---------------------------------------------------------------------------
 # ReplayEngine
 # ---------------------------------------------------------------------------
 
@@ -340,7 +378,13 @@ class ReplayEngine:
         seen_ids: set[str] = set()
         id_map: dict[str, TraceEnvelope] = {}
         edges: list[_Edge] = []
+        all_event_ids: set[str] = set()
 
+        # Phase 1: collect all envelope IDs first (order-independent)
+        for env in envelopes:
+            all_event_ids.add(env.event_id)
+
+        # Phase 2: validate hashes, collect IDs, validate parent/cause references
         for env in envelopes:
             if env.event_id in seen_ids:
                 failures.append(ReplayFailure(
@@ -354,8 +398,17 @@ class ReplayEngine:
             seen_ids.add(env.event_id)
             id_map[env.event_id] = env
 
+            # Verify hashes against preserved bytes/payloads
+            hash_failure = _verify_source_hash(env)
+            if hash_failure is not None:
+                failures.append(hash_failure)
+            hash_failure = _verify_payload_hash(env)
+            if hash_failure is not None:
+                failures.append(hash_failure)
+
+            # Validate parent/cause references against ALL known IDs
             if env.parent_event_id:
-                if env.parent_event_id not in id_map and not _is_external_root(env.parent_event_id):
+                if env.parent_event_id not in all_event_ids and not _is_external_root(env.parent_event_id):
                     failures.append(ReplayFailure(
                         code="missing_parent",
                         event_id=env.event_id,
@@ -366,7 +419,7 @@ class ReplayEngine:
                     ))
                 edges.append(_Edge(src=env.parent_event_id, dst=env.event_id))
             for cid in env.cause_event_ids:
-                if cid not in id_map and not _is_external_root(cid):
+                if cid not in all_event_ids and not _is_external_root(cid):
                     failures.append(ReplayFailure(
                         code="missing_cause",
                         event_id=env.event_id,
@@ -425,9 +478,24 @@ class ReplayEngine:
                 if self._reducers:
                     pass
 
+        # Blocker 4: strict replay must not report complete when required unknowns remain
+        required_unknown_codes = {
+            "missing_revision", "missing_config", "missing_policy",
+            "missing_evidence", "missing_trace_root", "missing_parent",
+            "missing_cause", "missing_snapshot", "missing_payload",
+            "missing_raw_bytes", "unsupported_record_version",
+            "ambiguous_order", "redacted_secret",
+            "external_input_not_recorded", "adapter_error", "hash_mismatch",
+        }
+        has_required_unknowns = any(u.code in required_unknown_codes for u in unknowns)
+
         status: Literal["complete", "incomplete", "invalid", "unsupported"]
         if failures:
             status = "incomplete" if level >= 2 else "invalid"
+        elif context.strict and has_required_unknowns:
+            status = "incomplete"
+            if level > 2:
+                level = 2
         else:
             if level >= 3 and not self._reducers:
                 status = "unsupported"

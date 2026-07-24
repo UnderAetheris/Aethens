@@ -212,3 +212,119 @@ class TestTraceChangesetIsolation:
                 path = os.path.join(root, f)
                 text = open(path, "r", encoding="utf-8").read()
                 assert "aetheris.changeset" not in text, f"trace module {path} imports changeset"
+
+
+class TestHashVerificationInReplay:
+    def test_source_hash_mismatch_fails(self):
+        raw = b'{"kind":"test"}'
+        env = TraceEnvelope(
+            schema_version=1, adapter_id="test", adapter_version=1, event_id="evt_1",
+            trace_id="trace_1", parent_event_id=None, cause_event_ids=(),
+            task_id="t1", session_id=None, plan_id=None, goal_id=None, step_id=None,
+            subsystem="test", capability_id="test", event_type="test",
+            authority_class="none",
+            revision=TraceValue(state="unknown", value=None, reason="test"),
+            config_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
+            policy_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
+            evidence_refs=(),
+            source=SourceLocator(store_kind="test", stream_id="test", line_number=1),
+            source_hash="wrong_hash",
+            payload_hash="def",
+            recorded_at=TraceValue(state="unknown", value=None, reason="test"),
+            stream_sequence=1, logical_order=None, ordering_basis="stream_sequence",
+            provenance=Provenance(origin="persisted", confidence="exact"),
+            outcome=TraceValue(state="not_applicable", value=None, reason="test"),
+            unknowns=(), rollback_ref=TraceValue(state="not_applicable", value=None, reason="test"),
+            preserved_raw_bytes=raw,
+            preserved_payload={"kind": "test"},
+        )
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert any(f.code == "source_hash_mismatch" for f in result.failures)
+
+    def test_payload_hash_mismatch_fails(self):
+        env = TraceEnvelope(
+            schema_version=1, adapter_id="test", adapter_version=1, event_id="evt_1",
+            trace_id="trace_1", parent_event_id=None, cause_event_ids=(),
+            task_id="t1", session_id=None, plan_id=None, goal_id=None, step_id=None,
+            subsystem="test", capability_id="test", event_type="test",
+            authority_class="none",
+            revision=TraceValue(state="unknown", value=None, reason="test"),
+            config_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
+            policy_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
+            evidence_refs=(),
+            source=SourceLocator(store_kind="test", stream_id="test", line_number=1),
+            source_hash="abc",
+            payload_hash="wrong_payload_hash",
+            recorded_at=TraceValue(state="unknown", value=None, reason="test"),
+            stream_sequence=1, logical_order=None, ordering_basis="stream_sequence",
+            provenance=Provenance(origin="persisted", confidence="exact"),
+            outcome=TraceValue(state="not_applicable", value=None, reason="test"),
+            unknowns=(), rollback_ref=TraceValue(state="not_applicable", value=None, reason="test"),
+            preserved_raw_bytes=None,
+            preserved_payload={"kind": "test"},
+        )
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert any(f.code == "payload_hash_mismatch" for f in result.failures)
+
+    def test_source_and_payload_hash_not_interchangeable(self):
+        raw = b'{"kind":"test"}'
+        env = TraceEnvelope(
+            schema_version=1, adapter_id="test", adapter_version=1, event_id="evt_1",
+            trace_id="trace_1", parent_event_id=None, cause_event_ids=(),
+            task_id="t1", session_id=None, plan_id=None, goal_id=None, step_id=None,
+            subsystem="test", capability_id="test", event_type="test",
+            authority_class="none",
+            revision=TraceValue(state="unknown", value=None, reason="test"),
+            config_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
+            policy_fingerprint=TraceValue(state="unknown", value=None, reason="test"),
+            evidence_refs=(),
+            source=SourceLocator(store_kind="test", stream_id="test", line_number=1),
+            source_hash=hashlib.sha256(raw).hexdigest(),
+            payload_hash="wrong_payload_hash",
+            recorded_at=TraceValue(state="unknown", value=None, reason="test"),
+            stream_sequence=1, logical_order=None, ordering_basis="stream_sequence",
+            provenance=Provenance(origin="persisted", confidence="exact"),
+            outcome=TraceValue(state="not_applicable", value=None, reason="test"),
+            unknowns=(), rollback_ref=TraceValue(state="not_applicable", value=None, reason="test"),
+            preserved_raw_bytes=raw,
+            preserved_payload={"kind": "test"},
+        )
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert any(f.code == "payload_hash_mismatch" for f in result.failures)
+        assert not any(f.code == "source_hash_mismatch" for f in result.failures)
+
+
+class TestParentCauseOrderIndependent:
+    def test_later_appearing_parent_not_missing(self):
+        child = _make_env("child", parent="parent")
+        parent = _make_env("parent")
+        engine = ReplayEngine()
+        result = engine.replay([child, parent], _ctx())
+        assert not any(f.code == "missing_parent" for f in result.failures)
+
+    def test_later_appearing_cause_not_missing(self):
+        child = _make_env("child", causes=("cause",))
+        cause = _make_env("cause")
+        engine = ReplayEngine()
+        result = engine.replay([child, cause], _ctx())
+        assert not any(f.code == "missing_cause" for f in result.failures)
+
+
+class TestStrictReplayUnknowns:
+    def test_strict_replay_incomplete_with_required_unknowns(self):
+        unknowns = (TraceUnknown(code="missing_revision", field="revision", reason="missing", required_for=("strict",)),)
+        env = _make_env("evt_1", unknowns=unknowns)
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert result.status == "incomplete"
+        assert result.achieved_level < 3
+
+    def test_unknown_remains_unknown_in_strict_replay(self):
+        unknowns = (TraceUnknown(code="missing_config", field="config", reason="missing", required_for=("strict",)),)
+        env = _make_env("evt_1", unknowns=unknowns)
+        engine = ReplayEngine()
+        result = engine.replay([env], _ctx())
+        assert any(u.code == "missing_config" for u in result.unknowns)

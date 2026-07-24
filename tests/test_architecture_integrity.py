@@ -325,6 +325,16 @@ def test_no_broad_wildcard_exception():
             assert exc.get("call_pattern") != "*", "wildcard exception forbidden"
 
 
+def test_na_normalized_to_not_applicable():
+    caps = json.loads(CAPABILITIES.read_text())["capabilities"]
+    for c in caps:
+        rd = c.get("runtime_default") or {}
+        assert rd.get("config_field") != "N/A", f"{c['id']} has N/A config_field"
+        rb = c.get("rollback") or {}
+        assert rb.get("token") != "N/A", f"{c['id']} has N/A rollback token"
+        assert rb.get("restores") != "N/A", f"{c['id']} has N/A rollback restores"
+
+
 def test_existing_test_suite_still_passes():
     result = subprocess.run(
         [sys.executable, "-m", "pytest", "-q", "--no-header", "-x"],

@@ -582,3 +582,75 @@ class TestForgedIDs:
         h1 = canonical_hash(cs)
         h2 = canonical_hash(cs)
         assert h1 == h2
+
+
+# ---------------------------------------------------------------------------
+# 13. Dangerous inverse references rejected
+# ---------------------------------------------------------------------------
+
+class TestDangerousInverseRejected:
+    def test_disable_safety_rejected(self):
+        cs = _make_cs(inverse=InverseReference(
+            kind=RollbackKind.GIT_REVERT,
+            owner_subsystem="vc",
+            authority_boundary=None,
+            target=_tv("known", "disable_safety"),
+            preconditions=(),
+            expected_restore_identity=None,
+            authorization_required=_tv("known", "y"),
+        ))
+        result = validate_change_set(cs)
+        assert not result.valid
+        assert any("dangerous pattern" in e for e in result.errors)
+
+    def test_bypass_review_rejected(self):
+        cs = _make_cs(inverse=InverseReference(
+            kind=RollbackKind.GIT_REVERT,
+            owner_subsystem="vc",
+            authority_boundary=None,
+            target=_tv("known", "bypass_review"),
+            preconditions=(),
+            expected_restore_identity=None,
+            authorization_required=_tv("known", "y"),
+        ))
+        result = validate_change_set(cs)
+        assert not result.valid
+
+    def test_expand_allowlist_rejected(self):
+        cs = _make_cs(inverse=InverseReference(
+            kind=RollbackKind.GIT_REVERT,
+            owner_subsystem="vc",
+            authority_boundary=None,
+            target=_tv("known", "expand_allowlist"),
+            preconditions=(),
+            expected_restore_identity=None,
+            authorization_required=_tv("known", "y"),
+        ))
+        result = validate_change_set(cs)
+        assert not result.valid
+
+    def test_increase_budget_rejected(self):
+        cs = _make_cs(inverse=InverseReference(
+            kind=RollbackKind.GIT_REVERT,
+            owner_subsystem="vc",
+            authority_boundary=None,
+            target=_tv("known", "increase_budget"),
+            preconditions=(),
+            expected_restore_identity=None,
+            authorization_required=_tv("known", "y"),
+        ))
+        result = validate_change_set(cs)
+        assert not result.valid
+
+    def test_delete_evidence_rejected(self):
+        cs = _make_cs(inverse=InverseReference(
+            kind=RollbackKind.GIT_REVERT,
+            owner_subsystem="vc",
+            authority_boundary=None,
+            target=_tv("known", "delete_evidence"),
+            preconditions=(),
+            expected_restore_identity=None,
+            authorization_required=_tv("known", "y"),
+        ))
+        result = validate_change_set(cs)
+        assert not result.valid

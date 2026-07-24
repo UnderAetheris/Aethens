@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from .canonical import change_id, receipt_id
+from .canonical import change_id, receipt_id, make_change_set as _make_change_set_factory, make_rollback_receipt as _make_rollback_receipt_factory
 from .model import (
     ChangeKind,
     ChangeSet,
@@ -42,13 +42,11 @@ def _id_preimage(identity: ObjectIdentity) -> dict[str, Any]:
 
 
 def make_change_set(**kwargs: Any) -> ChangeSet:
-    from .canonical import make_change_set as _factory
-    return _factory(**kwargs)
+    return _make_change_set_factory(**kwargs)
 
 
 def make_rollback_receipt(**kwargs: Any) -> RollbackReceipt:
-    from .canonical import make_rollback_receipt as _factory
-    return _factory(**kwargs)
+    return _make_rollback_receipt_factory(**kwargs)
 
 
 def _validate_sha256_digest(identity: ObjectIdentity, field: str) -> list[str]:
@@ -91,6 +89,27 @@ _RESEARCH_APPEND_KINDS = {
     ChangeKind.KNOWLEDGE_APPEND,
 }
 
+_DANGEROUS_INVERSE_PATTERNS = {
+    "disable_safety", "bypass_review", "expand_allowlist",
+    "increase_budget", "grant_permission", "add_tool",
+    "delete_evidence", "truncate_evidence", "remove_evidence",
+    "override_safety", "skip_review", "elevate_privilege",
+    "exec", "execute", "callback", "command",
+}
+
+
+def _check_dangerous_inverse(inverse: Any) -> list[str]:
+    errors: list[str] = []
+    target_val = ""
+    if hasattr(inverse, "target") and isinstance(inverse.target, TraceValue):
+        target_val = str(inverse.target.value or "").lower()
+    elif isinstance(inverse, dict):
+        target_val = str(inverse.get("target", {}).get("value", "")).lower()
+    for pattern in _DANGEROUS_INVERSE_PATTERNS:
+        if pattern in target_val:
+            errors.append(f"inverse reference target contains dangerous pattern: {pattern}")
+    return errors
+
 
 def validate_change_set(record: ChangeSet | dict[str, Any]) -> ValidationResult:
     errors: list[str] = []
@@ -122,12 +141,10 @@ def validate_change_set(record: ChangeSet | dict[str, Any]) -> ValidationResult:
     if cs.schema_version != 1:
         errors.append(f"unsupported schema_version: {cs.schema_version}")
 
-    try:
-        _validate_object_identity(cs.target, "target")
-        _validate_object_identity(cs.before, "before")
-        _validate_object_identity(cs.after, "after")
-    except ValueError as exc:
-        errors.append(str(exc))
+    # Blocker 9: collect _validate_object_identity errors into final result
+    errors.extend(_validate_object_identity(cs.target, "target"))
+    errors.extend(_validate_object_identity(cs.before, "before"))
+    errors.extend(_validate_object_identity(cs.after, "after"))
 
     if cs.target.scope != cs.before.scope or cs.target.object_type != cs.before.object_type:
         if not (cs.before.locator.state == "unknown" and cs.before.digest.state == "unknown"
@@ -140,6 +157,9 @@ def validate_change_set(record: ChangeSet | dict[str, Any]) -> ValidationResult:
 
     if cs.inverse.executable is not False:
         errors.append("inverse reference must have executable=False")
+
+    # Blocker 8: explicit validator rejection for dangerous inverse references
+    errors.extend(_check_dangerous_inverse(cs.inverse))
 
     if cs.inverse.kind not in _NON_EXECUTABLE_ROLLBACK_KINDS:
         errors.append(f"unknown rollback kind in inverse reference: {cs.inverse.kind}")

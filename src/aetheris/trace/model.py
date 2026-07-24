@@ -196,6 +196,8 @@ class TraceEnvelope:
     outcome: TraceValue
     unknowns: tuple[TraceUnknown, ...]
     rollback_ref: TraceValue
+    preserved_raw_bytes: bytes | None = None
+    preserved_payload: Any | None = None
 
 
 # ---------------------------------------------------------------------------

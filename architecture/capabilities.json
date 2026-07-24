@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "baseline_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713",
+  "baseline_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23",
   "verified_at": "2026-07-22T10:00:00Z",
   "project_version": "0.1.0",
   "capabilities": [
@@ -41,7 +41,7 @@
       "known_limitations": [
         "Environment overrides limited to explicitly declared fields"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "tools",
@@ -82,7 +82,7 @@
       "known_limitations": [
         "Built-in tools only; no dynamic plugin loading"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "safety",
@@ -121,7 +121,7 @@
       "known_limitations": [
         "Rule pipeline is ordered deny-wins; first block wins"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "controller",
@@ -134,7 +134,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -164,7 +164,7 @@
       "known_limitations": [
         "Single-threaded request handling"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "planner",
@@ -177,7 +177,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -205,7 +205,7 @@
       "known_limitations": [
         "Model suggestion path falls back to echo if invalid"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "executive",
@@ -219,7 +219,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -248,7 +248,7 @@
       "known_limitations": [
         "Single-plan-at-a-time execution"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "memory",
@@ -290,7 +290,7 @@
       "known_limitations": [
         "No query engine beyond deterministic filter/search"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "evaluation",
@@ -303,7 +303,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -331,7 +331,7 @@
       "known_limitations": [
         "Cases are static; no dynamic generation in v0"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "skills",
@@ -344,7 +344,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -373,7 +373,7 @@
       "known_limitations": [
         "_other_task_texts returns empty list (documented limitation)"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "skill_promotion",
@@ -415,7 +415,7 @@
       "known_limitations": [
         "Promotion is idle-gated and budget-bounded"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "plan_review",
@@ -429,7 +429,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -457,7 +457,7 @@
       "known_limitations": [
         "Only active when plan_review is provided to executive"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "reflection",
@@ -496,7 +496,7 @@
       "known_limitations": [
         "Cannot execute; executive enacts verdicts"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "autonomous_loop",
@@ -509,7 +509,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -535,7 +535,7 @@
       "known_limitations": [
         "_run_discovery is a no-op placeholder"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "self_repair",
@@ -549,7 +549,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -577,7 +577,7 @@
       "known_limitations": [
         "Keyword repair strategy only; other types recorded as experience"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "model_providers",
@@ -590,7 +590,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "off",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -616,7 +616,7 @@
       "known_limitations": [
         "Default off; only mock provider in baseline"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "model_patch",
@@ -629,7 +629,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "off",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -657,7 +657,7 @@
       "known_limitations": [
         "Single-file patches only in v0"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "understanding",
@@ -670,7 +670,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "off",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -697,7 +697,7 @@
       "known_limitations": [
         "Python source only; no multi-language support"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "reasoning",
@@ -738,7 +738,7 @@
       "known_limitations": [
         "No execution authority; abstention governs thin evidence"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "experience_recording",
@@ -781,7 +781,7 @@
       "known_limitations": [
         "Consumption is gated off by default"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "experience_consumption",
@@ -822,7 +822,7 @@
       "known_limitations": [
         "Consumption default-off until confidence floor is earned"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "hierarchy",
@@ -863,7 +863,7 @@
       "known_limitations": [
         "Default-off until adoption gate clears"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "research",
@@ -905,7 +905,7 @@
       "known_limitations": [
         "Allowlisted narrow research only"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "research_reliability",
@@ -918,7 +918,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "on",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -945,7 +945,7 @@
       "known_limitations": [
         "Does not gate egress; perimeter remains sole network authority"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "api_bridge",
@@ -958,7 +958,7 @@
       "adoption": "adopted",
       "runtime_default": {
         "state": "off",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -986,7 +986,7 @@
       "known_limitations": [
         "Bridge only; does not add execution authority"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "unattended_supervisor",
@@ -1027,7 +1027,7 @@
       "known_limitations": [
         "Default-off; adds no authority"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "unattended_outcome_learning",
@@ -1040,7 +1040,7 @@
       "adoption": "hold",
       "runtime_default": {
         "state": "off",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -1069,7 +1069,7 @@
       "known_limitations": [
         "Consumption is default-off; advisory only"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "frontend_shell",
@@ -1082,7 +1082,7 @@
       "adoption": "not_applicable",
       "runtime_default": {
         "state": "off",
-        "config_field": "N/A",
+        "config_field": "not_applicable",
         "env_override": "not_applicable"
       },
       "production_readiness": "unknown",
@@ -1099,13 +1099,13 @@
       },
       "rollback": {
         "kind": "not_applicable",
-        "token": "N/A",
-        "restores": "N/A"
+        "token": "not_applicable",
+        "restores": "not_applicable"
       },
       "known_limitations": [
         "Not covered by Python integrity checker"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     },
     {
       "id": "trace_replay",
@@ -1141,7 +1141,7 @@
         "No whole-program causality proof",
         "Decision verification requires complete persisted inputs"
       ],
-      "verified_revision": "31704237fd52ae7738ffd8d5f615f6fd48880713"
+      "verified_revision": "a0ff51753f68320292c3377cc8cd0dff7c884c23"
     }
   ]
 }

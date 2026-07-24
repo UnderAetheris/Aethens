@@ -111,22 +111,16 @@ def receipt_id(receipt: RollbackReceipt) -> str:
 def make_change_set(**kwargs: Any) -> "ChangeSet":
     kwargs.setdefault("schema_version", 1)
     cs = ChangeSet(**kwargs)
-    try:
-        expected = change_id(cs)
-        if cs.change_id != expected:
-            cs = ChangeSet(change_id=expected, **{f.name: getattr(cs, f.name) for f in ChangeSet.__dataclass_fields__.values() if f.name != "change_id"})
-    except Exception:
-        pass
+    expected = change_id(cs)
+    if cs.change_id != expected:
+        cs = ChangeSet(change_id=expected, **{f.name: getattr(cs, f.name) for f in ChangeSet.__dataclass_fields__.values() if f.name != "change_id"})
     return cs
 
 
 def make_rollback_receipt(**kwargs: Any) -> "RollbackReceipt":
     kwargs.setdefault("schema_version", 1)
     rr = RollbackReceipt(**kwargs)
-    try:
-        expected = receipt_id(rr)
-        if rr.receipt_id != expected:
-            rr = RollbackReceipt(receipt_id=expected, **{f.name: getattr(rr, f.name) for f in RollbackReceipt.__dataclass_fields__.values() if f.name != "receipt_id"})
-    except Exception:
-        pass
+    expected = receipt_id(rr)
+    if rr.receipt_id != expected:
+        rr = RollbackReceipt(receipt_id=expected, **{f.name: getattr(rr, f.name) for f in RollbackReceipt.__dataclass_fields__.values() if f.name != "receipt_id"})
     return rr

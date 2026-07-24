@@ -172,6 +172,8 @@ def _base_envelope(
         outcome=outcome or _na_value("no outcome captured"),
         unknowns=tuple(unknowns),
         rollback_ref=rollback_ref or _na_value("no rollback reference"),
+        preserved_raw_bytes=raw_bytes,
+        preserved_payload=payload_record,
     )
 
 

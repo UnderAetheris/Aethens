@@ -4,7 +4,7 @@
 **Milestone class:** Mutation accountability, rollback evidence, and read-only audit linkage
 **Implementation posture:** Minimal-first, additive-only, fail-closed
 **Authority change:** None permitted
-**Verified repository revision:** `31704237fd52ae7738ffd8d5f615f6fd48880713`
+**Verified repository revision:** `a0ff51753f68320292c3377cc8cd0dff7c884c23`
 
 ---
 

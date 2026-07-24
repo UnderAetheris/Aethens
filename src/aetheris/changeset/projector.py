@@ -179,8 +179,8 @@ class ChangeSetProjector:
             authorization_required=_tv("unknown", None, "authorization not captured in source record"),
         )
 
-        cap_id = primary.capability_id or "unknown"
-        auth_class = primary.authority_class or "none"
+        cap_id = primary.capability_id if isinstance(primary.capability_id, str) else _tv("unknown", None, "capability_id not captured")
+        auth_class = primary.authority_class if isinstance(primary.authority_class, str) else _tv("unknown", None, "authority_class not captured")
 
         trace_id = primary.trace_id if isinstance(primary.trace_id, TraceValue) else _tv("known", primary.trace_id or "unknown", "trace_id captured")
         task_id = primary.task_id if isinstance(primary.task_id, TraceValue) else _tv("known", primary.task_id or "unknown", "task_id captured")
@@ -232,11 +232,11 @@ class ChangeSetProjector:
             task_id=task_id,
             session_id=session_id,
             plan_id=plan_id,
-            capability_id=cap_id,
+            capability_id=cap_id.value if isinstance(cap_id, TraceValue) else cap_id,
             owner_subsystem=owner_subsystem,
             change_kind=change_kind,
             disposition=disposition,
-            authority_class=auth_class,
+            authority_class=auth_class.value if isinstance(auth_class, TraceValue) else auth_class,
             target=target,
             before=before,
             after=after,
@@ -304,11 +304,18 @@ class ReceiptProjector:
         if change_set.before is None or change_set.after is None:
             warnings.append("linked change_set has unknown before/after; confirmation cannot be exact")
 
-        pre = change_set.after if change_set.after is not None else _object_identity_from(
-            object_type=change_set.change_kind.value, scope=change_set.owner_subsystem,
+        # Blocker 6: derive observed pre/post from rollback-event evidence, not ChangeSet expected state
+        pre = _object_identity_from(
+            object_type=change_set.change_kind.value,
+            scope=change_set.owner_subsystem,
+            locator=primary.task_id or primary.event_id,
+            digest=primary.payload_hash,
         )
-        post = change_set.before if change_set.before is not None else _object_identity_from(
-            object_type=change_set.change_kind.value, scope=change_set.owner_subsystem,
+        post = _object_identity_from(
+            object_type=change_set.change_kind.value,
+            scope=change_set.owner_subsystem,
+            locator=primary.task_id or primary.event_id,
+            digest=primary.payload_hash,
         )
 
         expected = change_set.before
@@ -443,7 +450,7 @@ def change_set_to_envelope(change_set: ChangeSet, context: ReplayContext) -> Tra
         context=context,
         subsystem=change_set.owner_subsystem,
         capability_id=change_set.capability_id,
-        event_type="change_set_observed",
+        event_type="change_set",
         authority_class="none",
         task_id=change_set.task_id.value if isinstance(change_set.task_id, TraceValue) and change_set.task_id.state == "known" else None,
         session_id=change_set.session_id.value if isinstance(change_set.session_id, TraceValue) and change_set.session_id.state == "known" else None,
@@ -478,7 +485,7 @@ def rollback_receipt_to_envelope(
         context=context,
         subsystem=change_set.owner_subsystem,
         capability_id=change_set.capability_id,
-        event_type="rollback_receipt_observed",
+        event_type="rollback_receipt",
         authority_class="none",
         task_id=change_set.task_id.value if isinstance(change_set.task_id, TraceValue) and change_set.task_id.state == "known" else None,
         session_id=change_set.session_id.value if isinstance(change_set.session_id, TraceValue) and change_set.session_id.state == "known" else None,

@@ -182,7 +182,41 @@ class TestChangeSetModel:
         assert result.valid
 
     def test_unknown_change_kind_rejected(self):
-        cs = _make_cs(change_kind="other")
+        base: dict[str, Any] = dict(
+            schema_version=1,
+            change_id="chg_" + "a" * 32,
+            trace_id=_tv("known", "trace_1"),
+            task_id=_tv("known", "task_1"),
+            session_id=_tv("unknown", None, "no session"),
+            plan_id=_tv("unknown", None, "no plan"),
+            capability_id="tools",
+            owner_subsystem="tools",
+            change_kind="other",
+            disposition=MutationDisposition.REVERSIBLE,
+            authority_class="execution",
+            target=_oid("file", "repo", "src/main.py", "a" * 64, "sha256", 100, "v1"),
+            before=_oid("file", "repo", "src/old.py", "b" * 64, "sha256", 100, "v0"),
+            after=_oid("file", "repo", "src/new.py", "c" * 64, "sha256", 100, "v1"),
+            inverse=InverseReference(
+                kind=RollbackKind.GIT_REVERT,
+                owner_subsystem="version_control",
+                authority_boundary="sandbox_validation",
+                target=_tv("known", {"commit": "abc123"}),
+                preconditions=("independent_review",),
+                expected_restore_identity=None,
+                authorization_required=_tv("known", "commit_signer"),
+            ),
+            rollback_ref=_tv("unknown", None, "no rollback ref"),
+            revision=_tv("known", "abc123sha"),
+            config_fingerprint=_tv("unknown", None, "no config"),
+            policy_fingerprint=_tv("unknown", None, "no policy"),
+            evidence_refs=(),
+            source_event_ids=(),
+            provenance=Provenance(origin="persisted", confidence="exact"),
+            unknowns=(),
+            observed_at=_tv("known", 1000.0),
+        )
+        cs = ChangeSet(**base)
         result = validate_change_set(cs)
         assert not result.valid
         assert any("unknown change_kind" in e for e in result.errors)
@@ -329,3 +363,51 @@ class TestCanonicalJson:
 
     def test_different_inputs_different_hash(self):
         assert canonical_hash({"a": 1}) != canonical_hash({"a": 2})
+
+
+class TestObjectIdentityValidationCollected:
+    def test_invalid_sha256_digest_collected(self):
+        bad_oid = ObjectIdentity(
+            object_type="file", scope="repo",
+            locator=_tv("known", "x"), hash_algorithm="sha256",
+            digest=_tv("known", "short"), size_bytes=_tv("not_applicable", None, "test"),
+            version_ref=_tv("not_applicable", None, "test"),
+        )
+        cs = _make_cs(target=bad_oid, before=_oid(), after=_oid())
+        result = validate_change_set(cs)
+        assert not result.valid
+        assert any("sha256 digest must be exactly 64" in e for e in result.errors)
+
+    def test_empty_object_type_collected(self):
+        bad_oid = ObjectIdentity(
+            object_type="", scope="repo",
+            locator=_tv("known", "x"), hash_algorithm="unknown",
+            digest=_tv("unknown", None, "test"), size_bytes=_tv("not_applicable", None, "test"),
+            version_ref=_tv("not_applicable", None, "test"),
+        )
+        cs = _make_cs(target=bad_oid, before=_oid(), after=_oid())
+        result = validate_change_set(cs)
+        assert not result.valid
+        assert any("object_type must be non-empty" in e for e in result.errors)
+
+
+class TestCanonicalFactoriesFailExplicit:
+    def test_make_change_set_does_not_swallow_exception(self):
+        with pytest.raises(Exception):
+            make_change_set(change_kind="not_a_change_kind")
+
+    def test_make_rollback_receipt_does_not_swallow_exception(self):
+        from aetheris.changeset.model import RollbackReceipt, RollbackOutcome, RestorationConfirmation
+        with pytest.raises(Exception):
+            make_rollback_receipt(outcome="not_an_outcome")
+
+    def test_invalid_change_id_replaced_with_derived(self):
+        cs = _make_cs()
+        derived = change_id(cs)
+        cs2 = ChangeSet(change_id="chg_invalid", **{
+            f.name: getattr(cs, f.name) for f in ChangeSet.__dataclass_fields__.values()
+            if f.name != "change_id"
+        })
+        result = validate_change_set(cs2)
+        assert not result.valid
+        assert any("does not match content" in e for e in result.errors)

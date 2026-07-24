@@ -266,7 +266,9 @@ def check_runtime_defaults(findings: list[Finding], caps: list[dict[str, Any]]) 
         cid = c.get("id", "?")
         rd = c.get("runtime_default") or {}
         cfg_field = rd.get("config_field")
-        if not cfg_field or cfg_field == "N/A":
+        if not cfg_field:
+            continue
+        if cfg_field == "not_applicable":
             continue
         expected_state = rd.get("state", "unknown")
         if expected_state == "not_applicable":

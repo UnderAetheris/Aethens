@@ -236,9 +236,11 @@ def _print_json(records: list[dict[str, Any]], receipts: list[dict[str, Any]]) -
 
 def _validate_only(records: list[dict[str, Any]], receipts: list[dict[str, Any]]) -> int:
     exit_code = 0
+    change_map: dict[str, ChangeSet] = {}
     for rec in records:
         try:
             cs = _coerce_change_set(rec)
+            change_map[cs.change_id] = cs
             validation = validate_change_set(cs)
             if not validation.valid:
                 print(f"INVALID change_set {rec.get('change_id', '?')}: {'; '.join(validation.errors)}", file=sys.stderr)
@@ -251,7 +253,12 @@ def _validate_only(records: list[dict[str, Any]], receipts: list[dict[str, Any]]
     for rec in receipts:
         try:
             rr = _coerce_rollback_receipt(rec)
-            validation = validate_rollback_receipt(rr)
+            linked_cs = change_map.get(rr.change_id)
+            if linked_cs is None and rr.change_id:
+                print(f"INVALID receipt {rec.get('receipt_id', '?')}: receipt.change_id {rr.change_id!r} has no linked change_set", file=sys.stderr)
+                exit_code = 1
+                continue
+            validation = validate_rollback_receipt(rr, change_set=linked_cs)
             if not validation.valid:
                 print(f"INVALID receipt {rec.get('receipt_id', '?')}: {'; '.join(validation.errors)}", file=sys.stderr)
                 exit_code = 1
