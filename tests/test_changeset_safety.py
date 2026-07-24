@@ -18,9 +18,7 @@ from __future__ import annotations
 
 from typing import Any
 
-import pytest
-
-from aetheris.changeset.canonical import canonical_hash, change_id, receipt_id
+from aetheris.changeset.canonical import canonical_hash, change_id
 from aetheris.changeset.model import (
     ChangeKind,
     ChangeSet,
