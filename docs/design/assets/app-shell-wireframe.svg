@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" font-family="Inter, Segoe UI, system-ui, sans-serif">
+  <title>Aetheris app shell wireframe (v0.1)</title>
+  <rect width="1280" height="800" fill="#0B0D12"/>
+  <rect x="0" y="0" width="232" height="800" fill="#11141B"/>
+  <circle cx="36" cy="40" r="12" fill="#7C5CFF"/>
+  <text x="58" y="45" fill="#F2F4F8" font-size="16" font-weight="600">Aetheris</text>
+  <g font-size="14" fill="#A7AEBD">
+    <rect x="12" y="80" width="208" height="36" rx="8" fill="#1A1F2A"/>
+    <text x="44" y="103" fill="#F2F4F8">Home</text>
+    <text x="44" y="143">Chat</text>
+    <text x="44" y="179">Tasks &amp; Goals</text>
+    <text x="44" y="215">Approvals</text>
+    <rect x="176" y="201" width="28" height="18" rx="9" fill="#FFB547"/>
+    <text x="185" y="214" fill="#0B0D12" font-size="11" font-weight="700">3</text>
+    <text x="44" y="251">Memory</text>
+    <text x="44" y="287">Skills</text>
+    <text x="44" y="323">Research</text>
+    <text x="44" y="359">Guardian</text>
+    <text x="44" y="395">Reports &amp; Level</text>
+  </g>
+  <rect x="12" y="700" width="208" height="76" rx="12" fill="#1A1F2A"/>
+  <text x="28" y="728" fill="#A7AEBD" font-size="12">AFK learning</text>
+  <rect x="160" y="716" width="44" height="22" rx="11" fill="#2BD9A0"/>
+  <circle cx="193" cy="727" r="8" fill="#0B0D12"/>
+  <text x="28" y="758" fill="#6B7385" font-size="11">Budget 34 / 200 requests</text>
+  <rect x="256" y="20" width="1000" height="48" rx="12" fill="#11141B"/>
+  <text x="280" y="50" fill="#6B7385" font-size="14">Ask Aetheris anything, or press Ctrl+K</text>
+  <rect x="1150" y="30" width="90" height="28" rx="14" fill="#1A1F2A"/>
+  <circle cx="1166" cy="44" r="5" fill="#2BD9A0"/>
+  <text x="1178" y="49" fill="#A7AEBD" font-size="12">Healthy</text>
+  <text x="256" y="112" fill="#F2F4F8" font-size="26" font-weight="600">Good afternoon. 2 things need you.</text>
+  <text x="256" y="138" fill="#A7AEBD" font-size="14">Overnight: studied 4 sources, proposed 1 skill, coding pass rate 71% to 74%.</text>
+  <rect x="256" y="164" width="320" height="180" rx="16" fill="#11141B" stroke="#232938"/>
+  <text x="276" y="194" fill="#A7AEBD" font-size="12" letter-spacing="1">NEEDS YOU</text>
+  <text x="276" y="226" fill="#F2F4F8" font-size="15">Approve: clean 2.3 GB temp files</text>
+  <text x="276" y="250" fill="#6B7385" font-size="12">Reversible. Preview ready.</text>
+  <rect x="276" y="290" width="96" height="34" rx="10" fill="#7C5CFF"/>
+  <text x="300" y="312" fill="#FFFFFF" font-size="13" font-weight="600">Review</text>
+  <rect x="384" y="290" width="80" height="34" rx="10" fill="#1A1F2A"/>
+  <text x="406" y="312" fill="#A7AEBD" font-size="13">Later</text>
+  <rect x="596" y="164" width="320" height="180" rx="16" fill="#11141B" stroke="#232938"/>
+  <text x="616" y="194" fill="#A7AEBD" font-size="12" letter-spacing="1">LEVEL</text>
+  <text x="616" y="240" fill="#F2F4F8" font-size="40" font-weight="700">Lv 7</text>
+  <text x="716" y="240" fill="#2BD9A0" font-size="14">+3% this week</text>
+  <rect x="616" y="270" width="280" height="8" rx="4" fill="#1A1F2A"/>
+  <rect x="616" y="270" width="196" height="8" rx="4" fill="#7C5CFF"/>
+  <text x="616" y="306" fill="#6B7385" font-size="12">Measured on frozen benchmarks, not vibes</text>
+  <rect x="936" y="164" width="320" height="180" rx="16" fill="#11141B" stroke="#232938"/>
+  <text x="956" y="194" fill="#A7AEBD" font-size="12" letter-spacing="1">PC HEALTH</text>
+  <text x="956" y="228" fill="#F2F4F8" font-size="15">Defender: on, no threats</text>
+  <text x="956" y="254" fill="#F2F4F8" font-size="15">Disk: 313 GB free</text>
+  <text x="956" y="280" fill="#FFB547" font-size="15">2 new startup items</text>
+  <text x="956" y="312" fill="#6B7385" font-size="12">Last check 12 min ago</text>
+  <rect x="256" y="364" width="660" height="412" rx="16" fill="#11141B" stroke="#232938"/>
+  <text x="276" y="396" fill="#A7AEBD" font-size="12" letter-spacing="1">LIVE ACTIVITY</text>
+  <g font-size="13">
+    <circle cx="284" cy="430" r="5" fill="#2BD9A0"/><text x="300" y="435" fill="#F2F4F8">Planned: add tests for router fallback</text><text x="800" y="435" fill="#6B7385">2m</text>
+    <circle cx="284" cy="466" r="5" fill="#7C5CFF"/><text x="300" y="471" fill="#F2F4F8">Safety: write_file allowed (workspace, undo ready)</text><text x="800" y="471" fill="#6B7385">2m</text>
+    <circle cx="284" cy="502" r="5" fill="#FF5C7A"/><text x="300" y="507" fill="#F2F4F8">Test failed: test_fallback_on_429, reflecting</text><text x="800" y="507" fill="#6B7385">1m</text>
+    <circle cx="284" cy="538" r="5" fill="#2BD9A0"/><text x="300" y="543" fill="#F2F4F8">Repair passed on attempt 2, lesson saved</text><text x="800" y="543" fill="#6B7385">now</text>
+  </g>
+  <rect x="936" y="364" width="320" height="412" rx="16" fill="#11141B" stroke="#232938"/>
+  <text x="956" y="396" fill="#A7AEBD" font-size="12" letter-spacing="1">GOALS</text>
+  <g font-size="13" fill="#F2F4F8">
+    <text x="956" y="432">Free-tier model router</text>
+    <rect x="956" y="444" width="280" height="6" rx="3" fill="#1A1F2A"/><rect x="956" y="444" width="168" height="6" rx="3" fill="#2BD9A0"/>
+    <text x="956" y="486">Approvals inbox</text>
+    <rect x="956" y="498" width="280" height="6" rx="3" fill="#1A1F2A"/><rect x="956" y="498" width="56" height="6" rx="3" fill="#7C5CFF"/>
+    <text x="956" y="540">Guardian read-only</text>
+    <rect x="956" y="552" width="280" height="6" rx="3" fill="#1A1F2A"/>
+  </g>
+</svg>
