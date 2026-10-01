@@ -1,27 +1,47 @@
 # Aetheris
 
-A modular agent system with a FastAPI bridge and a thin React shell.
+**The personal AI that actually gets better at helping you, and proves it.**
 
-## Backend
+Aetheris is a modular, self-improving assistant and engineering system. It plans work, acts only through a single safety gate, measures itself on frozen benchmarks, and keeps an improvement only when it is strictly better with zero regressions and can be undone. It is designed to run on an ordinary Windows laptop for free.
 
-Start the API bridge:
+```
+plan -> act safely -> measure -> record -> improve
+```
+
+## Why Aetheris
+
+- **Proven improvement**: every learned change passes a measured gate and leaves a rollback receipt.
+- **Visible safety**: one execution gate, one network gate, permission tiers, hard locks the system can never cross, all enforced in CI.
+- **Personal**: remembers your preferences and projects, explains every decision, reports what it learned.
+- **Light and free**: no GPU, no Docker, free-tier models behind a fallback router.
+
+## Quick start
 
 ```bash
 pip install -e ".[dev]"
 python -m uvicorn aetheris.api.app:app --reload
-```
 
-## Frontend shell
-
-Install and run the shell:
-
-```bash
 cd shell
 npm install
 npm run dev
 ```
 
-The shell reads the backend URL from shell/.env and polls the FastAPI bridge every second.
+The shell reads the backend URL from `shell/.env` and talks to the FastAPI bridge.
+
+Windows / low-spec guide: [docs/engineering/DEV_SETUP_WINDOWS.md](docs/engineering/DEV_SETUP_WINDOWS.md).
+
+## Repository guide
+
+| Path | What |
+| --- | --- |
+| [`AGENTS.md`](AGENTS.md) | Operating manual for AI coding agents and contributors |
+| [`specs/`](specs/README.md) | Per-feature specs F00-F26 and the full inventory |
+| [`docs/`](docs/README.md) | Product, design system, architecture diagrams, engineering guides |
+| [`handoff/`](handoff/README.md) | Session continuity: state, decisions, roadmap, conversation log |
+| [`architecture/`](architecture/ARCHITECTURE_BASELINE.md) | Machine-checked ledgers, contracts, evidence |
+| `src/aetheris/` | Python backend, one package per subsystem |
+| `shell/` | React + Vite + TypeScript UI |
+| `tests/`, `scripts/` | Test suites, gate runners, integrity checker |
 
 ## Architecture
 
@@ -30,6 +50,8 @@ registry, runs it, and logs the result. Each subsystem lives in its own package
 under `src/aetheris/` so they plug in without tangling.
 
 Every ordinary registered tool action executes through `SafetyLayer`; network egress, internal persistence, and isolated sandbox validation use separately declared boundaries.
+
+Diagrams: [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md).
 
 <!-- architecture-capabilities:start -->
 | Capability | Implementation | Measurement | Adoption | Runtime Default | Production Readiness |
@@ -70,3 +92,5 @@ Every ordinary registered tool action executes through `SafetyLayer`; network eg
 1. `pre-commit install`
 2. Branch, code, `pytest` green, open a PR.
 3. CI runs ruff + pytest + coverage + architecture-integrity + repository-integrity + specialized gates (research, reasoning, hierarchy, reliability, unattended) on every push/PR. Lint, test, and specialized gates run independently; a lint failure does not skip tests.
+
+Full guide: [CONTRIBUTING.md](CONTRIBUTING.md). Security: [SECURITY.md](SECURITY.md).

@@ -15,14 +15,28 @@ aetheris_memory.jsonl
 reasoning_*_events.jsonl
 wf_*.jsonl
 tmp_smoke*.py
+reports/
 
 # Frontend
 shell/node_modules/
 shell/.env
 shell/package-lock.json
+shell/dist/
+shell/*.tsbuildinfo
+shell/vite.config.js
+shell/vite.config.d.ts
 
 # Test / coverage reports
 .coverage
+coverage.json
 htmlcov/
 *.cover
 .tox/
+test_output*.txt
+
+# Editors / local agent config
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
