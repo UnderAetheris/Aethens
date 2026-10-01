@@ -397,13 +397,11 @@ class TestCanonicalFactoriesFailExplicit:
             make_change_set(change_kind="not_a_change_kind")
 
     def test_make_rollback_receipt_does_not_swallow_exception(self):
-        from aetheris.changeset.model import RollbackReceipt, RollbackOutcome, RestorationConfirmation
         with pytest.raises(Exception):
             make_rollback_receipt(outcome="not_an_outcome")
 
     def test_invalid_change_id_replaced_with_derived(self):
         cs = _make_cs()
-        derived = change_id(cs)
         cs2 = ChangeSet(change_id="chg_invalid", **{
             f.name: getattr(cs, f.name) for f in ChangeSet.__dataclass_fields__.values()
             if f.name != "change_id"

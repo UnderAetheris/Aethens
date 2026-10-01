@@ -6,7 +6,7 @@ representation is strict JSON.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
+from typing import Any, Literal
 
 
 # ---------------------------------------------------------------------------

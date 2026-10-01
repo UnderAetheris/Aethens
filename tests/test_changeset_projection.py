@@ -208,8 +208,6 @@ def test_rollback_receipt_envelope_event_type_matches_reducer():
 def test_receipt_projection_derives_from_rollback_events():
     from aetheris.changeset.projector import ReceiptProjector
     from aetheris.changeset.model import ChangeSet, ObjectIdentity, TraceValue
-    from aetheris.changeset.model import RollbackOutcome
-    import copy
     cs = ChangeSet(
         schema_version=1, change_id="chg_test",
         trace_id=TraceValue(state="known", value="t1", source="test"),
