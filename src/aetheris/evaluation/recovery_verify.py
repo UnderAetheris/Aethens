@@ -2,10 +2,15 @@
 
 No filesystem, network, process, planner, or writer authority.
 All verification is deterministic and read-only.
+
+Observations and expectations may be attribute objects or plain mappings
+(fixture runners return dicts); both are read through ``_as_record``.
 """
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Mapping
+from types import SimpleNamespace
 from typing import Literal
 
 from ..trace.model import TraceValue
@@ -15,9 +20,32 @@ from .recovery_model import (
     ScenarioVerification,
 )
 
+_SOURCE = "recovery_verify"
+
+
+def _as_record(obj: object) -> object:
+    """Read mappings and attribute objects the same way, without copying values."""
+    if isinstance(obj, Mapping):
+        return SimpleNamespace(**obj)
+    return obj
+
 
 def _tv_repr(tv: TraceValue) -> tuple[str, object]:
     return (tv.state, tv.value)
+
+
+def _identity_comparable(identity: object) -> TraceValue | None:
+    """Return the TraceValue used for identity comparison.
+
+    Prefers an ``ObjectIdentity``-style ``digest``; otherwise accepts a bare
+    ``TraceValue`` identity. Anything else is not comparable.
+    """
+    digest = getattr(identity, "digest", None)
+    if isinstance(digest, TraceValue):
+        return digest
+    if isinstance(identity, TraceValue):
+        return identity
+    return None
 
 
 def _compute_duration(observation: object) -> int:
@@ -48,6 +76,8 @@ def classify_outcome(
     "exact", "partial", "blocked", "failed",
     "unknown", "not_applicable", "invalid",
 ], tuple[str, ...]]:
+    observation = _as_record(observation)
+    expected = _as_record(expected)
     failures: list[str] = []
 
     if hasattr(observation, "outcome") and hasattr(expected, "expected_outcome"):
@@ -55,20 +85,18 @@ def classify_outcome(
         exp_outcome = expected.expected_outcome
 
         if obs_outcome == exp_outcome == "succeeded":
-            if hasattr(observation, "observed_identity") and hasattr(expected, "expected_identity"):
-                obs_id = observation.observed_identity
-                exp_id = expected.expected_identity
-                if obs_id is not None and exp_id is not None:
-                    obs_digest = getattr(obs_id, "digest", None)
-                    exp_digest = getattr(exp_id, "digest", None)
-                    if obs_digest is not None and exp_digest is not None:
-                        obs_val = _tv_repr(obs_digest)
-                        exp_val = _tv_repr(exp_digest)
-                        if obs_val == exp_val:
-                            return ("exact", ())
-                        else:
-                            failures.append("observed digest does not match expected digest")
-                            return ("partial", tuple(failures))
+            obs_id = getattr(observation, "observed_identity", None)
+            exp_id = getattr(expected, "expected_identity", None)
+            if obs_id is not None and exp_id is not None:
+                obs_cmp = _identity_comparable(obs_id)
+                exp_cmp = _identity_comparable(exp_id)
+                if obs_cmp is not None and exp_cmp is not None:
+                    if obs_cmp.state != "known":
+                        return ("unknown", ("observed identity is not known",))
+                    if _tv_repr(obs_cmp) == _tv_repr(exp_cmp):
+                        return ("exact", ())
+                    failures.append("observed identity does not match expected identity")
+                    return ("partial", tuple(failures))
 
         if obs_outcome == "blocked":
             return ("blocked", ())
@@ -102,18 +130,33 @@ def verify_receipt_linkage(
     return (len(errors) == 0, tuple(errors))
 
 
+# Ordered authority levels. Narrowing (e.g. enabled -> disabled) is not an increase.
+# Unrecognized levels fail closed and count as an increase.
+_AUTHORITY_RANK: dict[str, int] = {
+    "none": 0,
+    "off": 0,
+    "disabled": 0,
+    "advisory": 1,
+    "delegated": 2,
+    "direct": 3,
+    "on": 3,
+    "enabled": 3,
+}
+
+
 def verify_authority_delta(
     authority_before: tuple[tuple[str, str], ...],
     authority_after: tuple[tuple[str, str], ...],
 ) -> tuple[int, tuple[str, ...]]:
-    before_set = set(authority_before)
-    after_set = set(authority_after)
-    new_authority = after_set - before_set
-    delta = len(new_authority)
+    before_rank: dict[str, int] = {}
+    for dim, level in authority_before:
+        before_rank[dim] = max(before_rank.get(dim, 0), _AUTHORITY_RANK.get(level, 0))
     failures: list[str] = []
-    for dim, level in new_authority:
-        failures.append(f"authority increased: {dim}={level}")
-    return (delta, tuple(failures))
+    for dim, level in sorted(set(authority_after)):
+        rank = _AUTHORITY_RANK.get(level)
+        if rank is None or rank > before_rank.get(dim, 0):
+            failures.append(f"authority increased: {dim}={level}")
+    return (len(failures), tuple(failures))
 
 
 def verify_safety_invariants(
@@ -268,6 +311,8 @@ def verify_scenario(
     declared_sequence: tuple[str, ...] = (),
     scenario_ids_in_order: tuple[str, ...] = (),
 ) -> ScenarioVerification:
+    observation = _as_record(observation)
+    expected = _as_record(expected)
     classification, class_failures = classify_outcome(observation, expected)
 
     receipt_valid = True
@@ -282,7 +327,27 @@ def verify_scenario(
 
     obs_identity = getattr(observation, "observed_identity", None)
     exp_identity = getattr(expected, "expected_identity", None)
-    identity_match, identity_errors = verify_identity_match(obs_identity, exp_identity)
+    identity_errors: tuple[str, ...] = ()
+    if exp_identity is None:
+        restoration_match = TraceValue(
+            state="not_applicable",
+            value=None,
+            reason="no expected identity declared for this scenario",
+            source=_SOURCE,
+        )
+    else:
+        identity_match, identity_errors = verify_identity_match(obs_identity, exp_identity)
+        if identity_match:
+            restoration_match = TraceValue(
+                state="known", value=True, reason="identity match", source=_SOURCE,
+            )
+        else:
+            restoration_match = TraceValue(
+                state="mismatch",
+                value={"matched": False, "errors": list(identity_errors)},
+                reason="identity mismatch",
+                source=_SOURCE,
+            )
 
     authority_before = getattr(observation, "authority_before", ())
     authority_after = getattr(observation, "authority_after", ())
@@ -300,7 +365,20 @@ def verify_scenario(
         declared_sequence,
     )
 
-    all_failures = class_failures + linkage_errors + identity_errors + auth_errors + safety_errors + evidence_errors + seq_errors
+    all_failures = (
+        class_failures + linkage_errors + identity_errors + auth_errors
+        + safety_errors + evidence_errors + seq_errors
+    )
+
+    # An exact restoration claim needs every supporting check to hold.
+    if classification == "exact" and not (
+        evidence_ok and safety_ok and auth_delta == 0 and receipt_valid and seq_ok
+    ):
+        classification = "partial"
+        all_failures = all_failures + (
+            "exact restoration downgraded: a supporting evidence, safety, authority, "
+            "linkage, or sequence check failed",
+        )
 
     duration = _compute_duration(observation)
 
@@ -308,42 +386,40 @@ def verify_scenario(
     if not isinstance(unknowns, tuple):
         unknowns = tuple(unknowns) if unknowns else ()
 
-    restoration_match_state = "known" if identity_match else "mismatch"
-    restoration_match_value = True if identity_match else False
-    if not identity_match and obs_identity is not None and exp_identity is not None:
-        restoration_match_value = False
+    if evidence_ok:
+        evidence_preserved = TraceValue(
+            state="known", value=True, reason="evidence preserved", source=_SOURCE,
+        )
+    else:
+        evidence_preserved = TraceValue(
+            state="mismatch",
+            value={"preserved": False, "errors": list(evidence_errors)},
+            reason="evidence modified",
+            source=_SOURCE,
+        )
 
-    evidence_preserved_state = "known" if evidence_ok else "mismatch"
-    evidence_preserved_value = evidence_ok
-
-    sequence_valid_state = "known" if seq_ok else "mismatch"
-    sequence_valid_value = seq_ok
+    if seq_ok:
+        sequence_valid = TraceValue(
+            state="known", value=True, reason="sequence valid", source=_SOURCE,
+        )
+    else:
+        sequence_valid = TraceValue(
+            state="mismatch",
+            value={"valid": False, "errors": list(seq_errors)},
+            reason="sequence violation",
+            source=_SOURCE,
+        )
 
     return ScenarioVerification(
         scenario_id=scenario_id,
         classification=classification,
         receipt_valid=receipt_valid,
         change_link_valid=change_link_valid,
-        restoration_match=TraceValue(
-            state=restoration_match_state,
-            value=restoration_match_value,
-            reason="identity match" if identity_match else "identity mismatch",
-            source="recovery_verify",
-        ),
-        evidence_preserved=TraceValue(
-            state=evidence_preserved_state,
-            value=evidence_preserved_value,
-            reason="evidence preserved" if evidence_ok else "evidence modified",
-            source="recovery_verify",
-        ),
+        restoration_match=restoration_match,
+        evidence_preserved=evidence_preserved,
         authority_delta=auth_delta,
         safety_preserved=safety_ok,
-        sequence_valid=TraceValue(
-            state=sequence_valid_state,
-            value=sequence_valid_value,
-            reason="sequence valid" if seq_ok else "sequence violation",
-            source="recovery_verify",
-        ),
+        sequence_valid=sequence_valid,
         duration_ns=duration,
         failures=all_failures,
         unknowns=unknowns,
