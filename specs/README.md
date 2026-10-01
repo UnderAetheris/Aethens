@@ -42,19 +42,23 @@ The [living architecture spec](../Aetheris%20Architecture%20v1.0%20(living%20spe
 | [F22](F22_interface_api_shell_chat.md) | Interface: API bridge, shell, chat | built / proposed (chat) | off |
 | [F23](F23_changesets_trace_recovery.md) | Changesets, rollback receipts, trace replay, recovery drills | built | n/a |
 | [F24](F24_governance_ci.md) | Governance: architecture integrity & CI gates | built | on |
+| [F25](F25_mind_cognitive_architecture.md) | Mind: cognitive architecture (composition) | proposed | n/a |
+| [F26](F26_shell_product_experience.md) | Shell product experience (UI/UX) | proposed | n/a |
 
 Full list of every ability, manner and rule captured: [INVENTORY.md](INVENTORY.md).
 
 ## Recommended build order (next)
 
-1. **F01** runtime profile + **F13** free-tier router (without a working brain on a low-end laptop, nothing else matters)
-2. **F02** Task Queue v1 + **F08** persisted keywords / `revert_last()` (already the living spec's "build next")
-3. **F04** permission tiers + approvals inbox (prerequisite for every new power below)
-4. **F06** user profile memory + **F00** persona
-5. **F21** reports
-6. **F16** curiosity engine, then **F17** AFK learning (after the non-goal decision)
-7. **F19** Guardian (read-only first), **F20** vault
-8. **F14** self-code evolution (last: widest lever)
+0. **Get CI green on `main`** (see `handoff/CURRENT_STATE.md`)
+1. **F01** runtime profile + **F13** free-tier router
+2. **F02** Task Queue v1 + **F08** persisted keywords / `revert_last()`
+3. **F04** permission tiers + approvals inbox
+4. **F26** M1-M3 (design system, layout, live feed) in parallel with backend work
+5. **F06** user profile memory + **F00** persona
+6. **F21** reports
+7. **F16** curiosity engine, then **F17** AFK learning (after the non-goal decision)
+8. **F19** Guardian (read-only first), **F20** vault
+9. **F14** self-code evolution (last: widest lever)
 
 ## Rules every spec follows
 
